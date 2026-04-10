@@ -157,6 +157,36 @@
       #mobile-menu-btn { display: none; }
       #mobile-nav { display: none !important; }
     }
+
+    /* FAQ accordion */
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.25,0.46,0.45,0.94), padding 0.3s ease; }
+    .faq-answer.open { max-height: 300px; }
+    .faq-icon { transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    .faq-icon.open { transform: rotate(45deg); }
+
+    /* Before/after slider */
+    .ba-slider { position: relative; overflow: hidden; border-radius: 16px; cursor: col-resize; user-select: none; }
+    .ba-after  { position: absolute; inset: 0; overflow: hidden; }
+    .ba-after img { width: 100%; height: 100%; object-fit: cover; }
+    .ba-before img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ba-handle { position: absolute; top: 0; bottom: 0; width: 3px; background: white; cursor: col-resize; z-index: 10; transform: translateX(-50%); box-shadow: 0 0 12px rgba(0,0,0,0.4); }
+    .ba-handle::before, .ba-handle::after { content:''; position:absolute; left:50%; transform:translateX(-50%); width:36px; height:36px; border-radius:50%; background:white; box-shadow:0 2px 12px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; }
+    .ba-handle::before { top:50%; transform:translate(-50%,-50%); }
+    .ba-label { position:absolute; bottom:10px; font-size:10px; font-weight:900; color:white; text-transform:uppercase; letter-spacing:0.08em; padding:3px 10px; border-radius:20px; z-index:5; }
+    .ba-label-before { left:10px; background:rgba(50,50,50,0.88); }
+    .ba-label-after  { right:10px; background:rgba(42,170,64,0.88); }
+
+    /* Back to top */
+    #back-to-top { opacity:0; transform:translateY(12px); transition:opacity 0.3s ease, transform 0.3s ease; pointer-events:none; }
+    #back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+
+    /* Cookie banner */
+    #cookie-banner { transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+    #cookie-banner.show { transform: translateY(0); }
+
+    /* Pricing cards */
+    .price-card { transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease; }
+    .price-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,163,227,0.18) !important; }
   </style>
 </head>
 <body>
@@ -169,9 +199,9 @@
 
     <div id="nav-links" class="hidden md:flex items-center gap-8 text-sm text-gray-600" style="font-weight:700;">
       <a href="#services"     class="hover:text-[#00A3E3] transition-colors duration-200">Services</a>
-      <a href="#how-it-works" class="hover:text-[#00A3E3] transition-colors duration-200">How It Works</a>
+      <a href="#pricing"      class="hover:text-[#00A3E3] transition-colors duration-200">Pricing</a>
       <a href="#gallery"      class="hover:text-[#00A3E3] transition-colors duration-200">Gallery</a>
-      <a href="#about"        class="hover:text-[#00A3E3] transition-colors duration-200">About</a>
+      <a href="#faq"          class="hover:text-[#00A3E3] transition-colors duration-200">FAQ</a>
     </div>
 
     <div class="flex items-center gap-3">
@@ -189,9 +219,9 @@
   <!-- Mobile nav -->
   <div id="mobile-nav" class="fixed top-[68px] left-0 right-0 z-40 bg-white border-b border-gray-100 px-6 py-5 flex flex-col gap-5 text-sm text-gray-700 hidden" style="font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,0.08);">
     <a href="#services"     class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Services</a>
-    <a href="#how-it-works" class="hover:text-[#00A3E3]" onclick="closeMobileNav()">How It Works</a>
+    <a href="#pricing"      class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Pricing</a>
     <a href="#gallery"      class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Gallery</a>
-    <a href="#about"        class="hover:text-[#00A3E3]" onclick="closeMobileNav()">About</a>
+    <a href="#faq"          class="hover:text-[#00A3E3]" onclick="closeMobileNav()">FAQ</a>
     <a href="#booking"      class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Book Now</a>
   </div>
 
@@ -332,30 +362,46 @@
     </div>
   </section>
 
-  <!-- ═══════════ GALLERY ═══════════ -->
+  <!-- ═══════════ GALLERY / BEFORE-AFTER SLIDERS ═══════════ -->
   <section id="gallery" class="py-20 px-6 md:px-14" style="background:linear-gradient(160deg,#003d5c 0%,#005a8a 100%);">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-12 reveal">
         <p class="text-xs uppercase tracking-widest mb-3" style="color:#7aeea0;font-weight:800;letter-spacing:0.12em;">✦ SEE THE DIFFERENCE ✦</p>
         <h2 class="font-display text-4xl md:text-5xl text-white">Before &amp; After</h2>
+        <p class="text-white/60 text-sm mt-2">Drag the slider to reveal the transformation</p>
       </div>
-      <div class="grid grid-cols-2 gap-4 md:gap-6">
-        <div class="reveal reveal-delay-1 rounded-2xl overflow-hidden relative" style="box-shadow:0 8px 24px rgba(0,0,0,0.3);">
-          <img src="https://placehold.co/600x400/555555/aaaaaa?text=Before" alt="Dirty bin before cleaning" class="w-full h-40 md:h-56 object-cover">
-          <div class="absolute bottom-0 left-0 right-0 py-2 px-3 text-white text-xs uppercase tracking-widest" style="background:rgba(50,50,50,0.92);font-weight:900;">BEFORE</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+
+        <!-- Slider 1 -->
+        <div class="reveal reveal-delay-1 ba-slider" style="height:280px;box-shadow:0 12px 40px rgba(0,0,0,0.4);" data-ba>
+          <!-- BEFORE (base layer) -->
+          <div class="ba-before" style="height:100%;">
+            <img src="https://placehold.co/600x400/555555/aaaaaa?text=BEFORE" alt="Dirty bin">
+          </div>
+          <!-- AFTER (clipped overlay) -->
+          <div class="ba-after" style="width:50%;">
+            <img src="https://placehold.co/600x400/1a7a40/7aeea0?text=AFTER" alt="Clean bin">
+          </div>
+          <!-- Handle line -->
+          <div class="ba-handle" style="left:50%;"></div>
+          <!-- Labels -->
+          <span class="ba-label ba-label-before">Before</span>
+          <span class="ba-label ba-label-after">After</span>
         </div>
-        <div class="reveal reveal-delay-2 rounded-2xl overflow-hidden relative" style="box-shadow:0 8px 24px rgba(56,199,77,0.28);">
-          <img src="https://placehold.co/600x400/1a7a40/7aeea0?text=After" alt="Clean bin after cleaning" class="w-full h-40 md:h-56 object-cover">
-          <div class="absolute bottom-0 left-0 right-0 py-2 px-3 text-white text-xs uppercase tracking-widest" style="background:rgba(42,170,64,0.92);font-weight:900;">AFTER ✦</div>
+
+        <!-- Slider 2 -->
+        <div class="reveal reveal-delay-2 ba-slider" style="height:280px;box-shadow:0 12px 40px rgba(0,0,0,0.4);" data-ba>
+          <div class="ba-before" style="height:100%;">
+            <img src="https://placehold.co/600x400/3a3a3a/888888?text=BEFORE" alt="Dirty bin">
+          </div>
+          <div class="ba-after" style="width:50%;">
+            <img src="https://placehold.co/600x400/155c28/5eda80?text=AFTER" alt="Clean bin">
+          </div>
+          <div class="ba-handle" style="left:50%;"></div>
+          <span class="ba-label ba-label-before">Before</span>
+          <span class="ba-label ba-label-after">After</span>
         </div>
-        <div class="reveal reveal-delay-3 rounded-2xl overflow-hidden relative" style="box-shadow:0 8px 24px rgba(0,0,0,0.3);">
-          <img src="https://placehold.co/600x400/555555/aaaaaa?text=Before" alt="Dirty bin before cleaning" class="w-full h-40 md:h-56 object-cover">
-          <div class="absolute bottom-0 left-0 right-0 py-2 px-3 text-white text-xs uppercase tracking-widest" style="background:rgba(50,50,50,0.92);font-weight:900;">BEFORE</div>
-        </div>
-        <div class="reveal reveal-delay-4 rounded-2xl overflow-hidden relative" style="box-shadow:0 8px 24px rgba(56,199,77,0.28);">
-          <img src="https://placehold.co/600x400/1a7a40/7aeea0?text=After" alt="Clean bin after cleaning" class="w-full h-40 md:h-56 object-cover">
-          <div class="absolute bottom-0 left-0 right-0 py-2 px-3 text-white text-xs uppercase tracking-widest" style="background:rgba(42,170,64,0.92);font-weight:900;">AFTER ✦</div>
-        </div>
+
       </div>
     </div>
   </section>
@@ -382,6 +428,71 @@
     </div>
   </section>
 
+  <!-- ═══════════ PRICING ═══════════ -->
+  <section id="pricing" class="py-20 px-6 md:px-14 bg-white">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12 reveal">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#00A3E3;font-weight:800;letter-spacing:0.12em;">✦ SIMPLE PRICING ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">Clear &amp; Fair Prices</h2>
+        <p class="text-sm text-gray-500 mt-3">No hidden fees. No nasty surprises. Just a clean bin.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Standard -->
+        <div class="price-card reveal reveal-delay-1 bg-white rounded-2xl p-8 text-center border-2 flex flex-col" style="border-color:#e0f4fd;box-shadow:0 4px 20px rgba(0,163,227,0.08);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5" style="background:linear-gradient(135deg,#e8f7fd,#c8eefa);">🧽</div>
+          <h3 class="text-base mb-1" style="font-weight:900;color:#1a1a1a;">Standard Clean</h3>
+          <p class="text-xs text-gray-400 mb-5">One-off interior &amp; exterior wash</p>
+          <div class="text-4xl mb-1" style="font-weight:900;color:#00A3E3;">£8</div>
+          <div class="text-xs text-gray-400 mb-6">per bin, per visit</div>
+          <ul class="text-xs text-gray-500 text-left flex flex-col gap-2 mb-7 flex-1">
+            <li class="flex items-start gap-2"><span style="color:#38C74D;">✓</span> Full interior clean</li>
+            <li class="flex items-start gap-2"><span style="color:#38C74D;">✓</span> Exterior wash</li>
+            <li class="flex items-start gap-2"><span style="color:#38C74D;">✓</span> Deodorised &amp; sanitised</li>
+            <li class="flex items-start gap-2"><span style="color:#38C74D;">✓</span> No need to be home</li>
+          </ul>
+          <a href="#booking" class="btn w-full py-3 rounded-xl text-sm text-white text-center" style="font-weight:800;background:linear-gradient(135deg,#00A3E3,#0080c0);box-shadow:0 4px 14px rgba(0,163,227,0.3);">Book Now</a>
+        </div>
+
+        <!-- Deep Clean (featured) -->
+        <div class="price-card reveal reveal-delay-2 rounded-2xl p-8 text-center flex flex-col relative overflow-hidden" style="background:linear-gradient(145deg,#003d5c,#005a8a);box-shadow:0 12px 40px rgba(0,61,92,0.4);">
+          <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-white text-[10px] px-3 py-1 rounded-full whitespace-nowrap" style="background:linear-gradient(135deg,#38C74D,#2aaa40);box-shadow:0 2px 8px rgba(56,199,77,0.45);font-weight:900;">★ BEST VALUE</div>
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5 mt-2" style="background:rgba(255,255,255,0.14);">✨</div>
+          <h3 class="text-base mb-1 text-white" style="font-weight:900;">Deep Clean</h3>
+          <p class="text-xs mb-5" style="color:rgba(255,255,255,0.6);">Power wash + full sanitise</p>
+          <div class="text-4xl mb-1 text-white" style="font-weight:900;">£12</div>
+          <div class="text-xs mb-6" style="color:rgba(255,255,255,0.55);">per bin, per visit</div>
+          <ul class="text-xs text-left flex flex-col gap-2 mb-7 flex-1" style="color:rgba(255,255,255,0.78);">
+            <li class="flex items-start gap-2"><span style="color:#7aeea0;">✓</span> Everything in Standard</li>
+            <li class="flex items-start gap-2"><span style="color:#7aeea0;">✓</span> High-pressure power wash</li>
+            <li class="flex items-start gap-2"><span style="color:#7aeea0;">✓</span> Kills 99.9% of bacteria</li>
+            <li class="flex items-start gap-2"><span style="color:#7aeea0;">✓</span> Eliminates stubborn odours</li>
+          </ul>
+          <a href="#booking" class="btn w-full py-3 rounded-xl text-sm text-center" style="font-weight:800;background:linear-gradient(135deg,#38C74D,#2aaa40);color:white;box-shadow:0 4px 14px rgba(56,199,77,0.4);">Book Now</a>
+        </div>
+
+        <!-- Monthly Plan -->
+        <div class="price-card reveal reveal-delay-3 bg-white rounded-2xl p-8 text-center border-2 flex flex-col" style="border-color:#c8f5da;box-shadow:0 4px 20px rgba(56,199,77,0.07);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5" style="background:linear-gradient(135deg,#edfaf2,#c8f5da);">📅</div>
+          <h3 class="text-base mb-1" style="font-weight:900;color:#1a1a1a;">Monthly Plan</h3>
+          <p class="text-xs text-gray-400 mb-5">Regular scheduled clean-ups</p>
+          <div class="text-4xl mb-1" style="font-weight:900;color:#38C74D;">£6</div>
+          <div class="text-xs text-gray-400 mb-6">per bin, per month</div>
+          <ul class="text-xs text-gray-500 text-left flex flex-col gap-2 mb-7 flex-1">
+            <li class="flex items-start gap-2"><span style="color:#38C74D;">✓</span> Monthly scheduled visit</li>
+            <li class="flex items-start gap-2"><span style="color:#38C74D;">✓</span> Full clean every time</li>
+            <li class="flex items-start gap-2"><span style="color:#38C74D;">✓</span> Cancel anytime</li>
+            <li class="flex items-start gap-2"><span style="color:#38C74D;">✓</span> Priority booking</li>
+          </ul>
+          <a href="#booking" class="btn w-full py-3 rounded-xl text-sm text-white text-center" style="font-weight:800;background:linear-gradient(135deg,#38C74D,#2aaa40);box-shadow:0 4px 14px rgba(56,199,77,0.3);">Subscribe</a>
+        </div>
+
+      </div>
+
+      <p class="text-center text-xs text-gray-400 mt-8 reveal">Prices are per bin. Discounts available for multiple bins — <a href="#booking" class="underline" style="color:#00A3E3;">get in touch for a quote</a>.</p>
+    </div>
+  </section>
+
   <!-- ═══════════ ABOUT ═══════════ -->
   <section id="about" class="py-20 px-6 md:px-14 bg-white">
     <div class="max-w-3xl mx-auto">
@@ -399,6 +510,70 @@
     </div>
   </section>
 
+  <!-- ═══════════ FAQ ═══════════ -->
+  <section id="faq" class="py-20 px-6 md:px-14" style="background:#f8f9fa;">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-12 reveal">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#38C74D;font-weight:800;letter-spacing:0.12em;">✦ QUESTIONS? ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">Common Questions</h2>
+      </div>
+
+      <div class="flex flex-col gap-3" id="faq-list">
+
+        <div class="reveal faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
+          <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
+            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">How does the service work?</span>
+            <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
+          </button>
+          <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
+            <div style="padding-bottom:20px;">Just leave your bin at the kerbside on your collection day. Our team will come to you, power-wash and sanitise the bin, then return it to your property — all while you're at work or at home. No fuss, no hassle.</div>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-1 faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
+          <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
+            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">Do I need to be home for the clean?</span>
+            <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
+          </button>
+          <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
+            <div style="padding-bottom:20px;">No — you don't need to be home at all. Just make sure your bin is accessible and we'll take care of everything.</div>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-2 faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
+          <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
+            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">What products do you use?</span>
+            <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
+          </button>
+          <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
+            <div style="padding-bottom:20px;">We use biodegradable, eco-friendly cleaning products that are tough on bacteria and odours but safe for your family, pets, and the environment. No harsh chemicals are left behind.</div>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-3 faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
+          <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
+            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">How much does it cost?</span>
+            <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
+          </button>
+          <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
+            <div style="padding-bottom:20px;">A Standard Clean starts from just £8 per bin. Our Deep Clean is £12 per bin, and our Monthly Plan is just £6 per bin per month. Multi-bin discounts are available — <a href="#booking" style="color:#00A3E3;font-weight:700;">get in touch for a quote</a>.</div>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-4 faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
+          <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
+            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">What areas do you cover?</span>
+            <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
+          </button>
+          <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
+            <div style="padding-bottom:20px;">We cover Carlisle, Penrith, Kendal, Barrow-in-Furness, Whitehaven and all surrounding areas across Cumbria. Not sure if we cover your postcode? <a href="#booking" style="color:#00A3E3;font-weight:700;">Drop us a message</a> and we'll let you know.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ═══════════ BOOKING ═══════════ -->
   <section id="booking" class="py-20 px-6 md:px-14 relative overflow-hidden" style="background:linear-gradient(160deg,#003d5c 0%,#005a8a 60%,#007ab5 100%);">
     <div class="absolute -top-16 -right-16 w-72 h-72 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(56,199,77,0.22),transparent);"></div>
@@ -408,7 +583,9 @@
         <h2 class="font-display text-4xl md:text-5xl text-white">Book a Clean</h2>
       </div>
       <div class="reveal bg-white rounded-2xl p-8" style="box-shadow:0 20px 56px rgba(0,0,0,0.32);">
-        <form onsubmit="handleBooking(event)" class="flex flex-col gap-4">
+        <form name="booking" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleBooking(event)" class="flex flex-col gap-4">
+          <input type="hidden" name="form-name" value="booking">
+          <p class="hidden"><input name="bot-field"></p>
           <input type="text"  name="name"     placeholder="Your name"    required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
           <input type="tel"   name="phone"    placeholder="Phone number" required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
           <div class="grid grid-cols-2 gap-4">
@@ -501,6 +678,25 @@
   <!-- Spacer so footer isn't hidden behind mobile bar -->
   <div class="md:hidden" style="height:64px;"></div>
 
+  <!-- ═══════════ BACK TO TOP ═══════════ -->
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+    class="fixed z-50 flex items-center justify-center w-11 h-11 rounded-full text-white shadow-lg"
+    style="bottom:100px;right:24px;background:linear-gradient(135deg,#003d5c,#00A3E3);box-shadow:0 4px 16px rgba(0,61,92,0.4);"
+    aria-label="Back to top">
+    ↑
+  </button>
+
+  <!-- ═══════════ COOKIE BANNER ═══════════ -->
+  <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-50 px-5 py-4 flex flex-col sm:flex-row items-center gap-4 justify-between" style="background:#1a1a1a;border-top:2px solid rgba(0,163,227,0.3);">
+    <p class="text-xs text-gray-300 max-w-lg leading-relaxed">
+      🍪 We use cookies to give you the best experience. By using this site you agree to our use of cookies for analytics and performance.
+    </p>
+    <div class="flex gap-3 flex-shrink-0">
+      <button onclick="acceptCookies()" class="btn px-5 py-2 rounded-full text-white text-xs" style="font-weight:800;background:linear-gradient(135deg,#38C74D,#2aaa40);box-shadow:0 2px 8px rgba(56,199,77,0.35);">Accept</button>
+      <button onclick="declineCookies()" class="btn px-5 py-2 rounded-full text-xs border border-gray-600 text-gray-400" style="font-weight:700;">Decline</button>
+    </div>
+  </div>
+
   <script>
     // Nav scroll
     const nav = document.getElementById('nav');
@@ -548,13 +744,21 @@
     }, { threshold: 0.5 });
     statEls.forEach(el => statObserver.observe(el));
 
-    // Booking form
+    // Booking form — submit to Netlify, show success message
     function handleBooking(e) {
-      e.preventDefault();
+      // If Netlify is handling POST, let native submit fire after showing message
+      const form = e.target;
       const success = document.getElementById('booking-success');
-      success.classList.remove('hidden');
-      e.target.reset();
-      setTimeout(() => success.classList.add('hidden'), 5000);
+      // For dev/local: prevent default + show message
+      // On Netlify: native form POST will navigate; skip preventDefault so Netlify receives it
+      const isNetlify = document.querySelector('[data-netlify="true"]');
+      if (!isNetlify || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        e.preventDefault();
+        success.classList.remove('hidden');
+        form.reset();
+        setTimeout(() => success.classList.add('hidden'), 5000);
+      }
+      // else: let form submit naturally to Netlify
     }
 
     // Trigger already-visible reveals on load
@@ -564,6 +768,70 @@
         if (rect.top < window.innerHeight) el.classList.add('visible');
       });
     }, 150);
+
+    // ── FAQ accordion ──
+    document.querySelectorAll('.faq-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item   = btn.closest('.faq-item');
+        const answer = item.querySelector('.faq-answer');
+        const icon   = btn.querySelector('.faq-icon');
+        const isOpen = answer.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+        document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('open'));
+        document.querySelectorAll('.faq-btn').forEach(b => b.setAttribute('aria-expanded','false'));
+
+        // Open clicked (if it was closed)
+        if (!isOpen) {
+          answer.classList.add('open');
+          icon.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // ── Before/After drag sliders ──
+    document.querySelectorAll('[data-ba]').forEach(slider => {
+      const after  = slider.querySelector('.ba-after');
+      const handle = slider.querySelector('.ba-handle');
+      let dragging = false;
+
+      function setPos(x) {
+        const rect = slider.getBoundingClientRect();
+        let pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+        after.style.width  = (pct * 100) + '%';
+        handle.style.left  = (pct * 100) + '%';
+      }
+
+      slider.addEventListener('mousedown',  e => { dragging = true; setPos(e.clientX); });
+      slider.addEventListener('touchstart', e => { dragging = true; setPos(e.touches[0].clientX); }, { passive: true });
+      window.addEventListener('mousemove',  e => { if (dragging) setPos(e.clientX); });
+      window.addEventListener('touchmove',  e => { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
+      window.addEventListener('mouseup',    () => { dragging = false; });
+      window.addEventListener('touchend',   () => { dragging = false; });
+    });
+
+    // ── Back to top ──
+    const backBtn = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      backBtn.classList.toggle('visible', window.scrollY > 500);
+    }, { passive: true });
+
+    // ── Cookie banner ──
+    const cookieBanner = document.getElementById('cookie-banner');
+    if (!localStorage.getItem('wc_cookie_consent')) {
+      // Show after short delay
+      setTimeout(() => cookieBanner.classList.add('show'), 1200);
+    }
+    function acceptCookies() {
+      localStorage.setItem('wc_cookie_consent', 'accepted');
+      cookieBanner.classList.remove('show');
+    }
+    function declineCookies() {
+      localStorage.setItem('wc_cookie_consent', 'declined');
+      cookieBanner.classList.remove('show');
+    }
   </script>
 </body>
 </html>
