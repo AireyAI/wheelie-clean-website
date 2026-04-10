@@ -86,6 +86,13 @@
 
     .font-display { font-family: 'Pacifico', cursive; }
 
+    /* CTA pulse */
+    @keyframes ctaPulse {
+      0%,100% { box-shadow: 0 6px 24px rgba(0,0,0,0.25), 0 0 0 0 rgba(255,255,255,0.35); }
+      60%      { box-shadow: 0 6px 24px rgba(0,0,0,0.25), 0 0 0 10px rgba(255,255,255,0); }
+    }
+    .cta-pulse { animation: ctaPulse 2.5s ease-out infinite; }
+
     /* Scroll reveal */
     .reveal {
       opacity: 0;
@@ -288,6 +295,16 @@
         <div class="logo-circle logo-hero" style="width:200px;height:200px;filter:drop-shadow(0 8px 32px rgba(0,0,0,0.45)) drop-shadow(0 0 28px rgba(56,199,77,0.5));"><img src="./IMG_1549 3.PNG" alt="Wheelie Clean"></div>
       </div>
 
+      <!-- Google Reviews badge -->
+      <div class="reveal inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl mb-5" style="background:rgba(255,255,255,0.13);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.2);">
+        <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        <div class="flex items-center gap-1.5">
+          <span class="text-yellow-300 text-sm tracking-tight">★★★★★</span>
+          <span class="text-white text-xs" style="font-weight:800;">5.0</span>
+          <span class="text-xs" style="color:rgba(255,255,255,0.55);">· Google Reviews</span>
+        </div>
+      </div>
+
       <!-- Headline -->
       <h1 class="reveal reveal-delay-1 font-display text-5xl md:text-6xl text-white leading-tight mb-3" style="text-shadow:0 2px 20px rgba(0,0,0,0.3);letter-spacing:-0.02em;">
         Keep It<br><span style="color:#7aeea0;">Wheelie Clean.</span>
@@ -296,35 +313,35 @@
         Cumbria's favourite bin cleaning service ✦
       </p>
       <p class="reveal reveal-delay-2 text-sm leading-relaxed max-w-sm mb-8" style="color:rgba(255,255,255,0.85);">
-        Eco-friendly wheelie bin cleaning that eliminates germs, odours and grime — booked online in minutes.
+        No smell. No germs. No hassle. We come to you, clean your bin on the spot, and leave it sparkling — all for less than a coffee a month.
       </p>
 
       <!-- CTAs -->
       <div class="reveal reveal-delay-3 flex flex-wrap gap-3 justify-center mb-10">
-        <a href="#booking" class="btn bg-white px-7 py-3.5 rounded-full text-sm" style="color:#00A3E3;font-weight:900;box-shadow:0 6px 24px rgba(0,0,0,0.25);">
+        <a href="#booking" class="btn cta-pulse bg-white px-8 py-4 rounded-full text-sm" style="color:#00A3E3;font-weight:900;">
           ✨ Get a Free Quote
         </a>
-        <a href="https://wa.me/447388585330?text=Hi%20Wheelie%20Clean!%20I%27d%20like%20to%20book%20a%20bin%20clean." target="_blank" class="btn px-7 py-3.5 rounded-full text-sm text-white" style="background:linear-gradient(135deg,#25D366,#1aad52);font-weight:700;box-shadow:0 4px 16px rgba(37,211,102,0.4);">
+        <a href="https://wa.me/447388585330?text=Hi%20Wheelie%20Clean!%20I%27d%20like%20to%20book%20a%20bin%20clean." target="_blank" class="btn px-7 py-4 rounded-full text-sm text-white" style="background:linear-gradient(135deg,#25D366,#1aad52);font-weight:700;box-shadow:0 4px 16px rgba(37,211,102,0.4);">
           💬 WhatsApp
         </a>
-        <a href="tel:07388585330" class="btn px-6 py-3.5 rounded-full text-sm text-white border-2 border-white/50" style="background:rgba(255,255,255,0.14);backdrop-filter:blur(6px);font-weight:700;">
+        <a href="tel:07388585330" class="btn px-6 py-4 rounded-full text-sm text-white border-2 border-white/50" style="background:rgba(255,255,255,0.14);backdrop-filter:blur(6px);font-weight:700;">
           📞 Call
         </a>
       </div>
 
       <!-- Stats -->
-      <div class="reveal reveal-delay-4 flex justify-center gap-10 pt-7 border-t border-white/15 w-full max-w-xs md:max-w-sm">
+      <div class="reveal reveal-delay-4 grid grid-cols-3 gap-6 pt-7 border-t border-white/15 w-full max-w-sm">
         <div class="text-center">
           <div class="stat-num text-2xl md:text-3xl" data-target="500" data-suffix="+" style="font-weight:900;color:#7aeea0;">0+</div>
-          <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.68);font-weight:600;">Happy Customers</div>
+          <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.6);font-weight:600;">Bins Cleaned</div>
         </div>
         <div class="text-center">
-          <div class="text-2xl md:text-3xl" style="font-weight:900;color:#ffd700;">5★</div>
-          <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.68);font-weight:600;">Avg Rating</div>
+          <div class="text-2xl md:text-3xl" style="font-weight:900;color:#ffd700;">5.0★</div>
+          <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.6);font-weight:600;">Google Rating</div>
         </div>
         <div class="text-center">
-          <div class="stat-num text-2xl md:text-3xl" data-target="100" data-suffix="%" style="font-weight:900;color:#B8BF5A;">0%</div>
-          <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.68);font-weight:600;">Eco-Friendly</div>
+          <div class="text-2xl md:text-3xl" style="font-weight:900;color:#B8BF5A;">£6</div>
+          <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.6);font-weight:600;">From / Month</div>
         </div>
       </div>
     </div>
@@ -506,11 +523,10 @@
         <div class="reveal reveal-delay-1 ba-slider" style="height:280px;box-shadow:0 12px 40px rgba(0,0,0,0.4);" data-ba>
           <!-- BEFORE (base layer) -->
           <div class="ba-before" style="height:100%;">
-            <img src="https://placehold.co/600x400/555555/aaaaaa?text=BEFORE" alt="Dirty bin">
+            <img src="https://placehold.co/600x400/3d2b1f/6b4226?text=🗑+BEFORE+-+Dirty+bin" alt="Dirty bin before cleaning">
           </div>
-          <!-- AFTER (clipped overlay — reveals from RIGHT as you drag right) -->
           <div class="ba-after" style="clip-path:inset(0 0 0 50%);">
-            <img src="https://placehold.co/600x400/1a7a40/7aeea0?text=AFTER" alt="Clean bin">
+            <img src="https://placehold.co/600x400/1a4a2e/38C74D?text=✓+AFTER+-+Spotless+bin" alt="Clean bin after washing">
           </div>
           <!-- Handle line + arrows -->
           <div class="ba-handle" style="left:50%;">
@@ -524,10 +540,10 @@
         <!-- Slider 2 -->
         <div class="reveal reveal-delay-2 ba-slider" style="height:280px;box-shadow:0 12px 40px rgba(0,0,0,0.4);" data-ba>
           <div class="ba-before" style="height:100%;">
-            <img src="https://placehold.co/600x400/3a3a3a/888888?text=BEFORE" alt="Dirty bin">
+            <img src="https://placehold.co/600x400/2c1a0e/5c3317?text=🗑+BEFORE+-+Smelly+%26+dirty" alt="Dirty bin before cleaning">
           </div>
-          <div class="ba-after" style="width:50%;">
-            <img src="https://placehold.co/600x400/155c28/5eda80?text=AFTER" alt="Clean bin">
+          <div class="ba-after" style="clip-path:inset(0 0 0 50%);">
+            <img src="https://placehold.co/600x400/003d5c/00A3E3?text=✓+AFTER+-+Sanitised+%26+fresh" alt="Clean bin after washing">
           </div>
           <div class="ba-handle" style="left:50%;"></div>
           <span class="ba-label ba-label-before">Before</span>
@@ -544,6 +560,19 @@
       <div class="text-center mb-12 reveal">
         <p class="text-xs uppercase tracking-widest mb-3" style="color:#38C74D;font-weight:800;letter-spacing:0.12em;">✦ HAPPY CUSTOMERS ✦</p>
         <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">Trusted Across Cumbria</h2>
+        <!-- Social proof avatars -->
+        <div class="flex items-center justify-center gap-2 mt-5">
+          <div class="flex -space-x-2">
+            <div class="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-xs text-white" style="background:linear-gradient(135deg,#00A3E3,#005a8a);">SM</div>
+            <div class="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-xs text-white" style="background:linear-gradient(135deg,#38C74D,#2aaa40);">JT</div>
+            <div class="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-xs text-white" style="background:linear-gradient(135deg,#B8BF5A,#8a9030);">LK</div>
+            <div class="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-xs text-white" style="background:linear-gradient(135deg,#003d5c,#007ab5);">+</div>
+          </div>
+          <div class="text-left">
+            <div class="text-yellow-400 text-sm leading-none">★★★★★</div>
+            <div class="text-xs text-gray-500 mt-0.5" style="font-weight:700;">500+ happy customers across Cumbria</div>
+          </div>
+        </div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="reveal reveal-delay-1 bg-white rounded-2xl p-7 border-l-4" style="border-color:#00A3E3;box-shadow:0 4px 20px rgba(0,163,227,0.08);">
@@ -629,6 +658,28 @@
       <p class="text-center text-xs text-gray-400 mt-8 reveal">Prices are per bin. Discounts available for multiple bins — <a href="#booking" class="underline" style="color:#00A3E3;">get in touch for a quote</a>.</p>
     </div>
   </section>
+
+  <!-- ═══════════ RESULTS BAR ═══════════ -->
+  <div class="py-10 px-6" style="background:linear-gradient(90deg,#003d5c,#005a8a,#003d5c);">
+    <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="reveal">
+        <div class="stat-num text-3xl md:text-4xl text-white" data-target="500" data-suffix="+" style="font-weight:900;color:#7aeea0;">0+</div>
+        <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.55);font-weight:700;">Bins Cleaned</div>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <div class="text-3xl md:text-4xl" style="font-weight:900;color:#ffd700;">5.0★</div>
+        <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.55);font-weight:700;">Google Rating</div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="stat-num text-3xl md:text-4xl text-white" data-target="99" data-suffix="%" style="font-weight:900;color:#38C74D;">0%</div>
+        <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.55);font-weight:700;">Bacteria Killed</div>
+      </div>
+      <div class="reveal reveal-delay-3">
+        <div class="text-3xl md:text-4xl" style="font-weight:900;color:#00A3E3;">£6</div>
+        <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.55);font-weight:700;">From Per Month</div>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══════════ ABOUT ═══════════ -->
   <section id="about" class="py-20 px-6 md:px-14 bg-white">
