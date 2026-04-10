@@ -3125,6 +3125,65 @@ function closeLogin(){
   document.body.style.overflow='';
 }
 
+// ── ONBOARDING WIZARD ────────────────────────────────────────────────
+const wiz={step:1,type:'',name:'',bio:'',avatar:'',disciplines:[],businessType:'',city:''};
+
+function openWizard(){
+  wiz.step=1;wiz.type='';wiz.name='';wiz.bio='';wiz.avatar='';wiz.disciplines=[];wiz.businessType='';wiz.city='';
+  document.getElementById('wizardOverlay').classList.add('open');
+  document.getElementById('wizardPanel').classList.add('open');
+  document.body.style.overflow='hidden';
+  renderWizStep();
+}
+
+function closeWizard(){
+  document.getElementById('wizardOverlay').classList.remove('open');
+  document.getElementById('wizardPanel').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function wizUpdateProgress(){
+  for(let i=1;i<=4;i++){
+    document.getElementById('wp'+i).classList.toggle('done',i<=wiz.step);
+  }
+  document.getElementById('wizStepLbl').textContent=`Step ${wiz.step} of 4`;
+}
+
+function renderWizStep(){
+  wizUpdateProgress();
+  const c=document.getElementById('wizContent');
+  if(wiz.step===1) c.innerHTML=wizStep1HTML();
+  if(wiz.step===2) c.innerHTML=wizStep2HTML();
+  if(wiz.step===3) c.innerHTML=wizStep3HTML();
+  if(wiz.step===4) c.innerHTML=wizStep4HTML();
+}
+
+function wizStep1HTML(){
+  return`
+  <div class="wizard-h">What brings you here?</div>
+  <div class="wizard-sub">This helps us personalise your experience</div>
+  <div class="wiz-type-grid">
+    <div class="wiz-type-tile${wiz.type==='creator'?' sel':''}" onclick="wizSelectType('creator')">
+      <span class="wiz-type-icon">🎨</span>
+      <div class="wiz-type-name">Creator</div>
+      <div class="wiz-type-sub">Artist · musician · photographer · dancer…</div>
+    </div>
+    <div class="wiz-type-tile${wiz.type==='advertiser'?' sel':''}" onclick="wizSelectType('advertiser')">
+      <span class="wiz-type-icon">🏢</span>
+      <div class="wiz-type-name">Advertiser</div>
+      <div class="wiz-type-sub">Brand · studio · venue owner…</div>
+    </div>
+  </div>
+  <div class="wiz-nav">
+    <button class="wiz-continue" onclick="wizNext()" ${wiz.type?'':'disabled'}>Continue →</button>
+  </div>`;
+}
+
+function wizSelectType(t){
+  wiz.type=t;
+  renderWizStep();
+}
+
 function setAuthMode(mode){
   authMode=mode;
   document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));
