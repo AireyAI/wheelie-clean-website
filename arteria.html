@@ -3184,6 +3184,62 @@ function wizSelectType(t){
   renderWizStep();
 }
 
+function wizNext(){
+  if(wiz.step<4){wiz.step++;renderWizStep();}
+  else{wizFinish();}
+}
+
+function wizBack(){
+  if(wiz.step>1){wiz.step--;renderWizStep();}
+}
+
+function wizStep2HTML(){
+  const isAdv=wiz.type==='advertiser';
+  const bioPlaceholder=isAdv?'Describe your brand or business (optional)':'Tell the community about yourself (optional)';
+  const avatarContent=wiz.avatar
+    ?`<img src="${wiz.avatar}" alt="avatar">`
+    :`<span style="font-size:1.3rem">📷</span>`;
+  return`
+  <div class="wizard-h">Set up your profile</div>
+  <div class="wizard-sub">Others will see this on your page</div>
+  <div class="wiz-avatar-row">
+    <div class="wiz-avatar" onclick="wizPickAvatar()" id="wizAvatarPreview">${avatarContent}</div>
+    <div>
+      <div style="font-size:.82rem;font-weight:700;color:var(--t1);margin-bottom:2px">Profile photo</div>
+      <div style="font-size:.72rem;color:var(--t3)">Optional · tap to upload</div>
+    </div>
+  </div>
+  <div class="field-group">
+    <label>Display name *</label>
+    <input class="field-input" id="wizName" placeholder="Your name or alias" value="${wiz.name}" oninput="wiz.name=this.value;document.getElementById('wizContinue2').disabled=!this.value.trim()">
+  </div>
+  <div class="wiz-bio-wrap">
+    <label style="display:block;font-size:.72rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Bio</label>
+    <textarea class="field-input" id="wizBio" rows="3" maxlength="160" placeholder="${bioPlaceholder}" style="resize:none;line-height:1.6" oninput="wiz.bio=this.value;document.getElementById('wizBioCount').textContent=this.value.length+'/160'">${wiz.bio}</textarea>
+    <div class="wiz-bio-count" id="wizBioCount">${wiz.bio.length}/160</div>
+  </div>
+  <div class="wiz-nav">
+    <button class="wiz-back" onclick="wizBack()">← Back</button>
+    <button class="wiz-continue" id="wizContinue2" onclick="wizNext()" ${wiz.name.trim()?'':'disabled'}>Continue →</button>
+  </div>`;
+}
+
+function wizPickAvatar(){
+  const inp=document.createElement('input');
+  inp.type='file';inp.accept='image/jpeg,image/png';
+  inp.onchange=e=>{
+    const f=e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=ev=>{
+      wiz.avatar=ev.target.result;
+      const pr=document.getElementById('wizAvatarPreview');
+      if(pr)pr.innerHTML=`<img src="${ev.target.result}" alt="avatar">`;
+    };
+    r.readAsDataURL(f);
+  };
+  inp.click();
+}
+
 function setAuthMode(mode){
   authMode=mode;
   document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));
