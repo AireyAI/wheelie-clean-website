@@ -194,6 +194,17 @@
     /* FAQ numbered badge */
     .faq-num { width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;background:linear-gradient(135deg,#e8f7fd,#c8eefa);color:#00A3E3; }
 
+    /* B/A handle arrows */
+    .ba-arrows { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:2px;pointer-events:none;z-index:11; }
+    .ba-arrows span { font-size:11px;font-weight:900;color:#00A3E3;line-height:1; }
+
+    /* Scroll indicator */
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+    .scroll-hint { animation: bounce 1.8s ease-in-out infinite; }
+
+    /* Active nav link */
+    .nav-active { color:#00A3E3 !important; }
+
     /* Back to top */
     #back-to-top { opacity:0; transform:translateY(12px); transition:opacity 0.3s ease, transform 0.3s ease; pointer-events:none; }
     #back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
@@ -318,6 +329,14 @@
       </div>
     </div>
 
+    <!-- Scroll hint -->
+    <div class="flex flex-col items-center pb-6 opacity-50">
+      <span class="text-white text-xs uppercase tracking-widest mb-2" style="font-weight:700;letter-spacing:0.12em;">Scroll</span>
+      <div class="scroll-hint w-5 h-8 rounded-full border-2 border-white/50 flex items-start justify-center pt-1.5">
+        <div class="w-1 h-2 rounded-full bg-white/80"></div>
+      </div>
+    </div>
+
     <!-- Wave -->
     <svg class="wave -mb-px" viewBox="0 0 1200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0,24 C200,48 400,0 600,24 C800,48 1000,0 1200,24 L1200,48 L0,48 Z" fill="#f8f9fa"/>
@@ -423,6 +442,13 @@
           <p class="text-xs text-gray-500 leading-relaxed">Your bin is spotless, deodorised and returned to your door. ✦</p>
         </div>
       </div>
+      <!-- CTA after steps -->
+      <div class="text-center mt-10 reveal">
+        <a href="#booking" class="btn inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-white text-sm" style="font-weight:900;background:linear-gradient(135deg,#38C74D,#2aaa40);box-shadow:0 6px 24px rgba(56,199,77,0.35);">
+          Book Your First Clean →
+        </a>
+        <p class="text-xs text-gray-400 mt-3">No commitment. Cancel any plan anytime.</p>
+      </div>
     </div>
   </section>
 
@@ -435,22 +461,30 @@
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         <div class="reveal reveal-delay-1 text-center p-6 rounded-2xl" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
-          <div class="text-3xl mb-3">🌡️</div>
+          <div class="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style="background:rgba(0,163,227,0.2);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00A3E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+          </div>
           <h3 class="text-sm text-white mb-1" style="font-weight:900;">Hot Water Clean</h3>
           <p class="text-xs" style="color:rgba(255,255,255,0.6);line-height:1.6;">High-temperature wash kills bacteria other services miss</p>
         </div>
         <div class="reveal reveal-delay-2 text-center p-6 rounded-2xl" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
-          <div class="text-3xl mb-3">📍</div>
-          <h3 class="text-sm text-white mb-1" style="font-weight:900;">Local & Reliable</h3>
+          <div class="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style="background:rgba(56,199,77,0.2);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38C74D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <h3 class="text-sm text-white mb-1" style="font-weight:900;">Local &amp; Reliable</h3>
           <p class="text-xs" style="color:rgba(255,255,255,0.6);line-height:1.6;">Cumbria-based team — we show up on time, every time</p>
         </div>
         <div class="reveal reveal-delay-3 text-center p-6 rounded-2xl" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
-          <div class="text-3xl mb-3">💧</div>
+          <div class="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style="background:rgba(122,238,160,0.2);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7aeea0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/><path d="M8 12a4 4 0 0 0 8 0"/></svg>
+          </div>
           <h3 class="text-sm text-white mb-1" style="font-weight:900;">Water Recycled</h3>
           <p class="text-xs" style="color:rgba(255,255,255,0.6);line-height:1.6;">Our van recycles wastewater — no mess left on your drive</p>
         </div>
         <div class="reveal reveal-delay-4 text-center p-6 rounded-2xl" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
-          <div class="text-3xl mb-3">📱</div>
+          <div class="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style="background:rgba(184,191,90,0.2);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B8BF5A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
           <h3 class="text-sm text-white mb-1" style="font-weight:900;">Easy to Book</h3>
           <p class="text-xs" style="color:rgba(255,255,255,0.6);line-height:1.6;">Book online, by phone, or just drop us a WhatsApp</p>
         </div>
@@ -478,8 +512,10 @@
           <div class="ba-after" style="clip-path:inset(0 0 0 50%);">
             <img src="https://placehold.co/600x400/1a7a40/7aeea0?text=AFTER" alt="Clean bin">
           </div>
-          <!-- Handle line -->
-          <div class="ba-handle" style="left:50%;"></div>
+          <!-- Handle line + arrows -->
+          <div class="ba-handle" style="left:50%;">
+            <div class="ba-arrows"><span>◀</span><span>▶</span></div>
+          </div>
           <!-- Labels -->
           <span class="ba-label ba-label-before">Before</span>
           <span class="ba-label ba-label-after">After</span>
@@ -602,7 +638,12 @@
         <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">About Wheelie Clean</h2>
       </div>
       <div class="reveal rounded-2xl overflow-hidden" style="background:#f8f9fa;border:2px solid #efefef;">
-        <img src="https://placehold.co/900x320/c8eefa/00A3E3?text=Team+%2F+Van+Photo" alt="Wheelie Clean team" class="w-full h-48 object-cover">
+        <!-- Replace this src with your real team/van photo -->
+        <div class="w-full h-48 flex flex-col items-center justify-center gap-3 relative overflow-hidden" style="background:linear-gradient(135deg,#003d5c 0%,#005a8a 60%,#00A3E3 100%);">
+          <div class="absolute inset-0 opacity-10" style="background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><circle cx=%2230%22 cy=%2230%22 r=%221%22 fill=%22white%22/></svg>');background-size:60px 60px;"></div>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><line x1="12" y1="15" x2="12" y2="17"/></svg>
+          <p class="text-white/60 text-xs uppercase tracking-widest" style="font-weight:700;">Add your team or van photo here</p>
+        </div>
         <div class="p-8">
           <p class="text-sm text-gray-600 leading-relaxed">We're Wheelie Clean — a local, family-run bin cleaning business proudly serving Cumbria. We started because we believed everyone deserves a clean, hygienic bin without the hassle. Using eco-friendly, biodegradable cleaning products, we power-wash and sanitise your wheelie bins right on your doorstep.</p>
         </div>
@@ -745,7 +786,18 @@
         <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">Serving Cumbria</h2>
       </div>
       <div class="reveal rounded-2xl overflow-hidden mb-8" style="box-shadow:inset 0 2px 8px rgba(0,163,227,0.07);">
-        <img src="https://placehold.co/900x280/c8eefa/00A3E3?text=Cumbria+Service+Area+Map" alt="Wheelie Clean service area — Cumbria" class="w-full h-44 object-cover opacity-80">
+        <!-- Styled map placeholder — replace with an embedded Google Map iframe when ready -->
+        <div class="w-full h-44 flex items-center justify-center relative overflow-hidden" style="background:linear-gradient(135deg,#e8f7fd 0%,#c8eefa 100%);">
+          <svg class="absolute opacity-10 w-full h-full" viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,140 C100,80 200,200 300,140 C400,80 500,200 600,140 C700,80 800,200 900,140" fill="none" stroke="#00A3E3" stroke-width="2"/>
+            <path d="M0,100 C150,160 300,60 450,120 C600,180 750,80 900,100" fill="none" stroke="#38C74D" stroke-width="1.5"/>
+          </svg>
+          <div class="text-center z-10">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00A3E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <p class="text-xs uppercase tracking-widest" style="color:#00A3E3;font-weight:800;">Cumbria, England</p>
+            <p class="text-xs text-gray-400 mt-1">Carlisle · Penrith · Kendal · Barrow · Whitehaven</p>
+          </div>
+        </div>
       </div>
       <div class="reveal flex flex-wrap gap-3 justify-center">
         <span class="px-4 py-2 rounded-full text-xs bg-white border-2" style="color:#00A3E3;border-color:#c8eefa;font-weight:800;box-shadow:0 2px 8px rgba(0,163,227,0.1);">Carlisle</span>
@@ -977,6 +1029,21 @@
     window.addEventListener('scroll', () => {
       backBtn.classList.toggle('visible', window.scrollY > 500);
     }, { passive: true });
+
+    // ── Active nav highlight ──
+    const navLinks = document.querySelectorAll('#nav-links a[href^="#"]');
+    const sectionIds = ['services','how-it-works','pricing','gallery','faq'];
+    const sectionEls = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    const navObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('nav-active'));
+          const activeLink = document.querySelector(\`#nav-links a[href="#\${entry.target.id}"]\`);
+          if (activeLink) activeLink.classList.add('nav-active');
+        }
+      });
+    }, { threshold: 0.3 });
+    sectionEls.forEach(el => navObserver.observe(el));
 
     // ── Cookie banner ──
     const cookieBanner = document.getElementById('cookie-banner');
