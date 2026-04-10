@@ -1,0 +1,278 @@
+# Dolled by Louise — Landing Page & AI Booking Agent Design Spec
+**Date:** 2026-04-10
+
+---
+
+## Overview
+
+A single-page, mobile-first landing page for Dolled by Louise, a lash artist based in Longtown, Cumbria. Primary goals: convert visitors into bookings via phone call or WhatsApp, and capture leads through an embedded AI booking agent that collects details and delivers them to Louise via WhatsApp and email.
+
+---
+
+## Business Details
+
+| Field | Value |
+|---|---|
+| Business name | Dolled by Louise |
+| Phone | +44 7464 557236 |
+| WhatsApp | wa.me/447464557236 |
+| Email (bookings) | louisetrainorr@gmail.com |
+| Address | 33 Albert Street, Longtown, CA6 5SF |
+| Google Maps | https://maps.google.com/?q=33+Albert+Street,+Longtown,+CA6+5SF |
+| Instagram | Placeholder (coming soon) |
+| Logo | Text wordmark — no logo yet |
+
+---
+
+## Services
+
+### Lash Lifts
+- Korean Lash Lift — intense curl & lift
+- LVL Lashes — Length, Volume & Lift
+- Lash Tint — deeper, darker lashes
+- Lift + Tint Combo
+
+### Lash Extensions
+- Classic — natural & defined
+- Hybrid — classic & volume blend
+- Russian Volume — full & fluffy fans
+- Mega Volume — maximum drama
+- Infills — 2–3 weeks after set
+
+**Note:** All prices are placeholder (£XX) — Louise to confirm before go-live.
+
+---
+
+## Visual Direction
+
+| Token | Value |
+|---|---|
+| `--plum` | `#2d1423` |
+| `--rose` | `#c97fa0` |
+| `--blush` | `#fce8ee` |
+| `--lilac` | `#e8d5f0` |
+| `--cream` | `#fdf8f5` |
+| `--wa` | `#25D366` |
+
+- **Vibe:** Soft feminine luxury — blush pinks, deep plum, and lilac accents
+- **Heading font:** Cormorant Garamond (Google Fonts) — italic, light weight
+- **Body font:** Jost (Google Fonts) — 300/400/500 weights
+- **Texture:** SVG fractalNoise grain overlay on `body::before` at 4% opacity
+- **Gradients:** Multi-layer radial gradients on hero and section backgrounds
+- **Shadows:** Pink-tinted `box-shadow` with rgba rose values
+- **Animations:** `transform` + `opacity` only — spring cubic-bezier easing
+
+---
+
+## Page Structure
+
+### 1. Floating WhatsApp Button
+Fixed bottom-right, z-index 1000. Plum-to-deep-plum gradient circle, pulsing `box-shadow` animation. Links to `wa.me/447464557236`.
+
+### 2. Sticky Nav
+- Left: "Dolled by Louise" italic Cormorant Garamond wordmark with "Lash Artist · Longtown" Jost subtitle in rose
+- Right: "📞 Call" pill (plum bg) + "Book Now" WhatsApp pill (green bg)
+- Transparent on load → blush/cream with backdrop-filter blur on scroll (IntersectionObserver or scroll event)
+- On mobile: hide "Call" button to avoid crowding
+
+### 3. Hero (full viewport)
+- Multi-layer radial gradient background (blush → lilac → cream) with `heroBreath` hue-rotate animation
+- 4 floating decorative rings (2 large border-only, 2 small filled) with `floatA`/`floatB` keyframe animations
+- Monogram circle: 92px, gradient blush→lilac, letter "D" in Cormorant Garamond
+- Label: `✦ Premium Lash Artist · Longtown, Cumbria ✦` in rose uppercase Jost
+- H1: "Dolled by Louise" — Cormorant Garamond italic, `clamp(52px, 11vw, 104px)`, font-weight 300
+- Rose/lilac gradient divider line (44px × 2px)
+- Tagline: "Expert lash lifts & extensions tailored to your unique eye shape."
+- Dual CTAs: "📞 Call to Book" (plum pill) + "WhatsApp" (green pill with WA SVG icon)
+- Scroll cue: "Scroll" label + gradient line, `scrollBounce` animation
+
+**Staggered fade-in:** all hero elements animate in with `fadeUp` keyframe (opacity 0→1, translateY 22px→0) with delays of 0.2s, 0.4s, 0.55s, 0.7s, 0.9s.
+
+### 4. Stats Bar
+White background, 4 stats in a flex row:
+- 100+ Happy Clients
+- 5★ Rated
+- 100% Premium Products
+- Certified & Insured
+
+Each stat: large Cormorant Garamond number + small rose uppercase Jost label. Dividers between stats (border-left on `+` sibling). Collapses to vertical on mobile.
+
+### 5. Services Section
+White background. Two cards in a CSS grid (`repeat(auto-fit, minmax(290px, 1fr))`):
+
+**Card 1 — Lash Lifts** (blush→lilac gradient bg):
+- Icon: ✨
+- Description paragraph
+- Bullet list: Korean Lash Lift, LVL Lashes, Lash Tint
+- WhatsApp CTA: `wa.me/447464557236?text=Hi Louise! I'd love to book a lash lift ✨`
+
+**Card 2 — Lash Extensions** (lilac→blush gradient bg):
+- Icon: 👁
+- Description paragraph
+- Bullet list: Classic, Hybrid, Russian Volume, Mega Volume
+- WhatsApp CTA: `wa.me/447464557236?text=Hi Louise! I'd love to book lash extensions 👁`
+
+Cards lift 10px with pink-tinted shadow on hover (`transform 0.32s cubic-bezier(0.34,1.3,0.64,1)`).
+
+### 6. Pricing Section
+Blush gradient background. Two white rounded panels (20px border-radius, pink box-shadow):
+- Left: Lash Lifts pricing (Korean Lash Lift, LVL, Lash Tint, Lift + Tint Combo) — all £XX placeholders
+- Right: Extensions pricing (Classic, Hybrid, Russian Volume, Mega Volume, Infills) — all £XX placeholders
+
+Each row: treatment name + description subtitle on left, `£XX` in Cormorant Garamond rose on right. Subtle hover: row gets blush bg, negative margin expansion. Note at top: "Prices to be confirmed by Louise".
+
+### 7. How to Book (3 Steps)
+White background. 3-column grid (stacks on mobile):
+1. Get in Touch — call or WhatsApp to check availability
+2. Book Your Slot — confirm time, deposit may be required
+3. Get Dolled Up — sit back, relax, leave with lashes you'll love
+
+Each step: numbered circle (blush→lilac gradient), Cormorant Garamond step title, Jost body text.
+
+### 8. Gallery
+Blush→lilac gradient background. 3×2 CSS grid of placeholder images (`placehold.co/400x400`), `aspect-ratio: 1`, 14px border-radius. On hover: image scales 1.07, dark gradient overlay fades in with caption label (Classic Set, Hybrid Set, Russian Volume, Korean Lift, LVL Lashes, Mega Volume). Note: client to swap in real photos.
+
+### 9. Testimonials
+White background. Two cards side-by-side (stacks on mobile):
+- Large decorative `"` quote mark (Cormorant Garamond, rose, 18% opacity) via `::before`
+- ★★★★★ stars in amber
+- Italic review text
+- Reviewer name in rose uppercase Jost
+
+Cards lift + shadow deepens on hover. Placeholder copy — client to swap for real reviews.
+
+### 10. FAQ Accordion
+Blush gradient background. 5 `<details>` / `<summary>` items:
+1. How long do lash extensions last?
+2. What's the difference between Korean Lash Lift and LVL?
+3. How do I prepare for my appointment?
+4. Can I wear mascara with extensions?
+5. Where are you based? (includes Google Maps link inline)
+
+Icon circle rotates 45° when open. Smooth height transition on answer reveal.
+
+### 11. Book & Find Us
+Deep plum gradient background (`#2d1423` → `#4a1a30`). Centred:
+- Rose label: `✦ Ready to get dolled? ✦`
+- Italic Cormorant Garamond heading: "Book Your Appointment"
+- Large clickable phone number in rose (`tel:` link)
+- Address in muted uppercase
+- Google Maps link (pin icon SVG + "View on Google Maps") in rose
+- Dual CTA buttons: "📞 Call Now" (rose gradient pill) + "WhatsApp Us" (green pill)
+
+### 12. Footer
+Near-black (`#1a0a10`) background:
+- Left: "Dolled by Louise" italic Cormorant Garamond
+- Right: "© 2026 · Instagram coming soon"
+
+---
+
+## AI Booking Agent — Option C (Smart Assistant + Booking)
+
+### Behaviour
+The agent can do two things:
+1. **Answer questions** — services explained, differences between treatments, aftercare advice, what to expect, pricing (directs to call if prices not set), location
+2. **Take bookings** — collects all required details, shows confirmation summary, sends via WhatsApp + email
+
+The agent detects intent and switches between modes seamlessly. After answering a question it always offers to book.
+
+### Widget UI
+- **Collapsed state:** 64px circle button, plum gradient, chat bubble SVG icon, rose badge showing "1" — pinned bottom-right. Pulses via `box-shadow` animation.
+- **Open state:** 380px wide chat panel (full-width on mobile), fixed bottom-right, max-height 520px with overflow scroll on messages.
+
+**Header:** plum gradient, "D" monogram avatar, business name, status line.
+
+**Progress bar:** 3px rose→lilac gradient bar below header, shows current step of 5.
+
+**Messages:**
+- Bot messages: white bubble, left-aligned, subtle border + shadow, `border-radius: 12px 12px 12px 3px`
+- User messages: plum gradient bubble, right-aligned, `border-radius: 12px 12px 3px 12px`
+- Typing indicator: three animated dots while waiting for API response
+
+**Quick reply chips:** Displayed after service question. Options: Korean Lash Lift, LVL Lashes, Lash Tint, Classic, Hybrid, Russian Volume, Mega Volume, "Not sure — help me choose!". Tap selects (highlighted in rose), or user can type.
+
+**Booking flow (5 steps):**
+1. Name
+2. Service (with chips + "help me choose" path)
+3. Preferred date / day of week
+4. Contact: phone or email
+5. Any notes (allergies, first-time, special requests)
+
+**Confirmation screen:** Card showing all collected details (name, service, date, contact, notes) before sending. "Does everything look right?"
+
+**Send buttons:**
+- "Send via WhatsApp" (green) — generates pre-filled `wa.me` URL and opens it
+- "📧 Email too" (blush/lilac) — triggers EmailJS send
+
+### Data Delivery
+
+**WhatsApp:** Constructs `wa.me/447464557236?text=...` URL with full booking summary URL-encoded. Opens in new tab for customer to tap Send.
+
+**Email via EmailJS:**
+- Service: EmailJS (free tier — 200 emails/month)
+- To: `louisetrainorr@gmail.com`
+- Subject: `New Booking Request — [name] — [service]`
+- Body: structured booking summary with all fields
+
+### Technical Architecture
+
+```
+index.html (or dolled-by-louise.html)
+│
+├── Chat widget UI (inline HTML/CSS/JS)
+│   ├── Renders messages, quick replies, progress bar
+│   └── Calls /api/chat on user message
+│
+├── /api/chat (Node.js endpoint in server.mjs)
+│   ├── Receives conversation history
+│   ├── Calls Anthropic claude-haiku-4-5 API
+│   │   └── System prompt: Louise's assistant persona + service knowledge
+│   └── Returns assistant reply + structured booking data if complete
+│
+└── EmailJS (client-side)
+    └── Fires on confirmation — sends to louisetrainorr@gmail.com
+```
+
+**Server:** `server.mjs` — extends existing `serve.mjs` to add `/api/chat` POST endpoint. Serves static files on port 3000.
+
+**Model:** `claude-haiku-4-5-20251001` — fast and cost-effective for chat (approx £0.001 per conversation).
+
+**System prompt covers:**
+- Louise's assistant persona (warm, friendly, knowledgeable)
+- Full service menu with descriptions and differences
+- Aftercare advice per treatment
+- Booking flow instructions
+- When to hand off to Louise directly (complex queries, pricing disputes)
+- Longtown location details
+
+**API key:** `ANTHROPIC_API_KEY` environment variable — never exposed to client.
+
+**EmailJS config:** `EMAILJS_SERVICE_ID`, `EMAILJS_TEMPLATE_ID`, `EMAILJS_PUBLIC_KEY` — the public key is safe to embed directly in the page `<script>` (it is intentionally client-side). Service ID and template ID are also non-secret and can be inlined.
+
+---
+
+## Technical Constraints
+
+- Single HTML file (`dolled-by-louise.html`) — all styles inline
+- `server.mjs` replaces `serve.mjs` — adds `/api/chat` POST endpoint alongside static file serving
+- Tailwind CSS via CDN
+- Google Fonts via `<link>` preconnect
+- Placeholder images via `placehold.co`
+- Mobile-first responsive — breakpoint at 640px
+- No build step, no frameworks
+- Scroll reveal via `IntersectionObserver` (threshold 0.12)
+- All animations on `transform` + `opacity` only — no `transition-all`
+- Every interactive element has hover, focus-visible, and active states
+
+---
+
+## Placeholder Content (to swap before launch)
+
+| Item | Status |
+|---|---|
+| Pricing (all £XX) | Louise to confirm |
+| Gallery photos (6 placeholders) | Client to provide real photos |
+| Testimonials (2 placeholder reviews) | Client to provide real reviews |
+| Stats (100+, 5★ etc.) | Update to reflect real numbers |
+| Instagram handle | Add when account is ready |
+| Logo | Replace "D" monogram when logo created |
