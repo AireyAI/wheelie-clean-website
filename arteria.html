@@ -1694,6 +1694,26 @@ svg.sparkline circle{fill:var(--amber)}
   </div>
 </div>
 
+<!-- ONBOARDING WIZARD PANEL -->
+<div class="overlay" id="wizardOverlay" onclick="closeWizard()"></div>
+<div class="wizard-panel" id="wizardPanel">
+  <div class="booking-handle"></div>
+  <div class="wizard-body">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+      <span style="font-family:var(--fd);font-weight:800;font-size:1rem;letter-spacing:-.04em;color:var(--t1)">ARTERIA<span class="logo-dot" style="margin-left:3px"></span></span>
+      <button class="modal-close" onclick="closeWizard()">✕</button>
+    </div>
+    <div class="wizard-progress" id="wizProg">
+      <div class="wp-seg" id="wp1"></div>
+      <div class="wp-seg" id="wp2"></div>
+      <div class="wp-seg" id="wp3"></div>
+      <div class="wp-seg" id="wp4"></div>
+    </div>
+    <div class="wizard-step-lbl" id="wizStepLbl">Step 1 of 4</div>
+    <div id="wizContent"></div>
+  </div>
+</div>
+
 <!-- BOOKING OVERLAY + PANEL -->
 <div class="overlay" id="bookingOverlay" onclick="closeBooking()"></div>
 <div class="booking-panel" id="bookingPanel">
