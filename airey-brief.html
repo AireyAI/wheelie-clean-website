@@ -223,6 +223,40 @@
       return { md: lines.join('\n'), slug };
     }
 
+    // ── Thank you screen ───────────────────────────────────────────────────
+    function showThankYou() {
+      // Hide progress bar
+      document.getElementById('progress-fill').parentElement.style.display = 'none';
+      document.getElementById('progress-fill').parentElement.previousElementSibling.style.display = 'none';
+
+      const c = document.getElementById('step-container');
+      c.innerHTML = '';
+
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'text-align:center;padding:24px 0;';
+
+      const icon = document.createElement('div');
+      icon.style.cssText = 'font-size:48px;margin-bottom:20px;';
+      icon.textContent = '✅';
+      wrap.appendChild(icon);
+
+      const title = document.createElement('div');
+      title.style.cssText = 'font-size:24px;font-weight:700;margin-bottom:10px;';
+      title.textContent = "You're all set!";
+      wrap.appendChild(title);
+
+      const sub = document.createElement('div');
+      sub.style.cssText = 'font-size:15px;color:var(--ai-muted);line-height:1.6;max-width:360px;margin:0 auto 32px;';
+      sub.textContent = "We've received your business brief. We'll be in touch soon.";
+      wrap.appendChild(sub);
+
+      // Clear localStorage on successful submit
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STEP_KEY);
+
+      c.appendChild(wrap);
+    }
+
     // ── Steps ──────────────────────────────────────────────────────────────
     const steps = [
 
@@ -459,57 +493,49 @@
         });
         c.appendChild(summaryWrap);
 
-        // Action buttons
+        // Submit button
         const actions = document.createElement('div');
         actions.style.cssText = 'display:flex;gap:12px;flex-wrap:wrap;';
 
-        const dlBtn = document.createElement('button');
-        dlBtn.className = 'btn-primary';
-        dlBtn.textContent = '⬇ Download Brief';
-        dlBtn.onclick = () => {
-          const { md, slug } = generateMarkdown();
+        const submitBtn = document.createElement('button');
+        submitBtn.className = 'btn-primary';
+        submitBtn.textContent = 'Submit →';
+        submitBtn.onclick = async () => {
+          submitBtn.textContent = 'Sending…';
+          submitBtn.disabled = true;
 
-          // Download file
-          const blob = new Blob([md], { type: 'text/markdown' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `${slug}-brief.md`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-
-          // Send copy to AireyAi via Formspree (silent)
-          fetch('https://formspree.io/f/xdaprbbw', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({
-              _subject: `New Business Brief — ${state.businessName || 'Unknown'}`,
-              name: state.fullName || '—',
-              email: state.email || '—',
-              phone: state.phone || '—',
-              business: state.businessName || '—',
-              brief: md,
-            }),
-          }).catch(() => {}); // silent fail — download still works if this fails
-        };
-
-        const emailBtn = document.createElement('button');
-        emailBtn.className = 'btn-outline';
-        emailBtn.textContent = '✉ Email to Myself';
-        emailBtn.onclick = () => {
           const { md } = generateMarkdown();
-          const subject = encodeURIComponent(`Business Brief — ${state.businessName || 'My Business'}`);
-          const body = encodeURIComponent(md);
-          window.location.href = `mailto:${state.email || ''}?subject=${subject}&body=${body}`;
+
+          try {
+            const res = await fetch('https://formspree.io/f/xdaprbbw', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+              body: JSON.stringify({
+                _subject: `New Business Brief — ${state.businessName || 'Unknown'}`,
+                name: state.fullName || '—',
+                email: state.email || '—',
+                phone: state.phone || '—',
+                business: state.businessName || '—',
+                brief: md,
+              }),
+            });
+
+            if (res.ok) {
+              showThankYou();
+            } else {
+              submitBtn.textContent = 'Something went wrong — try again';
+              submitBtn.disabled = false;
+            }
+          } catch {
+            submitBtn.textContent = 'Something went wrong — try again';
+            submitBtn.disabled = false;
+          }
         };
 
-        actions.appendChild(dlBtn);
-        actions.appendChild(emailBtn);
+        actions.appendChild(submitBtn);
         c.appendChild(actions);
 
-        // Back + reset
+        // Back
         const bottomNav = document.createElement('div');
         bottomNav.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-top:24px;';
 
