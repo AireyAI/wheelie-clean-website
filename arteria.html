@@ -1314,6 +1314,36 @@ svg.sparkline circle{fill:var(--amber)}
 .wiz-continue:disabled{opacity:.35;cursor:not-allowed}
 .wiz-skip{font-size:.8rem;color:var(--t3);cursor:pointer;text-align:center;margin-top:.75rem;transition:color .2s}
 .wiz-skip:hover{color:var(--t2)}
+/* PODCAST NETWORK */
+.pod-wrap{max-width:1200px;margin:0 auto;padding:5rem 2rem 4rem}
+.pod-hd{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
+.pod-title{font-family:var(--fd);font-size:2rem;font-weight:800;letter-spacing:-.05em;color:var(--t1);margin-bottom:.25rem}
+.pod-sub{font-size:.9rem;color:var(--t2);line-height:1.6}
+.pod-tabs{display:flex;gap:6px;margin-bottom:2rem;border-bottom:1px solid var(--border);padding-bottom:0}
+.pod-tab{padding:10px 20px;font-family:var(--fb);font-size:.88rem;font-weight:600;color:var(--t2);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s;margin-bottom:-1px}
+.pod-tab.active{color:var(--amber);border-bottom-color:var(--amber)}
+.pod-tab:hover{color:var(--t1)}
+.pod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+.pod-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:border-color .2s,transform .2s}
+.pod-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.pod-card-img{width:100%;height:160px;object-fit:cover;display:block;background:var(--elevated)}
+.pod-card-body{padding:1rem 1.25rem 1.25rem}
+.pod-card-name{font-family:var(--fd);font-size:1rem;font-weight:700;letter-spacing:-.03em;color:var(--t1);margin-bottom:.2rem}
+.pod-card-meta{font-size:.78rem;color:var(--t3);margin-bottom:.6rem}
+.pod-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.75rem}
+.pod-tag{background:var(--amber-dim);border:1px solid rgba(245,166,35,.25);color:var(--amber);border-radius:100px;padding:3px 10px;font-size:.7rem;font-weight:600}
+.pod-card-desc{font-size:.82rem;color:var(--t2);line-height:1.6;margin-bottom:1rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pod-card-prev{font-size:.75rem;color:var(--t3);font-style:italic;margin-bottom:.75rem}
+.pod-contact-btn{display:block;width:100%;padding:10px;border-radius:var(--r-sm);background:var(--elevated);border:1px solid var(--border2);color:var(--t1);font-family:var(--fb);font-size:.83rem;font-weight:600;cursor:pointer;text-align:center;transition:background .2s,border-color .2s;text-decoration:none}
+.pod-contact-btn:hover{background:var(--floating);border-color:rgba(245,166,35,.4);color:var(--amber)}
+.pod-new-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);color:var(--amber);border-radius:100px;padding:2px 8px;font-size:.65rem;font-weight:700;margin-left:6px;vertical-align:middle}
+.pod-new-dot{width:5px;height:5px;border-radius:50%;background:var(--amber)}
+/* Post modal niche pills */
+.pod-niche-pill{background:var(--elevated);border:1px solid var(--border);color:var(--t2);border-radius:100px;padding:5px 13px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s}
+.pod-niche-pill.sel{background:var(--amber-dim);border-color:rgba(245,166,35,.4);color:var(--amber)}
+.pod-mode-toggle{display:flex;background:var(--elevated);border:1px solid var(--border);border-radius:var(--r-sm);padding:4px;gap:4px;margin-bottom:1.25rem}
+.pod-mode-btn{flex:1;padding:9px;border-radius:6px;background:transparent;border:none;font-family:var(--fb);font-size:.85rem;font-weight:600;color:var(--t3);cursor:pointer;transition:all .2s}
+.pod-mode-btn.active{background:var(--floating);color:var(--t1)}
 </style>
 </head>
 <body>
