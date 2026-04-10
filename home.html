@@ -1076,8 +1076,13 @@
           revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
     revealEls.forEach(el => revealObserver.observe(el));
+
+    // Hard fallback — make everything visible after 3s no matter what
+    setTimeout(() => {
+      revealEls.forEach(el => el.classList.add('visible'));
+    }, 3000);
 
     // Stats counter
     const statEls = document.querySelectorAll('.stat-num[data-target]');
@@ -1118,13 +1123,16 @@
       // else: let form submit naturally to Netlify
     }
 
-    // Trigger already-visible reveals on load
-    setTimeout(() => {
+    // Trigger already-visible reveals on load + on anchor navigation
+    function revealVisible() {
       revealEls.forEach(el => {
         const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight) el.classList.add('visible');
+        if (rect.top < window.innerHeight + 100) el.classList.add('visible');
       });
-    }, 150);
+    }
+    setTimeout(revealVisible, 100);
+    setTimeout(revealVisible, 600);
+    window.addEventListener('scroll', revealVisible, { passive: true });
 
     // ── FAQ accordion ──
     document.querySelectorAll('.faq-btn').forEach(btn => {
