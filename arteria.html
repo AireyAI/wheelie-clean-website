@@ -1677,6 +1677,7 @@ svg.sparkline circle{fill:var(--amber)}
   <a onclick="go('training');closeMenu()">Training</a>
   <a onclick="go('events');closeMenu()">Events</a>
   <a onclick="go('community');closeMenu()">Community</a>
+  <a onclick="go('podcast-network');closeMenu()">Podcast</a>
   <a onclick="go('favourites');closeMenu()">Favourites</a>
   <a onclick="go('profile');closeMenu()">My Account</a>
   <a onclick="openLogin();closeMenu()">Login</a>
@@ -1741,6 +1742,27 @@ svg.sparkline circle{fill:var(--amber)}
     </div>
     <div class="wizard-step-lbl" id="wizStepLbl">Step 1 of 4</div>
     <div id="wizContent"></div>
+  </div>
+</div>
+
+<!-- PODCAST POST MODAL -->
+<div class="overlay" id="podOverlay" onclick="closePodModal()"></div>
+<div class="booking-panel" id="podPanel">
+  <div class="booking-handle"></div>
+  <div class="booking-header">
+    <div>
+      <div style="font-family:var(--fd);font-size:1.1rem;font-weight:800;letter-spacing:-.03em">Post a listing</div>
+      <div style="font-size:.78rem;color:var(--t2);margin-top:2px">Find guests or get discovered as a guest</div>
+    </div>
+    <button class="modal-close" onclick="closePodModal()">✕</button>
+  </div>
+  <div class="booking-body">
+    <div class="pod-mode-toggle">
+      <button class="pod-mode-btn active" id="podModeHost" onclick="podSwitchType('host')">🎙 I'm a Host</button>
+      <button class="pod-mode-btn" id="podModeGuest" onclick="podSwitchType('guest')">🎤 I'm a Guest</button>
+    </div>
+    <div id="podModalFields"></div>
+    <button class="btn-primary" style="width:100%;padding:13px;margin-top:1rem" onclick="submitPodListing()">Post listing</button>
   </div>
 </div>
 
@@ -1831,6 +1853,7 @@ svg.sparkline circle{fill:var(--amber)}
     <li><a id="nl-training" onclick="go('training')">Training</a></li>
     <li><a id="nl-events" onclick="go('events')">Events</a></li>
     <li><a id="nl-community" onclick="go('community')">Community</a></li>
+    <li><a id="nl-podcast-network" onclick="go('podcast-network')">Podcast</a></li>
     <li><a id="nl-favourites" onclick="go('favourites')" class="nav-fav-wrap" style="display:flex;align-items:center;gap:4px;position:relative">Favourites<span class="nav-badge" id="favBadge">0</span></a></li>
     <li><a id="nl-inbox" onclick="go('inbox')" style="display:flex;align-items:center;gap:2px">Inbox<span class="inbox-nav-badge" id="inboxNavBadge">0</span></a></li>
     <li><a onclick="goAbout()">About</a></li>
@@ -2547,6 +2570,26 @@ svg.sparkline circle{fill:var(--amber)}
     </div>
   </div>
 </div><!-- /view:404 -->
+
+<!-- ══════════════════════════════════════════
+     VIEW: PODCAST NETWORK
+══════════════════════════════════════════ -->
+<div data-view="podcast-network" style="display:none">
+  <div class="pod-wrap">
+    <div class="pod-hd">
+      <div>
+        <h1 class="pod-title">🎙 Podcast Network</h1>
+        <p class="pod-sub">Connect with podcasters and guests across the creative world</p>
+      </div>
+      <button class="btn-primary" onclick="openPodModal()">+ Post a listing</button>
+    </div>
+    <div class="pod-tabs">
+      <button class="pod-tab active" id="pod-tab-host" onclick="podSwitchTab('host')">Find a Guest</button>
+      <button class="pod-tab" id="pod-tab-guest" onclick="podSwitchTab('guest')">Be a Guest</button>
+    </div>
+    <div class="pod-grid" id="podGrid"></div>
+  </div>
+</div><!-- /view:podcast-network -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
