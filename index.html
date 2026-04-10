@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wheelie Clean — Cumbria's Favourite Bin Cleaning Service</title>
+  <meta name="description" content="Eco-friendly wheelie bin cleaning across Cumbria. Book online in minutes. Keep It Wheelie Clean.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:  #00A3E3;
+      --green: #38C74D;
+      --tan:   #B8BF5A;
+      --gray:  #404040;
+      --navy:  #003d5c;
+      --navy2: #005a8a;
+      --mint:  #7aeea0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; color: var(--gray); background: #fff; overflow-x: hidden; }
+
+    .font-display { font-family: 'Pacifico', cursive; }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s cubic-bezier(0.25,0.46,0.45,0.94),
+                  transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Logo always circular — clips black corners from PNG */
+    .logo-circle { border-radius: 50%; overflow: hidden; display: block; flex-shrink: 0; }
+    .logo-circle img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* Nav scroll */
+    #nav { transition: box-shadow 0.3s ease, border-color 0.3s ease; }
+    #nav.scrolled { box-shadow: 0 4px 24px rgba(0,163,227,0.12); border-bottom-color: rgba(0,163,227,0.15) !important; }
+
+    /* Sparkles */
+    @keyframes sparkle {
+      0%,100% { opacity: 0.35; transform: scale(1) rotate(0deg); }
+      50%      { opacity: 0.75; transform: scale(1.35) rotate(15deg); }
+    }
+    .sparkle   { animation: sparkle 3s   ease-in-out infinite; }
+    .sparkle-2 { animation: sparkle 4s   ease-in-out infinite 1s; }
+    .sparkle-3 { animation: sparkle 3.5s ease-in-out infinite 0.5s; }
+    .sparkle-4 { animation: sparkle 5s   ease-in-out infinite 1.5s; }
+
+    /* Logo float-in */
+    @keyframes floatIn {
+      from { opacity: 0; transform: scale(0.78) translateY(20px); }
+      to   { opacity: 1; transform: scale(1)    translateY(0); }
+    }
+    .logo-hero { animation: floatIn 0.9s cubic-bezier(0.34,1.56,0.64,1) both 0.2s; }
+
+    /* Logo glow pulse */
+    @keyframes glowPulse {
+      0%,100% { opacity: 0.45; transform: scale(1); }
+      50%      { opacity: 0.7;  transform: scale(1.1); }
+    }
+    .glow-ring { animation: glowPulse 3s ease-in-out infinite; }
+
+    /* Button spring */
+    .btn { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease; cursor: pointer; display: inline-block; }
+    .btn:hover  { transform: translateY(-2px) scale(1.04); }
+    .btn:active { transform: scale(0.97); }
+
+    /* Service card lift */
+    .service-card { transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease; }
+    .service-card:hover { transform: translateY(-6px); }
+    .service-card-light:hover { box-shadow: 0 16px 40px rgba(0,163,227,0.18) !important; }
+    .service-card-dark:hover  { box-shadow: 0 16px 40px rgba(0,61,92,0.55)   !important; }
+
+    /* Wave */
+    .wave { display: block; width: 100%; }
+
+    /* Form focus */
+    input:focus, select:focus, textarea:focus { border-color: #00A3E3 !important; outline: none; }
+
+    /* Mobile nav */
+    @media (max-width: 768px) {
+      #nav-links { display: none; }
+      #mobile-menu-btn { display: flex; }
+    }
+    @media (min-width: 769px) {
+      #mobile-menu-btn { display: none; }
+      #mobile-nav { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ NAV ═══════════ -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-transparent px-6 md:px-14 py-3 flex items-center justify-between">
+    <a href="#" class="flex-shrink-0">
+      <div class="logo-circle" style="width:48px;height:48px;"><img src="./IMG_1549 3.PNG" alt="Wheelie Clean"></div>
+    </a>
+
+    <div id="nav-links" class="hidden md:flex items-center gap-8 text-sm text-gray-600" style="font-weight:700;">
+      <a href="#services"     class="hover:text-[#00A3E3] transition-colors duration-200">Services</a>
+      <a href="#how-it-works" class="hover:text-[#00A3E3] transition-colors duration-200">How It Works</a>
+      <a href="#gallery"      class="hover:text-[#00A3E3] transition-colors duration-200">Gallery</a>
+      <a href="#about"        class="hover:text-[#00A3E3] transition-colors duration-200">About</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="#booking" class="btn bg-[#38C74D] text-white text-xs px-5 py-2.5 rounded-full flex-shrink-0" style="font-weight:800; box-shadow:0 4px 14px rgba(56,199,77,0.35);">
+        📞 Book Now
+      </a>
+      <button id="mobile-menu-btn" class="flex flex-col gap-1.5 p-2 md:hidden" aria-label="Open menu">
+        <span class="block w-6 h-0.5 bg-gray-600 transition-all duration-200"></span>
+        <span class="block w-6 h-0.5 bg-gray-600 transition-all duration-200"></span>
+        <span class="block w-6 h-0.5 bg-gray-600 transition-all duration-200"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile nav -->
+  <div id="mobile-nav" class="fixed top-[68px] left-0 right-0 z-40 bg-white border-b border-gray-100 px-6 py-5 flex flex-col gap-5 text-sm text-gray-700 hidden" style="font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,0.08);">
+    <a href="#services"     class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Services</a>
+    <a href="#how-it-works" class="hover:text-[#00A3E3]" onclick="closeMobileNav()">How It Works</a>
+    <a href="#gallery"      class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Gallery</a>
+    <a href="#about"        class="hover:text-[#00A3E3]" onclick="closeMobileNav()">About</a>
+    <a href="#booking"      class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Book Now</a>
+  </div>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="relative overflow-hidden pt-[68px]" style="background:linear-gradient(150deg,#003d5c 0%,#005a8a 30%,#007ab5 60%,#00A3E3 85%,#1acc6e 100%);">
+    <!-- Glow blobs -->
+    <div class="absolute -top-16 -left-16 w-80 h-80 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(56,199,77,0.32) 0%,transparent 70%);"></div>
+    <div class="absolute -bottom-10 -right-10 w-72 h-72 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(0,163,227,0.45) 0%,transparent 70%);"></div>
+    <!-- Sparkles -->
+    <span class="sparkle   absolute select-none pointer-events-none text-white text-2xl" style="top:18%;left:6%;opacity:0.4;">✦</span>
+    <span class="sparkle-2 absolute select-none pointer-events-none text-2xl" style="top:55%;right:5%;opacity:0.35;color:#7aeea0;">✦</span>
+    <span class="sparkle-3 absolute select-none pointer-events-none text-lg" style="bottom:22%;left:12%;opacity:0.35;color:#B8BF5A;">✦</span>
+    <span class="sparkle-4 absolute select-none pointer-events-none text-base" style="top:38%;right:18%;opacity:0.3;color:white;">✦</span>
+    <span class="sparkle   absolute w-2.5 h-2.5 rounded-full bg-white pointer-events-none" style="top:32%;left:8%;opacity:0.55;"></span>
+    <span class="sparkle-2 absolute w-1.5 h-1.5 rounded-full pointer-events-none" style="top:20%;right:14%;opacity:0.7;background:#38C74D;"></span>
+    <span class="sparkle-3 absolute w-1   h-1   rounded-full pointer-events-none" style="top:62%;left:19%;opacity:0.65;background:#B8BF5A;"></span>
+
+    <div class="relative z-10 flex flex-col items-center text-center px-6 pb-20 pt-10">
+      <!-- Badge -->
+      <div class="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 text-white text-xs uppercase tracking-widest border border-white/30" style="background:rgba(255,255,255,0.12);backdrop-filter:blur(6px);font-weight:800;">
+        ✦ CUMBRIA'S #1 BIN CLEANING SERVICE
+      </div>
+
+      <!-- Logo -->
+      <div class="relative inline-block mb-5">
+        <div class="glow-ring absolute rounded-full pointer-events-none" style="inset:-18px;background:radial-gradient(circle,rgba(56,199,77,0.42) 0%,transparent 68%);"></div>
+        <div class="logo-circle logo-hero" style="width:144px;height:144px;filter:drop-shadow(0 8px 32px rgba(0,0,0,0.45)) drop-shadow(0 0 28px rgba(56,199,77,0.5));"><img src="./IMG_1549 3.PNG" alt="Wheelie Clean"></div>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="reveal reveal-delay-1 font-display text-5xl md:text-6xl text-white leading-tight mb-3" style="text-shadow:0 2px 20px rgba(0,0,0,0.3);letter-spacing:-0.02em;">
+        Keep It<br><span style="color:#7aeea0;">Wheelie Clean.</span>
+      </h1>
+      <p class="reveal reveal-delay-2 text-xs uppercase tracking-widest mb-4" style="color:rgba(255,255,255,0.72);font-weight:800;letter-spacing:0.08em;">
+        Cumbria's favourite bin cleaning service ✦
+      </p>
+      <p class="reveal reveal-delay-2 text-sm leading-relaxed max-w-sm mb-8" style="color:rgba(255,255,255,0.85);">
+        Eco-friendly wheelie bin cleaning that eliminates germs, odours and grime — booked online in minutes.
+      </p>
+
+      <!-- CTAs -->
+      <div class="reveal reveal-delay-3 flex flex-wrap gap-4 justify-center mb-10">
+        <a href="#booking" class="btn bg-white px-7 py-3.5 rounded-full text-sm" style="color:#00A3E3;font-weight:900;box-shadow:0 6px 24px rgba(0,0,0,0.25);">
+          ✨ Get a Free Quote
+        </a>
+        <a href="tel:07000000000" class="btn px-7 py-3.5 rounded-full text-sm text-white border-2 border-white/50" style="background:rgba(255,255,255,0.14);backdrop-filter:blur(6px);font-weight:700;">
+          📞 Call Us
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="reveal reveal-delay-4 flex justify-center gap-10 pt-7 border-t border-white/15 w-full max-w-xs md:max-w-sm">
+        <div class="text-center">
+          <div class="stat-num text-2xl md:text-3xl" data-target="500" data-suffix="+" style="font-weight:900;color:#7aeea0;">0+</div>
+          <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.68);font-weight:600;">Happy Customers</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl md:text-3xl" style="font-weight:900;color:#ffd700;">5★</div>
+          <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.68);font-weight:600;">Avg Rating</div>
+        </div>
+        <div class="text-center">
+          <div class="stat-num text-2xl md:text-3xl" data-target="100" data-suffix="%" style="font-weight:900;color:#B8BF5A;">0%</div>
+          <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.68);font-weight:600;">Eco-Friendly</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wave -->
+    <svg class="wave -mb-px" viewBox="0 0 1200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,24 C200,48 400,0 600,24 C800,48 1000,0 1200,24 L1200,48 L0,48 Z" fill="#f8f9fa"/>
+    </svg>
+  </section>
+
+  <!-- ═══════════ TRUST BAR ═══════════ -->
+  <div class="bg-white border-b border-gray-100 px-6 py-5 flex flex-wrap justify-center gap-6 md:gap-12">
+    <div class="flex items-center gap-2 text-xs text-gray-600" style="font-weight:700;">🌿 <span>Eco-friendly products</span></div>
+    <div class="flex items-center gap-2 text-xs text-gray-600" style="font-weight:700;">🏡 <span>No need to be home</span></div>
+    <div class="flex items-center gap-2 text-xs text-gray-600" style="font-weight:700;">📅 <span>Flexible scheduling</span></div>
+    <div class="flex items-center gap-2 text-xs text-gray-600" style="font-weight:700;">✅ <span>Fully insured</span></div>
+  </div>
+
+  <!-- ═══════════ SERVICES ═══════════ -->
+  <section id="services" class="py-20 px-6 md:px-14" style="background:#f8f9fa;">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12 reveal">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#38C74D;font-weight:800;letter-spacing:0.12em;">✦ WHAT WE OFFER ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">Our Cleaning Services</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Standard -->
+        <div class="service-card service-card-light reveal reveal-delay-1 bg-white rounded-2xl p-7 text-center flex flex-col items-center border-2" style="border-color:#e0f4fd;box-shadow:0 4px 20px rgba(0,163,227,0.07);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-5" style="background:linear-gradient(135deg,#e8f7fd,#c8eefa);">🧽</div>
+          <h3 class="text-base mb-2" style="font-weight:900;color:#1a1a1a;">Standard Clean</h3>
+          <p class="text-xs text-gray-500 leading-relaxed">Interior & exterior wash, deodorised and disinfected every time.</p>
+        </div>
+        <!-- Deep Clean (featured) -->
+        <div class="service-card service-card-dark reveal reveal-delay-2 rounded-2xl p-7 text-center flex flex-col items-center relative overflow-hidden" style="background:linear-gradient(145deg,#003d5c,#005a8a);box-shadow:0 8px 32px rgba(0,61,92,0.35);">
+          <div class="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(56,199,77,0.28),transparent);"></div>
+          <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-white text-[10px] px-3 py-1 rounded-full whitespace-nowrap" style="background:linear-gradient(135deg,#38C74D,#2aaa40);box-shadow:0 2px 8px rgba(56,199,77,0.45);font-weight:900;">★ MOST POPULAR</div>
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-5 mt-2" style="background:rgba(255,255,255,0.14);">✨</div>
+          <h3 class="text-base mb-2 text-white" style="font-weight:900;">Deep Clean</h3>
+          <p class="text-xs leading-relaxed" style="color:rgba(255,255,255,0.78);">Power wash + sanitise — kills 99.9% of bacteria and eliminates stubborn odours.</p>
+        </div>
+        <!-- Monthly -->
+        <div class="service-card service-card-light reveal reveal-delay-3 bg-white rounded-2xl p-7 text-center flex flex-col items-center border-2" style="border-color:#c8f5da;box-shadow:0 4px 20px rgba(56,199,77,0.07);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-5" style="background:linear-gradient(135deg,#edfaf2,#c8f5da);">📅</div>
+          <h3 class="text-base mb-2" style="font-weight:900;color:#1a1a1a;">Monthly Plan</h3>
+          <p class="text-xs text-gray-500 leading-relaxed">Regular scheduled cleans — set it up once and never think about it again.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ HOW IT WORKS ═══════════ -->
+  <section id="how-it-works" class="py-20 px-6 md:px-14 bg-white">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12 reveal">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#00A3E3;font-weight:800;letter-spacing:0.12em;">✦ SIMPLE AS THAT ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">How It Works</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3">
+        <div class="reveal reveal-delay-1 flex flex-col items-center text-center px-8 py-8 md:border-r-2 border-dashed border-gray-100">
+          <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl text-white mb-5 flex-shrink-0" style="font-weight:900;background:linear-gradient(135deg,#00A3E3,#0080c0);box-shadow:0 6px 20px rgba(0,163,227,0.38);">1</div>
+          <h3 class="text-base mb-2" style="font-weight:900;color:#1a1a1a;">Book Online</h3>
+          <p class="text-xs text-gray-500 leading-relaxed">Pick your service, enter your postcode and choose a date — done in under 2 minutes.</p>
+        </div>
+        <div class="reveal reveal-delay-2 flex flex-col items-center text-center px-8 py-8 md:border-r-2 border-dashed border-gray-100">
+          <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl text-white mb-5 flex-shrink-0" style="font-weight:900;background:linear-gradient(135deg,#00A3E3,#0080c0);box-shadow:0 6px 20px rgba(0,163,227,0.38);">2</div>
+          <h3 class="text-base mb-2" style="font-weight:900;color:#1a1a1a;">We Come to You</h3>
+          <p class="text-xs text-gray-500 leading-relaxed">Just leave your bin out on the day — no need to be home. We handle everything.</p>
+        </div>
+        <div class="reveal reveal-delay-3 flex flex-col items-center text-center px-8 py-8">
+          <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl text-white mb-5 flex-shrink-0" style="font-weight:900;background:linear-gradient(135deg,#38C74D,#2aaa40);box-shadow:0 6px 20px rgba(56,199,77,0.38);">✓</div>
+          <h3 class="text-base mb-2" style="font-weight:900;color:#1a1a1a;">Sparkling Result</h3>
+          <p class="text-xs text-gray-500 leading-relaxed">Your bin is spotless, deodorised and returned to your door. ✦</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ GALLERY ═══════════ -->
+  <section id="gallery" class="py-20 px-6 md:px-14" style="background:linear-gradient(160deg,#003d5c 0%,#005a8a 100%);">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12 reveal">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#7aeea0;font-weight:800;letter-spacing:0.12em;">✦ SEE THE DIFFERENCE ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl text-white">Before &amp; After</h2>
+      </div>
+      <div class="grid grid-cols-2 gap-4 md:gap-6">
+        <div class="reveal reveal-delay-1 rounded-2xl overflow-hidden relative" style="box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+          <img src="https://placehold.co/600x400/555555/aaaaaa?text=Before" alt="Dirty bin before cleaning" class="w-full h-40 md:h-56 object-cover">
+          <div class="absolute bottom-0 left-0 right-0 py-2 px-3 text-white text-xs uppercase tracking-widest" style="background:rgba(50,50,50,0.92);font-weight:900;">BEFORE</div>
+        </div>
+        <div class="reveal reveal-delay-2 rounded-2xl overflow-hidden relative" style="box-shadow:0 8px 24px rgba(56,199,77,0.28);">
+          <img src="https://placehold.co/600x400/1a7a40/7aeea0?text=After" alt="Clean bin after cleaning" class="w-full h-40 md:h-56 object-cover">
+          <div class="absolute bottom-0 left-0 right-0 py-2 px-3 text-white text-xs uppercase tracking-widest" style="background:rgba(42,170,64,0.92);font-weight:900;">AFTER ✦</div>
+        </div>
+        <div class="reveal reveal-delay-3 rounded-2xl overflow-hidden relative" style="box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+          <img src="https://placehold.co/600x400/555555/aaaaaa?text=Before" alt="Dirty bin before cleaning" class="w-full h-40 md:h-56 object-cover">
+          <div class="absolute bottom-0 left-0 right-0 py-2 px-3 text-white text-xs uppercase tracking-widest" style="background:rgba(50,50,50,0.92);font-weight:900;">BEFORE</div>
+        </div>
+        <div class="reveal reveal-delay-4 rounded-2xl overflow-hidden relative" style="box-shadow:0 8px 24px rgba(56,199,77,0.28);">
+          <img src="https://placehold.co/600x400/1a7a40/7aeea0?text=After" alt="Clean bin after cleaning" class="w-full h-40 md:h-56 object-cover">
+          <div class="absolute bottom-0 left-0 right-0 py-2 px-3 text-white text-xs uppercase tracking-widest" style="background:rgba(42,170,64,0.92);font-weight:900;">AFTER ✦</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ TESTIMONIALS ═══════════ -->
+  <section class="py-20 px-6 md:px-14" style="background:#f8f9fa;">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12 reveal">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#38C74D;font-weight:800;letter-spacing:0.12em;">✦ HAPPY CUSTOMERS ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">Trusted Across Cumbria</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="reveal reveal-delay-1 bg-white rounded-2xl p-7 border-l-4" style="border-color:#00A3E3;box-shadow:0 4px 20px rgba(0,163,227,0.08);">
+          <div class="text-xl mb-3" style="color:#f5a623;letter-spacing:0.05em;">★★★★★</div>
+          <p class="text-sm text-gray-600 leading-relaxed italic mb-5">"Brilliant service — bin looks brand new. Can't believe the difference. Will definitely be booking again!"</p>
+          <p class="text-xs uppercase tracking-wider" style="color:#404040;font-weight:900;">Sarah M. · Carlisle</p>
+        </div>
+        <div class="reveal reveal-delay-2 bg-white rounded-2xl p-7 border-l-4" style="border-color:#38C74D;box-shadow:0 4px 20px rgba(56,199,77,0.08);">
+          <div class="text-xl mb-3" style="color:#f5a623;letter-spacing:0.05em;">★★★★★</div>
+          <p class="text-sm text-gray-600 leading-relaxed italic mb-5">"So easy to book online and they arrived right on time. No more disgusting bin smell — absolute game changer!"</p>
+          <p class="text-xs uppercase tracking-wider" style="color:#404040;font-weight:900;">James T. · Penrith</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ ABOUT ═══════════ -->
+  <section id="about" class="py-20 px-6 md:px-14 bg-white">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-10 reveal">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#00A3E3;font-weight:800;letter-spacing:0.12em;">✦ OUR STORY ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">About Wheelie Clean</h2>
+      </div>
+      <div class="reveal rounded-2xl overflow-hidden" style="background:#f8f9fa;border:2px solid #efefef;">
+        <img src="https://placehold.co/900x320/c8eefa/00A3E3?text=Team+%2F+Van+Photo" alt="Wheelie Clean team" class="w-full h-48 object-cover">
+        <div class="p-8">
+          <p class="text-sm text-gray-600 leading-relaxed">We're Wheelie Clean — a local, family-run bin cleaning business proudly serving Cumbria. We started because we believed everyone deserves a clean, hygienic bin without the hassle. Using eco-friendly, biodegradable cleaning products, we power-wash and sanitise your wheelie bins right on your doorstep.</p>
+          <p class="text-sm text-gray-400 leading-relaxed mt-3 italic">Replace this with your own story — when you started, why you started, and what makes Wheelie Clean special.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ BOOKING ═══════════ -->
+  <section id="booking" class="py-20 px-6 md:px-14 relative overflow-hidden" style="background:linear-gradient(160deg,#003d5c 0%,#005a8a 60%,#007ab5 100%);">
+    <div class="absolute -top-16 -right-16 w-72 h-72 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(56,199,77,0.22),transparent);"></div>
+    <div class="max-w-xl mx-auto relative z-10">
+      <div class="text-center mb-10 reveal">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#7aeea0;font-weight:800;letter-spacing:0.12em;">✦ GET STARTED ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl text-white">Book a Clean</h2>
+      </div>
+      <div class="reveal bg-white rounded-2xl p-8" style="box-shadow:0 20px 56px rgba(0,0,0,0.32);">
+        <form onsubmit="handleBooking(event)" class="flex flex-col gap-4">
+          <input type="text"  name="name"     placeholder="Your name"    required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
+          <input type="tel"   name="phone"    placeholder="Phone number" required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
+          <div class="grid grid-cols-2 gap-4">
+            <input type="text" name="postcode" placeholder="Postcode" required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
+            <select name="service" required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200 text-gray-500" style="font-family:inherit;">
+              <option value="" disabled selected>Service type</option>
+              <option value="standard">Standard Clean</option>
+              <option value="deep">Deep Clean</option>
+              <option value="monthly">Monthly Plan</option>
+            </select>
+          </div>
+          <textarea name="message" placeholder="Message / notes (optional)" rows="3" class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200 resize-none" style="font-family:inherit;"></textarea>
+          <button type="submit" class="btn w-full py-3.5 rounded-xl text-sm text-white" style="font-weight:900;background:linear-gradient(135deg,#00A3E3,#0080c0);box-shadow:0 4px 16px rgba(0,163,227,0.4);">
+            Send Enquiry →
+          </button>
+        </form>
+        <p class="text-center text-xs text-gray-400 mt-5">Or call us directly: <a href="tel:07000000000" class="hover:underline" style="color:#00A3E3;font-weight:800;">07XXX XXX XXX</a></p>
+        <div id="booking-success" class="hidden mt-4 text-center text-sm" style="color:#38C74D;font-weight:700;">
+          ✦ Thanks! We'll be in touch shortly.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SERVICE AREA ═══════════ -->
+  <section class="py-20 px-6 md:px-14 text-center" style="background:#f8f9fa;">
+    <div class="max-w-3xl mx-auto">
+      <div class="reveal mb-10">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#B8BF5A;font-weight:800;letter-spacing:0.12em;">✦ WHERE WE OPERATE ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">Serving Cumbria</h2>
+      </div>
+      <div class="reveal rounded-2xl overflow-hidden mb-8" style="box-shadow:inset 0 2px 8px rgba(0,163,227,0.07);">
+        <img src="https://placehold.co/900x280/c8eefa/00A3E3?text=Cumbria+Service+Area+Map" alt="Wheelie Clean service area — Cumbria" class="w-full h-44 object-cover opacity-80">
+      </div>
+      <div class="reveal flex flex-wrap gap-3 justify-center">
+        <span class="px-4 py-2 rounded-full text-xs bg-white border-2" style="color:#00A3E3;border-color:#c8eefa;font-weight:800;box-shadow:0 2px 8px rgba(0,163,227,0.1);">Carlisle</span>
+        <span class="px-4 py-2 rounded-full text-xs bg-white border-2" style="color:#00A3E3;border-color:#c8eefa;font-weight:800;box-shadow:0 2px 8px rgba(0,163,227,0.1);">Penrith</span>
+        <span class="px-4 py-2 rounded-full text-xs bg-white border-2" style="color:#00A3E3;border-color:#c8eefa;font-weight:800;box-shadow:0 2px 8px rgba(0,163,227,0.1);">Kendal</span>
+        <span class="px-4 py-2 rounded-full text-xs bg-white border-2" style="color:#00A3E3;border-color:#c8eefa;font-weight:800;box-shadow:0 2px 8px rgba(0,163,227,0.1);">Barrow-in-Furness</span>
+        <span class="px-4 py-2 rounded-full text-xs bg-white border-2" style="color:#00A3E3;border-color:#c8eefa;font-weight:800;box-shadow:0 2px 8px rgba(0,163,227,0.1);">Whitehaven</span>
+        <span class="px-4 py-2 rounded-full text-xs text-white" style="font-weight:900;background:linear-gradient(135deg,#38C74D,#2aaa40);box-shadow:0 2px 8px rgba(56,199,77,0.3);">+ All surrounding areas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="py-12 px-6 text-center" style="background:linear-gradient(160deg,#1a1a1a 0%,#2a2a2a 100%);">
+    <div class="logo-circle mx-auto mb-2" style="width:64px;height:64px;filter:drop-shadow(0 2px 10px rgba(0,163,227,0.3));"><img src="./IMG_1549 3.PNG" alt="Wheelie Clean"></div>
+    <p class="text-sm italic mb-1" style="color:#00A3E3;font-weight:900;">"Keep It Wheelie Clean" ✦</p>
+    <p class="text-xs text-gray-500 mb-7">Eco-friendly bin cleaning across Cumbria</p>
+    <div class="flex gap-3 justify-center mb-7">
+      <a href="#" class="btn px-5 py-2 rounded-full text-white text-xs" style="background:#1877f2;font-weight:800;">📘 Facebook</a>
+      <a href="#" class="btn px-5 py-2 rounded-full text-white text-xs" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);font-weight:800;">📸 Instagram</a>
+    </div>
+    <p class="text-xs" style="color:#444;">© 2025 Wheelie Clean · All rights reserved</p>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Mobile menu
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    mobileBtn.addEventListener('click', () => mobileNav.classList.toggle('hidden'));
+    function closeMobileNav() { mobileNav.classList.add('hidden'); }
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // Stats counter
+    const statEls = document.querySelectorAll('.stat-num[data-target]');
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseInt(el.dataset.target, 10);
+        const suffix = el.dataset.suffix || '+';
+        const duration = 1400;
+        const stepMs = 16;
+        const increment = target / (duration / stepMs);
+        let current = 0;
+        const timer = setInterval(() => {
+          current = Math.min(current + increment, target);
+          el.textContent = Math.floor(current) + suffix;
+          if (current >= target) clearInterval(timer);
+        }, stepMs);
+        statObserver.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    statEls.forEach(el => statObserver.observe(el));
+
+    // Booking form
+    function handleBooking(e) {
+      e.preventDefault();
+      const success = document.getElementById('booking-success');
+      success.classList.remove('hidden');
+      e.target.reset();
+      setTimeout(() => success.classList.add('hidden'), 5000);
+    }
+
+    // Trigger already-visible reveals on load
+    setTimeout(() => {
+      revealEls.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) el.classList.add('visible');
+      });
+    }, 150);
+  </script>
+</body>
+</html>
