@@ -3336,7 +3336,12 @@ function setAuthType(type){
 function handleAuth(){
   const email=document.getElementById('authEmail').value;
   if(!email){document.getElementById('authEmail').focus();return}
-  document.getElementById('loginContent').innerHTML=`<div style="text-align:center;padding:3rem 1rem"><div style="font-size:2.5rem;color:var(--green);margin-bottom:1rem">✓</div><h3 style="font-family:var(--fd);font-size:1.3rem;font-weight:800;margin-bottom:.5rem">${authMode==='signin'?'Welcome back!':'Account created!'}</h3><p style="color:var(--t2);font-size:.9rem;margin-bottom:1.5rem;line-height:1.7">${authMode==='signin'?'You\'re now signed in to ARTERIA.':'Your '+authType+' account is ready. Start exploring!'}</p><button class="btn-primary" style="width:100%;padding:12px;font-size:.9rem" onclick="closeLogin()">Continue</button></div>`;
+  if(authMode==='signin'){
+    document.getElementById('loginContent').innerHTML=`<div style="text-align:center;padding:3rem 1rem"><div style="font-size:2.5rem;color:var(--green);margin-bottom:1rem">✓</div><h3 style="font-family:var(--fd);font-size:1.3rem;font-weight:800;margin-bottom:.5rem">Welcome back!</h3><p style="color:var(--t2);font-size:.9rem;margin-bottom:1.5rem;line-height:1.7">You're now signed in to ARTERIA.</p><button class="btn-primary" style="width:100%;padding:12px;font-size:.9rem" onclick="closeLogin()">Continue</button></div>`;
+  } else {
+    closeLogin();
+    setTimeout(openWizard,380);
+  }
 }
 
 // ── CURRENCY ─────────────────────────────────────────────────────────
