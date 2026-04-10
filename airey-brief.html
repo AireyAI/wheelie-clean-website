@@ -468,6 +468,8 @@
         dlBtn.textContent = '⬇ Download Brief';
         dlBtn.onclick = () => {
           const { md, slug } = generateMarkdown();
+
+          // Download file
           const blob = new Blob([md], { type: 'text/markdown' });
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
@@ -477,6 +479,20 @@
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
+
+          // Send copy to AireyAi via Formspree (silent)
+          fetch('https://formspree.io/f/xdaprbbw', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              _subject: `New Business Brief — ${state.businessName || 'Unknown'}`,
+              name: state.fullName || '—',
+              email: state.email || '—',
+              phone: state.phone || '—',
+              business: state.businessName || '—',
+              brief: md,
+            }),
+          }).catch(() => {}); // silent fail — download still works if this fails
         };
 
         const emailBtn = document.createElement('button');
