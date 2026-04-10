@@ -440,6 +440,107 @@ Below the message, a single share button:
 
 ---
 
+### About Louise Section
+
+Placed between Testimonials and FAQ — where trust is already building. A warm, personal section that makes Louise feel human and approachable.
+
+Layout: two columns on desktop (text left, photo right), stacked on mobile.
+
+**Left — copy:**
+- Small rose label: `✦ Meet Your Lash Artist`
+- Cormorant Garamond heading: "Hi, I'm Louise"
+- 3–4 sentences of personal intro (placeholder copy — Louise to write her own):
+  > *"I've been obsessed with lashes ever since my first set completely changed how I felt leaving the house in the morning. I trained because I wanted every client to feel that same confidence. Based right here in Longtown, I treat every appointment like a visit from a friend — relaxed, personal, and always with your best result in mind."*
+- Trust line: "Fully certified · insured · based in Cumbria"
+- WhatsApp CTA: "Say hello 👋"
+
+**Right — photo:**
+- Circular portrait placeholder (`placehold.co/400x400`) with blush→lilac gradient border ring
+- Caption: "Louise · Lash Artist" in small rose Jost
+
+---
+
+### Gift Vouchers Section
+
+Placed just before the Footer — a standalone full-width strip with a blush/lilac gradient background.
+
+Content:
+- Label: `✦ The Perfect Gift`
+- Heading: "Give the Gift of Gorgeous Lashes 🎁"
+- Subtext: "Treat someone special to a lash treatment they'll love. Gift vouchers available for all services — just WhatsApp Louise to arrange."
+- Single WhatsApp CTA: `wa.me/447464557236?text=Hi Louise! I'd love to enquire about a gift voucher 🎁`
+- Small print: "Vouchers valid for 12 months from purchase"
+
+---
+
+### Aftercare Tips Section
+
+Placed after the Gallery, before Testimonials. Helps clients know what to expect and reduces repetitive post-appointment messages to Louise.
+
+Layout: 2×2 grid of tip cards on desktop, single column on mobile. Each card: icon circle (blush→lilac gradient), bold tip title, short explanation.
+
+**Tips:**
+1. 🚿 **Keep them dry for 24 hours** — avoid steam, swimming, and sweating for the first day
+2. 🧴 **Avoid oil-based products** — oils break down lash adhesive; use oil-free micellar water
+3. 🪮 **Brush daily** — use a clean spoolie every morning to keep lashes neat and separated
+4. 😴 **Sleep on your back** — reduces friction and extends the life of your set
+5. ✋ **Don't pick or pull** — let lashes shed naturally with your natural lash cycle
+
+Section has blush gradient background. Cards are white with soft pink shadow, lift on hover.
+
+---
+
+### Save Contact / vCard Prompt
+
+Added to the AI agent's post-booking confirmation message (alongside the referral nudge):
+
+> *"Want to save Louise's number so you never lose it?"*
+
+A "💾 Save to contacts" button triggers a download of a `.vcf` vCard file containing:
+```
+BEGIN:VCARD
+VERSION:3.0
+FN:Dolled by Louise
+TEL;TYPE=CELL:+447464557236
+EMAIL:louisetrainorr@gmail.com
+ADR:;;33 Albert Street;Longtown;;CA6 5SF;UK
+URL:https://dolledbylouise.co.uk
+END:VCARD
+```
+
+The vCard is generated as a `data:` URI and triggered via a programmatic `<a download>` click. Works on iOS, Android, and desktop.
+
+---
+
+### Certification Strip
+
+A slim full-width strip between the Stats Bar and Services section. White background, subtle rose top/bottom border.
+
+Content: a flex row of trust badges centred horizontally:
+- 🛡️ **Fully Insured**
+- 🎓 **Professionally Trained**
+- ✅ **Health & Safety Compliant**
+- 💎 **Premium Products Only**
+
+Each badge: small icon + bold label + subtle descriptor in rose Jost. Placeholders — update with real certification body logos (BABTAC, ABT, etc.) when available. Scroll-reveals as a group.
+
+---
+
+### Accessibility
+
+The following accessibility requirements apply throughout:
+
+- **Skip link:** `<a href="#main" class="skip-link">Skip to content</a>` as first element in `<body>`. Visually hidden until focused, appears on keyboard Tab. Smooth scrolls to `<main id="main">`.
+- **ARIA labels:** all icon-only buttons (floating WA, back-to-top, chat toggle, send button) have descriptive `aria-label` attributes.
+- **Focus-visible states:** all interactive elements show a rose `outline: 2px solid var(--rose)` on `:focus-visible` — never `outline: none`.
+- **Semantic HTML:** `<nav>`, `<main>`, `<section>`, `<footer>`, `<h1>`→`<h3>` hierarchy respected throughout.
+- **Alt text:** all `<img>` elements have descriptive `alt` attributes. Gallery placeholders use service name as alt text.
+- **Colour contrast:** rose (`#c97fa0`) on cream (`#fdf8f5`) is used only for decorative/non-essential text. All body copy uses plum (`#2d1423`) on light backgrounds — passes WCAG AA.
+- **Reduced motion:** all animations respect `@media (prefers-reduced-motion: reduce)` — transitions set to `0.01ms`, animations disabled.
+- **Chat widget keyboard:** chat input focusable, Enter sends message, Escape closes widget.
+
+---
+
 ## Technical Constraints
 
 - Single HTML file (`dolled-by-louise.html`) — all styles inline
@@ -467,3 +568,8 @@ Below the message, a single share button:
 | Logo | Replace "D" monogram when logo created |
 | OG image (`og-image.jpg`) | Create 1200×630 brand image for link previews |
 | Domain URL in JSON-LD | Update `dolledbylouise.co.uk` to real domain when live |
+| About photo | Louise to provide portrait photo for About section |
+| About copy | Louise to write personal bio (placeholder provided) |
+| Certification badges | Replace placeholder badges with real logos (BABTAC, ABT etc.) when available |
+| Google Business URL | Add real URL to Google Reviews badge when profile is live |
+| vCard URL | Update domain in vCard when live |
