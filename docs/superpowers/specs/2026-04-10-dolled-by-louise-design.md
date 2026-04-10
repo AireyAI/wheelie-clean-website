@@ -341,6 +341,105 @@ UK law (PECR + UK GDPR) requires a cookie notice. A slim bar fixed to the **bott
 
 ---
 
+### Before/After Slider
+
+Sits between the Services section and Pricing — or inside the Gallery section as a featured item. A drag-to-reveal slider showing a natural lash photo on the left and finished result on the right.
+
+Implementation:
+- Single `<div>` with two absolutely-positioned images and a draggable divider line
+- Divider: thin white line with a circular handle (plum gradient, double-chevron icon)
+- Touch and mouse drag supported via `pointermove` events
+- Defaults to 50/50 split, handle pulses once on load to signal it's draggable
+- Placeholder images via `placehold.co` — client swaps in real before/after photos
+- Caption beneath: `"Swipe to see the transformation ✨"`
+
+---
+
+### "Which Lash Is Right for Me?" Quiz
+
+Placed after the Services section, before Pricing. A 3-step inline quiz inside a blush/lilac card:
+
+**Step 1 — What look do you want?**
+- Natural & subtle
+- Defined & polished
+- Full & dramatic
+
+**Step 2 — How low-maintenance are you?**
+- I want something I can forget about (lifts)
+- I'm happy with infills every 3 weeks (extensions)
+
+**Step 3 — Is this your first time?**
+- Yes, first time
+- No, I've had lashes before
+
+**Result:** Recommended treatment shown in a styled result card with treatment name, description, duration, and a WhatsApp booking CTA pre-filled with that treatment.
+
+Result mapping:
+- Natural + forget about it → Korean Lash Lift
+- Natural + first time → Classic Extensions
+- Defined + extensions → Hybrid
+- Full + extensions → Russian Volume
+- Full + drama + experienced → Mega Volume
+
+Quiz is pure HTML/CSS/JS — no API calls. Transitions between steps with `fadeUp` animation.
+
+---
+
+### Treatment Duration & Aftercare on Service Cards
+
+Each service card and pricing row gains a small metadata line:
+
+| Treatment | Duration | Lasts |
+|---|---|---|
+| Korean Lash Lift | 60–75 mins | 6–8 weeks |
+| LVL Lashes | 45–60 mins | 6–8 weeks |
+| Lash Tint | 15–20 mins | 4–6 weeks |
+| Classic Extensions | 90–120 mins | 2–3 weeks (infills) |
+| Hybrid Extensions | 90–120 mins | 2–3 weeks (infills) |
+| Russian Volume | 120–150 mins | 2–3 weeks (infills) |
+| Mega Volume | 150–180 mins | 2–3 weeks (infills) |
+
+Displayed as: `⏱ 60–75 mins · lasts 6–8 weeks` in small rose Jost beneath the treatment name. Also added to the agent's knowledge base.
+
+---
+
+### Sticky Mobile Booking Bar
+
+On mobile only (`max-width: 640px`), a slim fixed bar at the very bottom of the viewport — above the cookie notice if visible:
+
+- Background: plum gradient
+- Two equal buttons: `📞 Call` (plum) and WhatsApp icon + "WhatsApp" (green)
+- Height: 52px
+- Hidden on desktop
+- Fades in after user scrolls past the hero CTA (so it doesn't appear immediately over the hero buttons)
+- `padding-bottom` added to page body equal to bar height so content isn't obscured
+
+---
+
+### Google Reviews Badge
+
+A small strip in the Stats Bar (section 4), or directly beneath the Testimonials section:
+
+- Shows: Google logo + star rating (★★★★★) + "See our reviews" link
+- Links to Louise's Google Business profile (placeholder URL — update when profile is live)
+- Placeholder: shown as "★★★★★ Google Reviews — coming soon" until real profile exists
+- Styled as a subtle pill: white background, thin rose border, Google colours for the "G" logo
+
+---
+
+### Referral Nudge After Booking
+
+After the AI agent successfully sends the booking (WhatsApp opened + email fired), the chat widget shows a final message:
+
+> *"You're all booked! 🎉 Louise will be in touch to confirm your slot.*
+> *Love your lashes? Tell a friend about Dolled by Louise 💕"*
+
+Below the message, a single share button:
+- "Share with a friend" — uses the native Web Share API (`navigator.share`) on mobile (falls back to copying the URL on desktop)
+- Styled as a small blush pill button
+
+---
+
 ## Technical Constraints
 
 - Single HTML file (`dolled-by-louise.html`) — all styles inline
