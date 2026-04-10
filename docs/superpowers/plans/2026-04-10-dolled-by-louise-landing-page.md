@@ -1,0 +1,1511 @@
+# Dolled by Louise — Landing Page Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Build `dolled-by-louise.html` — a single-file, mobile-first landing page for Dolled by Louise (lash artist, Longtown, Cumbria) with all sections, animations, SEO, and accessibility baked in.
+
+**Architecture:** All HTML, CSS, and JS in one self-contained file. Tailwind CDN for utility classes, custom CSS properties for the brand palette, inline `<style>` for design-system tokens and keyframes. No build step.
+
+**Tech Stack:** Plain HTML5 · Tailwind CSS (CDN) · Google Fonts (Cormorant Garamond + Jost) · CSS custom properties · Vanilla JS · IntersectionObserver · `placehold.co` for images
+
+---
+
+## File Map
+
+| Action | Path | Responsibility |
+|---|---|---|
+| Create | `dolled-by-louise.html` | Full landing page — all sections, styles, JS |
+
+---
+
+### Task 1: Scaffold — `<head>`, CSS tokens, keyframes, base styles
+
+**Files:**
+- Create: `dolled-by-louise.html`
+
+- [ ] **Step 1: Create the file with full `<head>` block**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dolled by Louise — Lash Artist in Longtown, Cumbria</title>
+  <meta name="description" content="Expert lash lifts and extensions in Longtown, Cumbria. Korean Lash Lift, LVL, Classic, Hybrid & Russian Volume. Call or WhatsApp Louise to book.">
+  <meta property="og:title" content="Dolled by Louise — Lash Artist in Longtown, Cumbria">
+  <meta property="og:description" content="Expert lash lifts and extensions. Call or WhatsApp Louise to book.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      --plum:   #2d1423;
+      --rose:   #c97fa0;
+      --blush:  #fce8ee;
+      --lilac:  #e8d5f0;
+      --cream:  #fdf8f5;
+      --wa:     #25D366;
+      --easing: cubic-bezier(0.34, 1.3, 0.64, 1);
+    }
+
+    /* ── Grain texture ── */
+    body { font-family: 'Jost', sans-serif; color: var(--plum); background: var(--cream); }
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── Skip link ── */
+    .skip-link {
+      position: absolute; top: -999px; left: 8px; z-index: 9999;
+      background: var(--plum); color: var(--cream); padding: 8px 16px;
+      border-radius: 0 0 8px 8px; font-size: 14px;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ── Keyframes ── */
+    @keyframes heroBreath {
+      0%, 100% { filter: hue-rotate(0deg); }
+      50%       { filter: hue-rotate(8deg); }
+    }
+    @keyframes floatA {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%       { transform: translateY(-18px) rotate(5deg); }
+    }
+    @keyframes floatB {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%       { transform: translateY(12px) rotate(-4deg); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(6px); }
+    }
+    @keyframes waPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(201,127,160,0.5); }
+      50%       { box-shadow: 0 0 0 12px rgba(201,127,160,0); }
+    }
+    @keyframes sliderPulse {
+      0%   { transform: translateX(-50%) scale(1); }
+      50%  { transform: translateX(-50%) scale(1.15); }
+      100% { transform: translateX(-50%) scale(1); }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ── Focus visible ── */
+    :focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s var(--easing), transform 0.6s var(--easing); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Shared button styles ── */
+    .btn-plum {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, var(--plum), #4a1a30);
+      color: var(--cream); padding: 12px 28px; border-radius: 999px;
+      font-family: 'Jost', sans-serif; font-size: 15px; font-weight: 500;
+      letter-spacing: 0.03em; border: none; cursor: pointer;
+      transition: transform 0.25s var(--easing), box-shadow 0.25s var(--easing);
+      box-shadow: 0 4px 20px rgba(45,20,35,0.3);
+      text-decoration: none;
+    }
+    .btn-plum:hover  { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,20,35,0.4); }
+    .btn-plum:active { transform: translateY(0); }
+
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--wa); color: #fff; padding: 12px 28px; border-radius: 999px;
+      font-family: 'Jost', sans-serif; font-size: 15px; font-weight: 500;
+      letter-spacing: 0.03em; border: none; cursor: pointer;
+      transition: transform 0.25s var(--easing), box-shadow 0.25s var(--easing);
+      box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+      text-decoration: none;
+    }
+    .btn-wa:hover  { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.4); }
+    .btn-wa:active { transform: translateY(0); }
+  </style>
+
+  <!-- JSON-LD LocalBusiness schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BeautySalon",
+    "name": "Dolled by Louise",
+    "description": "Expert lash lifts and extensions in Longtown, Cumbria",
+    "telephone": "+447464557236",
+    "email": "louisetrainorr@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "33 Albert Street",
+      "addressLocality": "Longtown",
+      "postalCode": "CA6 5SF",
+      "addressCountry": "GB"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 55.0007,
+      "longitude": -2.9757
+    },
+    "url": "https://dolledbylouise.co.uk",
+    "priceRange": "££",
+    "hasMap": "https://maps.google.com/?q=33+Albert+Street,+Longtown,+CA6+5SF"
+  }
+  </script>
+</head>
+<body class="relative">
+  <a href="#main" class="skip-link">Skip to content</a>
+  <!-- sections go here -->
+  <main id="main">
+  </main>
+</body>
+</html>
+```
+
+- [ ] **Step 2: Start server and verify the file loads**
+
+```bash
+node serve.mjs &
+```
+
+Open `http://localhost:3000/dolled-by-louise.html` — should show a blank cream page with no console errors.
+
+- [ ] **Step 3: Commit scaffold**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: scaffold dolled-by-louise.html with head, tokens, keyframes"
+```
+
+---
+
+### Task 2: Sticky Nav
+
+**Files:**
+- Modify: `dolled-by-louise.html` — add `<nav>` before `<main>`
+
+- [ ] **Step 1: Add nav HTML above `<main>`**
+
+```html
+<nav id="nav" style="
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.35s, backdrop-filter 0.35s, box-shadow 0.35s;
+" aria-label="Main navigation">
+
+  <!-- Wordmark -->
+  <a href="#" style="text-decoration:none; line-height:1.2;">
+    <span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:22px; color:var(--plum); display:block;">Dolled by Louise</span>
+    <span style="font-family:'Jost',sans-serif; font-size:11px; font-weight:400; color:var(--rose); letter-spacing:0.12em; text-transform:uppercase;">Lash Artist · Longtown</span>
+  </a>
+
+  <!-- Desktop anchors + CTAs -->
+  <div style="display:flex; align-items:center; gap:24px;">
+    <div class="nav-links" style="display:flex; gap:20px;">
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#pricing"  class="nav-link">Pricing</a>
+      <a href="#gallery"  class="nav-link">Gallery</a>
+      <a href="#faq"      class="nav-link">FAQ</a>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <a href="tel:+447464557236" class="btn-plum nav-call" style="padding:9px 18px; font-size:13px;" aria-label="Call Louise">📞 Call</a>
+      <a href="https://wa.me/447464557236" target="_blank" rel="noopener" class="btn-wa" style="padding:9px 18px; font-size:13px;" aria-label="WhatsApp Louise">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Book Now
+      </a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .nav-link {
+    font-family: 'Jost', sans-serif; font-size: 13px; font-weight: 400;
+    color: var(--plum); text-decoration: none; letter-spacing: 0.06em;
+    opacity: 0.75; transition: opacity 0.2s, color 0.2s;
+  }
+  .nav-link:hover { opacity: 1; color: var(--rose); }
+  @media (max-width: 640px) {
+    .nav-links { display: none !important; }
+    .nav-call  { display: none !important; }
+  }
+  #nav.scrolled {
+    background: rgba(253,248,245,0.92);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 24px rgba(45,20,35,0.08);
+  }
+</style>
+```
+
+- [ ] **Step 2: Add scroll watcher JS (place before `</body>`)**
+
+```html
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+</script>
+```
+
+- [ ] **Step 3: Add `padding-top: 72px` to `<main>` so content isn't hidden under the nav**
+
+```html
+<main id="main" style="padding-top: 72px;">
+```
+
+- [ ] **Step 4: Screenshot and verify nav looks correct**
+
+Take a screenshot of `http://localhost:3000/dolled-by-louise.html` — nav should show "Dolled by Louise" wordmark on the left, anchor links + CTAs on the right. On mobile width it should show only the wordmark + "Book Now".
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add sticky nav with scroll blur and anchor links"
+```
+
+---
+
+### Task 3: Hero Section
+
+**Files:**
+- Modify: `dolled-by-louise.html` — add hero `<section>` inside `<main>`
+
+- [ ] **Step 1: Add hero section HTML + CSS**
+
+```html
+<section id="hero" style="
+  position: relative; min-height: 100svh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 80px 24px 60px; overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(252,232,238,0.95) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 70% at 80% 80%, rgba(232,213,240,0.8) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, #fdf8f5 0%, #fce8ee 100%);
+  animation: heroBreath 8s ease-in-out infinite;
+">
+  <!-- Floating decorative rings -->
+  <div aria-hidden="true" style="position:absolute;top:8%;left:6%;width:260px;height:260px;border-radius:50%;border:1.5px solid rgba(201,127,160,0.2);animation:floatA 7s ease-in-out infinite;pointer-events:none;"></div>
+  <div aria-hidden="true" style="position:absolute;bottom:10%;right:5%;width:180px;height:180px;border-radius:50%;border:1.5px solid rgba(232,213,240,0.5);animation:floatB 9s ease-in-out infinite;pointer-events:none;"></div>
+  <div aria-hidden="true" style="position:absolute;top:30%;right:8%;width:60px;height:60px;border-radius:50%;background:rgba(201,127,160,0.08);animation:floatA 5s ease-in-out infinite 1s;pointer-events:none;"></div>
+  <div aria-hidden="true" style="position:absolute;bottom:25%;left:9%;width:40px;height:40px;border-radius:50%;background:rgba(232,213,240,0.25);animation:floatB 6s ease-in-out infinite 0.5s;pointer-events:none;"></div>
+
+  <!-- Content wrapper -->
+  <div style="position:relative; z-index:1; max-width:680px; margin:0 auto;">
+
+    <!-- Monogram -->
+    <div style="
+      width:92px; height:92px; border-radius:50%; margin:0 auto 28px;
+      background: linear-gradient(135deg, var(--blush), var(--lilac));
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 8px 32px rgba(201,127,160,0.25);
+      animation: fadeUp 0.6s var(--easing) both;
+    " aria-hidden="true">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:40px;font-style:italic;font-weight:300;color:var(--plum);">D</span>
+    </div>
+
+    <!-- Label -->
+    <p style="
+      font-family:'Jost',sans-serif; font-size:11px; font-weight:500;
+      letter-spacing:0.22em; text-transform:uppercase; color:var(--rose);
+      margin-bottom:16px;
+      animation: fadeUp 0.6s var(--easing) 0.2s both;
+    ">✦ Premium Lash Artist · Longtown, Cumbria ✦</p>
+
+    <!-- H1 -->
+    <h1 style="
+      font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300;
+      font-size:clamp(52px, 11vw, 104px); line-height:1.0; color:var(--plum);
+      margin-bottom:20px; letter-spacing:-0.01em;
+      animation: fadeUp 0.6s var(--easing) 0.4s both;
+    ">Dolled by Louise</h1>
+
+    <!-- Divider -->
+    <div style="
+      width:44px; height:2px; margin:0 auto 24px;
+      background: linear-gradient(90deg, var(--rose), var(--lilac));
+      border-radius:2px;
+      animation: fadeUp 0.6s var(--easing) 0.55s both;
+    " aria-hidden="true"></div>
+
+    <!-- Tagline -->
+    <p style="
+      font-family:'Jost',sans-serif; font-size:18px; font-weight:300;
+      color:var(--plum); opacity:0.75; line-height:1.65; margin-bottom:36px;
+      animation: fadeUp 0.6s var(--easing) 0.7s both;
+    ">Expert lash lifts &amp; extensions tailored to your unique eye shape.</p>
+
+    <!-- CTAs -->
+    <div style="
+      display:flex; flex-wrap:wrap; gap:14px; justify-content:center;
+      animation: fadeUp 0.6s var(--easing) 0.9s both;
+    ">
+      <a href="tel:+447464557236" class="btn-plum" aria-label="Call Louise to book">📞 Call to Book</a>
+      <a href="https://wa.me/447464557236?text=Hi%20Louise!%20I'd%20love%20to%20book%20an%20appointment%20%F0%9F%92%95" target="_blank" rel="noopener" class="btn-wa" aria-label="WhatsApp Louise to book">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        WhatsApp
+      </a>
+    </div>
+
+    <!-- Scroll cue -->
+    <div style="
+      margin-top:56px; display:flex; flex-direction:column; align-items:center; gap:6px;
+      animation: fadeUp 0.6s var(--easing) 1.1s both;
+    " aria-hidden="true">
+      <span style="font-family:'Jost',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--rose);opacity:0.7;">Scroll</span>
+      <div style="width:1px;height:32px;background:linear-gradient(to bottom,var(--rose),transparent);animation:scrollBounce 2s ease-in-out infinite;"></div>
+    </div>
+  </div>
+</section>
+```
+
+- [ ] **Step 2: Screenshot and verify hero renders**
+
+Hero should show: monogram circle, rose label, large italic "Dolled by Louise" heading, two CTA buttons, floating rings in background, animated gradient bg.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add hero section with stagger animations and floating rings"
+```
+
+---
+
+### Task 4: Stats Bar + Certification Strip
+
+**Files:**
+- Modify: `dolled-by-louise.html` — add two sections after hero, inside `<main>`
+
+- [ ] **Step 1: Add stats bar HTML + CSS**
+
+```html
+<section id="stats" style="background:#fff; padding:40px 24px; position:relative; z-index:1;">
+  <div style="max-width:860px; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:center; gap:0;">
+
+    <div class="stat-item reveal">
+      <span class="stat-num">100+</span>
+      <span class="stat-label">Happy Clients</span>
+    </div>
+    <div class="stat-item reveal" style="animation-delay:0.1s">
+      <span class="stat-num">5★</span>
+      <span class="stat-label">Rated</span>
+    </div>
+    <div class="stat-item reveal" style="animation-delay:0.2s">
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Premium Products</span>
+    </div>
+    <div class="stat-item reveal" style="animation-delay:0.3s">
+      <span class="stat-num">✓</span>
+      <span class="stat-label">Certified &amp; Insured</span>
+    </div>
+
+    <!-- Google Reviews badge -->
+    <div class="reveal" style="width:100%;display:flex;justify-content:center;margin-top:20px;animation-delay:0.4s">
+      <a href="#" aria-label="See our Google reviews" style="
+        display:inline-flex;align-items:center;gap:8px;
+        background:#fff;border:1.5px solid rgba(201,127,160,0.3);
+        border-radius:999px;padding:7px 16px;text-decoration:none;
+        font-family:'Jost',sans-serif;font-size:12px;color:var(--plum);
+        transition:border-color 0.2s,box-shadow 0.2s;
+      " onmouseenter="this.style.boxShadow='0 2px 12px rgba(201,127,160,0.2)'" onmouseleave="this.style.boxShadow=''">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        ★★★★★ Google Reviews — coming soon
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stat-item {
+    flex: 1 1 140px; text-align:center; padding:20px 16px;
+    border-right: 1px solid rgba(201,127,160,0.12);
+    min-width: 120px;
+  }
+  .stat-item:last-of-type { border-right: none; }
+  .stat-num {
+    display:block; font-family:'Cormorant Garamond',serif; font-size:44px;
+    font-weight:300; color:var(--plum); line-height:1;
+  }
+  .stat-label {
+    display:block; font-family:'Jost',sans-serif; font-size:11px; font-weight:500;
+    letter-spacing:0.14em; text-transform:uppercase; color:var(--rose);
+    margin-top:6px;
+  }
+</style>
+```
+
+- [ ] **Step 2: Add certification strip**
+
+```html
+<div style="
+  background:#fff; padding:18px 24px;
+  border-top:1px solid rgba(201,127,160,0.15);
+  border-bottom:1px solid rgba(201,127,160,0.15);
+  position:relative; z-index:1;
+">
+  <div class="reveal" style="
+    max-width:860px; margin:0 auto;
+    display:flex; flex-wrap:wrap; gap:24px; justify-content:center;
+  ">
+    <span class="cert-badge">🛡️ <strong>Fully Insured</strong></span>
+    <span class="cert-badge">🎓 <strong>Professionally Trained</strong></span>
+    <span class="cert-badge">✅ <strong>Health &amp; Safety Compliant</strong></span>
+    <span class="cert-badge">💎 <strong>Premium Products Only</strong></span>
+  </div>
+</div>
+
+<style>
+  .cert-badge {
+    font-family:'Jost',sans-serif; font-size:13px; font-weight:400; color:var(--plum);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .cert-badge strong { font-weight:500; }
+</style>
+```
+
+- [ ] **Step 3: Screenshot and verify stats + certification strip render correctly**
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add stats bar, Google reviews badge, and certification strip"
+```
+
+---
+
+### Task 5: Services Section
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Add services section**
+
+```html
+<section id="services" style="background:#fff; padding:80px 24px;">
+  <div style="max-width:860px; margin:0 auto;">
+    <p class="section-label reveal">✦ What We Offer</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">Our Services</h2>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:24px; margin-top:40px;">
+
+      <!-- Lash Lifts card -->
+      <div class="service-card reveal" style="background:linear-gradient(135deg,var(--blush),var(--lilac));">
+        <div class="service-icon">✨</div>
+        <h3 class="service-title">Lash Lifts</h3>
+        <p class="service-desc">Lift and define your natural lashes without the need for extensions. Results last 6–8 weeks with zero maintenance.</p>
+        <ul class="service-list">
+          <li><strong>Korean Lash Lift</strong> <span class="meta">⏱ 60–75 mins · lasts 6–8 weeks</span></li>
+          <li><strong>LVL Lashes</strong> <span class="meta">⏱ 45–60 mins · lasts 6–8 weeks</span></li>
+          <li><strong>Lash Tint</strong> <span class="meta">⏱ 15–20 mins · lasts 4–6 weeks</span></li>
+          <li><strong>Lift + Tint Combo</strong></li>
+        </ul>
+        <a href="https://wa.me/447464557236?text=Hi%20Louise!%20I'd%20love%20to%20book%20a%20lash%20lift%20%E2%9C%A8" target="_blank" rel="noopener" class="btn-wa" style="margin-top:20px;" aria-label="WhatsApp to book a lash lift">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Book a Lift
+        </a>
+      </div>
+
+      <!-- Extensions card -->
+      <div class="service-card reveal" style="background:linear-gradient(135deg,var(--lilac),var(--blush)); animation-delay:0.15s">
+        <div class="service-icon">👁</div>
+        <h3 class="service-title">Lash Extensions</h3>
+        <p class="service-desc">Individually applied lashes for stunning fullness and length. Choose your drama level — from barely-there to full glam.</p>
+        <ul class="service-list">
+          <li><strong>Classic</strong> <span class="meta">⏱ 90–120 mins · 2–3 wk infills</span></li>
+          <li><strong>Hybrid</strong> <span class="meta">⏱ 90–120 mins · 2–3 wk infills</span></li>
+          <li><strong>Russian Volume</strong> <span class="meta">⏱ 120–150 mins · 2–3 wk infills</span></li>
+          <li><strong>Mega Volume</strong> <span class="meta">⏱ 150–180 mins · 2–3 wk infills</span></li>
+        </ul>
+        <a href="https://wa.me/447464557236?text=Hi%20Louise!%20I'd%20love%20to%20book%20lash%20extensions%20%F0%9F%91%81" target="_blank" rel="noopener" class="btn-wa" style="margin-top:20px;" aria-label="WhatsApp to book lash extensions">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Book Extensions
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-label {
+    font-family:'Jost',sans-serif; font-size:11px; font-weight:500;
+    letter-spacing:0.2em; text-transform:uppercase; color:var(--rose);
+    text-align:center; margin-bottom:10px;
+  }
+  .section-heading {
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300;
+    font-size:clamp(36px,6vw,52px); color:var(--plum); text-align:center;
+    line-height:1.1; margin-bottom:4px;
+  }
+  .service-card {
+    border-radius:20px; padding:36px 32px;
+    box-shadow:0 4px 32px rgba(201,127,160,0.12);
+    transition:transform 0.32s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.32s;
+  }
+  .service-card:hover { transform:translateY(-10px); box-shadow:0 16px 48px rgba(201,127,160,0.22); }
+  .service-icon { font-size:36px; margin-bottom:16px; }
+  .service-title {
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300;
+    font-size:28px; color:var(--plum); margin-bottom:10px;
+  }
+  .service-desc { font-size:14px; font-weight:300; color:var(--plum); opacity:0.8; line-height:1.7; margin-bottom:18px; }
+  .service-list { list-style:none; padding:0; margin:0 0 4px; }
+  .service-list li {
+    font-size:14px; font-weight:400; color:var(--plum); padding:7px 0;
+    border-bottom:1px solid rgba(45,20,35,0.08);
+  }
+  .service-list li:last-child { border-bottom:none; }
+  .meta { display:block; font-size:11px; color:var(--rose); font-weight:400; margin-top:2px; }
+</style>
+```
+
+- [ ] **Step 2: Screenshot and verify both cards render**
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add services section with lash lift and extension cards"
+```
+
+---
+
+### Task 6: Before/After Slider + Quiz
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Add before/after slider section**
+
+```html
+<section style="padding:60px 24px; background:var(--cream);">
+  <div style="max-width:600px; margin:0 auto; text-align:center;">
+    <p class="section-label reveal">✦ See the Difference</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">Before &amp; After</h2>
+    <p style="font-size:14px;font-weight:300;color:var(--plum);opacity:0.7;margin:10px 0 28px;animation-delay:0.2s" class="reveal">Swipe to see the transformation ✨</p>
+
+    <div id="baSlider" class="reveal" style="
+      position:relative; width:100%; padding-top:75%; border-radius:20px; overflow:hidden;
+      box-shadow:0 8px 40px rgba(45,20,35,0.14); user-select:none; touch-action:pan-y;
+      animation-delay:0.25s;
+    " aria-label="Before and after lash comparison slider">
+      <!-- After image (bottom layer, full width) -->
+      <img src="https://placehold.co/600x450/e8d5f0/2d1423?text=After" alt="After lash treatment" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <!-- Before image (top layer, clips to left side) -->
+      <div id="baClip" style="position:absolute;inset:0;overflow:hidden;width:50%;">
+        <img src="https://placehold.co/600x450/fce8ee/2d1423?text=Before" alt="Before lash treatment" style="width:100vw;max-width:600px;height:100%;object-fit:cover;">
+      </div>
+      <!-- Divider line -->
+      <div id="baDivider" style="position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:3px;background:#fff;box-shadow:0 0 10px rgba(0,0,0,0.2);">
+        <!-- Handle -->
+        <div id="baHandle" style="
+          position:absolute;top:50%;left:50%;
+          transform:translate(-50%,-50%);
+          width:44px;height:44px;border-radius:50%;
+          background:linear-gradient(135deg,var(--plum),#4a1a30);
+          box-shadow:0 4px 16px rgba(45,20,35,0.35);
+          display:flex;align-items:center;justify-content:center;
+          cursor:ew-resize;
+          animation:sliderPulse 1.5s ease-in-out 1s 2;
+        " aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l-6-6 6-6M15 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const slider = document.getElementById('baSlider');
+  const clip   = document.getElementById('baClip');
+  const div    = document.getElementById('baDivider');
+  if (!slider) return;
+
+  let dragging = false;
+  function setPos(clientX) {
+    const rect = slider.getBoundingClientRect();
+    const pct  = Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+    clip.style.width = pct + '%';
+    div.style.left   = pct + '%';
+  }
+  slider.addEventListener('pointerdown', e => { dragging = true; slider.setPointerCapture(e.pointerId); });
+  slider.addEventListener('pointermove', e => { if (dragging) setPos(e.clientX); });
+  slider.addEventListener('pointerup',   () => { dragging = false; });
+})();
+</script>
+```
+
+- [ ] **Step 2: Add quiz section**
+
+```html
+<section id="quiz" style="padding:70px 24px; background:var(--blush);">
+  <div style="max-width:560px; margin:0 auto;">
+    <p class="section-label reveal">✦ Not Sure Where to Start?</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">Which Lash Is Right for Me?</h2>
+
+    <div id="quizCard" class="reveal" style="
+      margin-top:32px; background:#fff; border-radius:20px; padding:36px 32px;
+      box-shadow:0 8px 40px rgba(201,127,160,0.12);
+      animation-delay:0.2s;
+    ">
+      <!-- Step 1 -->
+      <div id="qStep1">
+        <p class="quiz-q">What look do you want?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="quizAnswer(1,'natural')">Natural &amp; subtle</button>
+          <button class="quiz-opt" onclick="quizAnswer(1,'defined')">Defined &amp; polished</button>
+          <button class="quiz-opt" onclick="quizAnswer(1,'full')">Full &amp; dramatic</button>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div id="qStep2" style="display:none;">
+        <p class="quiz-q">How low-maintenance are you?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="quizAnswer(2,'low')">Forget about it (lifts)</button>
+          <button class="quiz-opt" onclick="quizAnswer(2,'high')">Happy with infills every 3 weeks</button>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div id="qStep3" style="display:none;">
+        <p class="quiz-q">First time?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="quizAnswer(3,'yes')">Yes, first time</button>
+          <button class="quiz-opt" onclick="quizAnswer(3,'no')">No, I've had lashes before</button>
+        </div>
+      </div>
+      <!-- Result -->
+      <div id="qResult" style="display:none; text-align:center;">
+        <div style="font-size:40px; margin-bottom:12px;" id="qResultIcon"></div>
+        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--rose);font-weight:500;margin-bottom:8px;">Your perfect match</p>
+        <h3 id="qResultName" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;color:var(--plum);margin-bottom:12px;"></h3>
+        <p id="qResultDesc" style="font-size:14px;font-weight:300;color:var(--plum);opacity:0.8;line-height:1.7;margin-bottom:20px;"></p>
+        <a id="qResultCTA" href="#" target="_blank" rel="noopener" class="btn-wa">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Book this treatment
+        </a>
+        <br><button onclick="quizReset()" style="margin-top:14px;background:none;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-size:13px;color:var(--rose);text-decoration:underline;underline-offset:3px;">Take the quiz again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quiz-q { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:var(--plum);margin-bottom:20px; }
+  .quiz-opts { display:flex;flex-direction:column;gap:10px; }
+  .quiz-opt {
+    background:var(--blush); border:1.5px solid rgba(201,127,160,0.2);
+    border-radius:12px; padding:13px 18px;
+    font-family:'Jost',sans-serif;font-size:14px;font-weight:400;color:var(--plum);
+    cursor:pointer; text-align:left;
+    transition:background 0.2s,border-color 0.2s,transform 0.2s var(--easing);
+  }
+  .quiz-opt:hover { background:var(--lilac); border-color:var(--rose); transform:translateX(4px); }
+  .quiz-opt:focus-visible { outline:2px solid var(--rose); }
+</style>
+
+<script>
+const quizAnswers = {};
+const quizResults = {
+  'natural-low':    {icon:'✨', name:'Korean Lash Lift',   desc:'A gentle, low-maintenance lift using a Korean technique for an intense curl that lasts 6–8 weeks.', wa:'Korean+Lash+Lift'},
+  'natural-high-yes': {icon:'👁', name:'Classic Extensions',  desc:'Individually placed single extensions for subtle, natural-looking length — perfect for first-timers.',    wa:'Classic+Extensions'},
+  'natural-high-no':  {icon:'👁', name:'Classic Extensions',  desc:'Individually placed single extensions for subtle, natural-looking definition.',                            wa:'Classic+Extensions'},
+  'defined-high-yes': {icon:'💕', name:'Hybrid Extensions',   desc:'The best of both worlds — a mix of classic and volume for a polished, full look without being overdone.',   wa:'Hybrid+Extensions'},
+  'defined-high-no':  {icon:'💕', name:'Hybrid Extensions',   desc:'Classic meets volume for a beautifully defined, everyday glam look.',                                       wa:'Hybrid+Extensions'},
+  'defined-low':    {icon:'✨', name:'LVL Lashes',          desc:'Length, Volume & Lift — lifts your natural lashes from the root for a wide-eye, mascara-free look.',          wa:'LVL+Lashes'},
+  'full-high-yes':  {icon:'🔥', name:'Russian Volume',      desc:'Handcrafted fan extensions for full, fluffy volume. A dramatic step up from classic.',                       wa:'Russian+Volume'},
+  'full-high-no':   {icon:'🔥', name:'Mega Volume',         desc:'Maximum drama. Ultra-fine lashes fanned out for the fullest, most glamorous result possible.',               wa:'Mega+Volume'},
+  'full-low':       {icon:'✨', name:'Lift + Tint Combo',   desc:'Your lashes lifted AND darkened for maximum impact — zero maintenance, maximum effect.',                      wa:'Lift+Tint+Combo'},
+};
+
+function quizAnswer(step, val) {
+  quizAnswers[step] = val;
+  document.getElementById('qStep' + step).style.display = 'none';
+  if (step === 1) {
+    document.getElementById('qStep2').style.display = 'block';
+  } else if (step === 2) {
+    if (val === 'low') {
+      showQuizResult(quizAnswers[1] + '-low');
+    } else {
+      document.getElementById('qStep3').style.display = 'block';
+    }
+  } else if (step === 3) {
+    const key = quizAnswers[1] + '-high-' + val;
+    showQuizResult(quizResults[key] ? key : quizAnswers[1] + '-high-yes');
+  }
+}
+
+function showQuizResult(key) {
+  const r = quizResults[key] || quizResults['natural-low'];
+  document.getElementById('qResultIcon').textContent = r.icon;
+  document.getElementById('qResultName').textContent = r.name;
+  document.getElementById('qResultDesc').textContent = r.desc;
+  document.getElementById('qResultCTA').href = 'https://wa.me/447464557236?text=Hi%20Louise!%20I%27d%20love%20to%20book%20a%20' + r.wa;
+  document.getElementById('qResult').style.display = 'block';
+}
+
+function quizReset() {
+  Object.keys(quizAnswers).forEach(k => delete quizAnswers[k]);
+  ['qStep1','qStep2','qStep3','qResult'].forEach(id => {
+    document.getElementById(id).style.display = id === 'qStep1' ? 'block' : 'none';
+  });
+}
+</script>
+```
+
+- [ ] **Step 3: Screenshot and verify both slider and quiz render**
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add before/after slider and lash quiz sections"
+```
+
+---
+
+### Task 7: Pricing + How to Book
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Add pricing section**
+
+```html
+<section id="pricing" style="padding:80px 24px; background:linear-gradient(160deg,var(--blush),var(--cream));">
+  <div style="max-width:860px; margin:0 auto;">
+    <p class="section-label reveal">✦ Transparent Pricing</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">Pricing</h2>
+    <p class="reveal" style="text-align:center;font-size:13px;color:var(--rose);font-weight:400;margin-top:8px;animation-delay:0.2s">Prices to be confirmed — contact Louise for current rates.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:36px;">
+      <!-- Lifts panel -->
+      <div class="pricing-panel reveal">
+        <h3 class="pricing-panel-title">Lash Lifts</h3>
+        <div class="pricing-row"><div><span class="pricing-name">Korean Lash Lift</span><span class="pricing-sub">⏱ 60–75 mins</span></div><span class="pricing-price">£XX</span></div>
+        <div class="pricing-row"><div><span class="pricing-name">LVL Lashes</span><span class="pricing-sub">⏱ 45–60 mins</span></div><span class="pricing-price">£XX</span></div>
+        <div class="pricing-row"><div><span class="pricing-name">Lash Tint</span><span class="pricing-sub">⏱ 15–20 mins</span></div><span class="pricing-price">£XX</span></div>
+        <div class="pricing-row" style="border-bottom:none;"><div><span class="pricing-name">Lift + Tint Combo</span></div><span class="pricing-price">£XX</span></div>
+      </div>
+      <!-- Extensions panel -->
+      <div class="pricing-panel reveal" style="animation-delay:0.12s">
+        <h3 class="pricing-panel-title">Lash Extensions</h3>
+        <div class="pricing-row"><div><span class="pricing-name">Classic</span><span class="pricing-sub">⏱ 90–120 mins</span></div><span class="pricing-price">£XX</span></div>
+        <div class="pricing-row"><div><span class="pricing-name">Hybrid</span><span class="pricing-sub">⏱ 90–120 mins</span></div><span class="pricing-price">£XX</span></div>
+        <div class="pricing-row"><div><span class="pricing-name">Russian Volume</span><span class="pricing-sub">⏱ 120–150 mins</span></div><span class="pricing-price">£XX</span></div>
+        <div class="pricing-row"><div><span class="pricing-name">Mega Volume</span><span class="pricing-sub">⏱ 150–180 mins</span></div><span class="pricing-price">£XX</span></div>
+        <div class="pricing-row" style="border-bottom:none;"><div><span class="pricing-name">Infills</span><span class="pricing-sub">2–3 weeks after set</span></div><span class="pricing-price">£XX</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pricing-panel {
+    background:#fff; border-radius:20px; padding:28px 28px 20px;
+    box-shadow:0 4px 24px rgba(201,127,160,0.1);
+  }
+  .pricing-panel-title {
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;
+    color:var(--plum);margin-bottom:16px;font-weight:300;
+  }
+  .pricing-row {
+    display:flex;align-items:center;justify-content:space-between;
+    padding:11px 0;border-bottom:1px solid rgba(201,127,160,0.12);
+    transition:background 0.15s,margin 0.15s;border-radius:8px;
+  }
+  .pricing-row:hover { background:var(--blush); padding-left:8px; padding-right:8px; margin:0 -8px; }
+  .pricing-name { display:block;font-size:14px;font-weight:400;color:var(--plum); }
+  .pricing-sub  { display:block;font-size:11px;color:var(--rose);margin-top:2px; }
+  .pricing-price { font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--rose);white-space:nowrap;margin-left:12px; }
+</style>
+```
+
+- [ ] **Step 2: Add How to Book section**
+
+```html
+<section style="padding:80px 24px; background:#fff;">
+  <div style="max-width:760px; margin:0 auto; text-align:center;">
+    <p class="section-label reveal">✦ Simple Process</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">How to Book</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;margin-top:44px;">
+      <div class="book-step reveal">
+        <div class="step-num">1</div>
+        <h3 class="step-title">Get in Touch</h3>
+        <p class="step-desc">Call or WhatsApp Louise to check availability and ask any questions.</p>
+      </div>
+      <div class="book-step reveal" style="animation-delay:0.12s">
+        <div class="step-num">2</div>
+        <h3 class="step-title">Book Your Slot</h3>
+        <p class="step-desc">Confirm your appointment time. A small deposit may be required to secure your slot.</p>
+      </div>
+      <div class="book-step reveal" style="animation-delay:0.24s">
+        <div class="step-num">3</div>
+        <h3 class="step-title">Get Dolled Up</h3>
+        <p class="step-desc">Sit back, relax, and leave with lashes you'll absolutely love.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .book-step { text-align:center; }
+  .step-num {
+    width:60px;height:60px;border-radius:50%;margin:0 auto 16px;
+    background:linear-gradient(135deg,var(--blush),var(--lilac));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--plum);
+    box-shadow:0 4px 16px rgba(201,127,160,0.18);
+  }
+  .step-title { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:var(--plum);margin-bottom:8px;font-weight:300; }
+  .step-desc  { font-size:14px;font-weight:300;color:var(--plum);opacity:0.75;line-height:1.7; }
+</style>
+```
+
+- [ ] **Step 3: Screenshot and verify pricing panels + steps render**
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add pricing panels and how-to-book steps"
+```
+
+---
+
+### Task 8: Gallery
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Add gallery section**
+
+```html
+<section id="gallery" style="padding:80px 24px; background:linear-gradient(135deg,var(--blush),var(--lilac),var(--cream));">
+  <div style="max-width:860px; margin:0 auto;">
+    <p class="section-label reveal">✦ Our Work</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">Gallery</h2>
+    <p class="reveal" style="text-align:center;font-size:14px;font-weight:300;color:var(--plum);opacity:0.7;margin-top:8px;animation-delay:0.2s">Real results — client photos coming soon.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:36px;">
+      <!-- 6 gallery items -->
+      <div class="gallery-item reveal"><img src="https://placehold.co/400x400/fce8ee/2d1423?text=Classic+Set" alt="Classic lash set result"><div class="gallery-cap">Classic Set</div></div>
+      <div class="gallery-item reveal" style="animation-delay:0.06s"><img src="https://placehold.co/400x400/e8d5f0/2d1423?text=Hybrid+Set" alt="Hybrid lash extension result"><div class="gallery-cap">Hybrid Set</div></div>
+      <div class="gallery-item reveal" style="animation-delay:0.12s"><img src="https://placehold.co/400x400/fce8ee/2d1423?text=Russian+Volume" alt="Russian volume lash set"><div class="gallery-cap">Russian Volume</div></div>
+      <div class="gallery-item reveal" style="animation-delay:0.18s"><img src="https://placehold.co/400x400/e8d5f0/2d1423?text=Korean+Lift" alt="Korean lash lift result"><div class="gallery-cap">Korean Lift</div></div>
+      <div class="gallery-item reveal" style="animation-delay:0.24s"><img src="https://placehold.co/400x400/fce8ee/2d1423?text=LVL+Lashes" alt="LVL lashes result"><div class="gallery-cap">LVL Lashes</div></div>
+      <div class="gallery-item reveal" style="animation-delay:0.3s"><img src="https://placehold.co/400x400/e8d5f0/2d1423?text=Mega+Volume" alt="Mega volume lash set"><div class="gallery-cap">Mega Volume</div></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery-item {
+    position:relative; border-radius:14px; overflow:hidden;
+    aspect-ratio:1; box-shadow:0 4px 20px rgba(45,20,35,0.1);
+    cursor:pointer;
+  }
+  .gallery-item img { width:100%;height:100%;object-fit:cover;transition:transform 0.4s var(--easing); }
+  .gallery-item:hover img { transform:scale(1.07); }
+  .gallery-cap {
+    position:absolute;inset:0;
+    background:linear-gradient(to top,rgba(45,20,35,0.75),transparent);
+    display:flex;align-items:flex-end;padding:14px;
+    font-family:'Jost',sans-serif;font-size:13px;font-weight:500;
+    letter-spacing:0.06em;color:#fff;
+    opacity:0;transition:opacity 0.3s;
+  }
+  .gallery-item:hover .gallery-cap { opacity:1; }
+</style>
+```
+
+- [ ] **Step 2: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add gallery grid section"
+```
+
+---
+
+### Task 9: Aftercare + Testimonials + About Louise
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Add aftercare section**
+
+```html
+<section style="padding:80px 24px; background:linear-gradient(160deg,var(--blush),var(--cream));">
+  <div style="max-width:860px; margin:0 auto;">
+    <p class="section-label reveal">✦ Keep Them Looking Perfect</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">Aftercare Tips</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;margin-top:36px;">
+      <div class="aftercare-card reveal">
+        <div class="aftercare-icon">🚿</div>
+        <h3 class="aftercare-title">Keep them dry for 24 hours</h3>
+        <p class="aftercare-desc">Avoid steam, swimming, and sweating for the first day after your appointment.</p>
+      </div>
+      <div class="aftercare-card reveal" style="animation-delay:0.08s">
+        <div class="aftercare-icon">🧴</div>
+        <h3 class="aftercare-title">Avoid oil-based products</h3>
+        <p class="aftercare-desc">Oils break down lash adhesive. Use oil-free micellar water to cleanse around your eyes.</p>
+      </div>
+      <div class="aftercare-card reveal" style="animation-delay:0.16s">
+        <div class="aftercare-icon">🪮</div>
+        <h3 class="aftercare-title">Brush daily</h3>
+        <p class="aftercare-desc">Use a clean spoolie every morning to keep lashes neat and separated.</p>
+      </div>
+      <div class="aftercare-card reveal" style="animation-delay:0.24s">
+        <div class="aftercare-icon">😴</div>
+        <h3 class="aftercare-title">Sleep on your back</h3>
+        <p class="aftercare-desc">Reduces friction and pressure on lashes, extending the life of your set.</p>
+      </div>
+      <div class="aftercare-card reveal" style="animation-delay:0.32s">
+        <div class="aftercare-icon">✋</div>
+        <h3 class="aftercare-title">Don't pick or pull</h3>
+        <p class="aftercare-desc">Let lashes shed naturally with your natural lash cycle to protect your naturals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .aftercare-card {
+    background:#fff; border-radius:16px; padding:24px;
+    box-shadow:0 4px 20px rgba(201,127,160,0.1);
+    transition:transform 0.28s var(--easing),box-shadow 0.28s;
+  }
+  .aftercare-card:hover { transform:translateY(-6px); box-shadow:0 10px 32px rgba(201,127,160,0.18); }
+  .aftercare-icon { font-size:28px; margin-bottom:12px; }
+  .aftercare-title { font-family:'Jost',sans-serif;font-size:14px;font-weight:500;color:var(--plum);margin-bottom:6px; }
+  .aftercare-desc  { font-size:13px;font-weight:300;color:var(--plum);opacity:0.75;line-height:1.65; }
+</style>
+```
+
+- [ ] **Step 2: Add testimonials section**
+
+```html
+<section style="padding:80px 24px; background:#fff;">
+  <div style="max-width:860px; margin:0 auto;">
+    <p class="section-label reveal">✦ What Clients Say</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">Testimonials</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:40px;">
+      <div class="testi-card reveal">
+        <div style="color:#f59e0b;font-size:18px;margin-bottom:10px;">★★★★★</div>
+        <p class="testi-text">"Louise is absolutely incredible. My lashes have never looked so good — I get compliments every day. The whole experience was so relaxing and professional."</p>
+        <p class="testi-name">— Sarah M.</p>
+      </div>
+      <div class="testi-card reveal" style="animation-delay:0.12s">
+        <div style="color:#f59e0b;font-size:18px;margin-bottom:10px;">★★★★★</div>
+        <p class="testi-text">"Best lash artist in Cumbria, hands down. I've had Russian Volume with Louise for over a year and I wouldn't go anywhere else. So natural-looking yet full and gorgeous."</p>
+        <p class="testi-name">— Emma R.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .testi-card {
+    background:var(--cream); border-radius:20px; padding:32px 28px;
+    box-shadow:0 4px 24px rgba(201,127,160,0.1);
+    position:relative; overflow:hidden;
+    transition:transform 0.3s var(--easing),box-shadow 0.3s;
+  }
+  .testi-card::before {
+    content:'"'; position:absolute; top:10px; left:18px;
+    font-family:'Cormorant Garamond',serif; font-size:120px; font-weight:300;
+    color:var(--rose); opacity:0.18; line-height:1; pointer-events:none;
+  }
+  .testi-card:hover { transform:translateY(-6px); box-shadow:0 12px 36px rgba(201,127,160,0.18); }
+  .testi-text { font-size:14px;font-weight:300;color:var(--plum);line-height:1.75;font-style:italic;margin-bottom:16px;position:relative;z-index:1; }
+  .testi-name { font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--rose); }
+</style>
+```
+
+- [ ] **Step 3: Add About Louise section**
+
+```html
+<section style="padding:80px 24px; background:linear-gradient(160deg,var(--lilac),var(--cream));">
+  <div style="max-width:860px; margin:0 auto;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+
+      <!-- Text left -->
+      <div class="reveal">
+        <p class="section-label" style="text-align:left;">✦ Meet Your Lash Artist</p>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(36px,5vw,52px);color:var(--plum);line-height:1.1;margin-bottom:20px;">Hi, I'm Louise</h2>
+        <p style="font-size:15px;font-weight:300;color:var(--plum);opacity:0.8;line-height:1.8;margin-bottom:16px;">
+          I've been obsessed with lashes ever since my first set completely changed how I felt leaving the house in the morning. I trained because I wanted every client to feel that same confidence.
+        </p>
+        <p style="font-size:15px;font-weight:300;color:var(--plum);opacity:0.8;line-height:1.8;margin-bottom:24px;">
+          Based right here in Longtown, I treat every appointment like a visit from a friend — relaxed, personal, and always with your best result in mind.
+        </p>
+        <p style="font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:24px;">Fully certified · Insured · Based in Cumbria</p>
+        <a href="https://wa.me/447464557236?text=Hi%20Louise!%20%F0%9F%91%8B" target="_blank" rel="noopener" class="btn-wa" style="display:inline-flex;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Say hello 👋
+        </a>
+      </div>
+
+      <!-- Photo right -->
+      <div class="reveal" style="animation-delay:0.15s;text-align:center;">
+        <div style="
+          display:inline-block; border-radius:50%; padding:4px;
+          background:linear-gradient(135deg,var(--rose),var(--lilac));
+          box-shadow:0 8px 40px rgba(201,127,160,0.25);
+        ">
+          <img src="https://placehold.co/400x400/fce8ee/2d1423?text=Louise" alt="Louise, lash artist at Dolled by Louise" style="width:260px;height:260px;border-radius:50%;object-fit:cover;display:block;">
+        </div>
+        <p style="margin-top:12px;font-family:'Jost',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--rose);">Louise · Lash Artist</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Responsive: stack About section on mobile -->
+<style>
+  @media (max-width: 640px) {
+    #aboutGrid { grid-template-columns: 1fr !important; }
+  }
+</style>
+```
+
+Fix the About grid to use an id so the responsive rule works — add `id="aboutGrid"` to the inner grid `<div>`.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add aftercare tips, testimonials, and About Louise sections"
+```
+
+---
+
+### Task 10: FAQ + Book & Find Us
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Add FAQ accordion**
+
+```html
+<section id="faq" style="padding:80px 24px; background:linear-gradient(160deg,var(--blush),var(--cream));">
+  <div style="max-width:680px; margin:0 auto;">
+    <p class="section-label reveal">✦ Common Questions</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">FAQ</h2>
+
+    <div style="margin-top:36px; display:flex; flex-direction:column; gap:12px;">
+
+      <details class="faq-item reveal">
+        <summary class="faq-q">How long do lash extensions last?</summary>
+        <div class="faq-a">Lash extensions last the full cycle of your natural lashes — usually 2–3 weeks before infills are needed. With good aftercare and infills every 2–3 weeks, you can maintain your set indefinitely.</div>
+      </details>
+
+      <details class="faq-item reveal" style="animation-delay:0.08s">
+        <summary class="faq-q">What's the difference between Korean Lash Lift and LVL?</summary>
+        <div class="faq-a">Both lift your natural lashes from the root — no extensions involved. The Korean Lash Lift uses a more intense curl rod for a dramatic, eye-opening effect. LVL (Length, Volume & Lift) adds more volume and a softer, longer-lasting curl. Louise can recommend the best option for your lash type.</div>
+      </details>
+
+      <details class="faq-item reveal" style="animation-delay:0.16s">
+        <summary class="faq-q">How do I prepare for my appointment?</summary>
+        <div class="faq-a">Arrive with clean lashes — no mascara, lash serum, or eye makeup. Remove contact lenses before a lift or tint. Avoid caffeine before your appointment as it can cause eye fluttering. That's it!</div>
+      </details>
+
+      <details class="faq-item reveal" style="animation-delay:0.24s">
+        <summary class="faq-q">Can I wear mascara with extensions?</summary>
+        <div class="faq-a">We don't recommend it — extensions already give a mascara effect. If you do, only use a water-based, oil-free mascara on the tips only, and never a waterproof formula as it's very hard to remove without damaging the lashes.</div>
+      </details>
+
+      <details class="faq-item reveal" style="animation-delay:0.32s">
+        <summary class="faq-q">Where are you based?</summary>
+        <div class="faq-a">Louise is based at 33 Albert Street, Longtown, CA6 5SF — a short drive from Carlisle and the Scottish borders. <a href="https://maps.google.com/?q=33+Albert+Street,+Longtown,+CA6+5SF" target="_blank" rel="noopener" style="color:var(--rose);text-decoration:underline;">View on Google Maps →</a></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-item {
+    background:#fff; border-radius:14px; padding:0;
+    box-shadow:0 2px 16px rgba(201,127,160,0.08); overflow:hidden;
+  }
+  .faq-q {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 22px; cursor:pointer; list-style:none;
+    font-family:'Jost',sans-serif;font-size:15px;font-weight:400;color:var(--plum);
+    transition:color 0.2s;
+  }
+  .faq-q::-webkit-details-marker { display:none; }
+  .faq-q::after {
+    content:'✦'; color:var(--rose); font-size:12px;
+    transition:transform 0.28s var(--easing);
+    flex-shrink:0; margin-left:12px;
+  }
+  .faq-item[open] .faq-q { color:var(--rose); }
+  .faq-item[open] .faq-q::after { transform:rotate(45deg); }
+  .faq-a {
+    padding:0 22px 18px; font-size:14px;font-weight:300;
+    color:var(--plum);opacity:0.8;line-height:1.75;
+  }
+</style>
+```
+
+- [ ] **Step 2: Add Book & Find Us section**
+
+```html
+<section style="padding:90px 24px; background:linear-gradient(135deg,#2d1423,#4a1a30);">
+  <div style="max-width:580px; margin:0 auto; text-align:center;">
+    <p style="font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--rose);margin-bottom:14px;" class="reveal">✦ Ready to get dolled? ✦</p>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(36px,7vw,60px);color:var(--cream);line-height:1.1;margin-bottom:24px;" class="reveal" style="animation-delay:0.1s">Book Your Appointment</h2>
+
+    <a href="tel:+447464557236" class="reveal" style="display:block;font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,38px);font-weight:300;color:var(--rose);text-decoration:none;margin-bottom:10px;animation-delay:0.2s;transition:opacity 0.2s;" onmouseenter="this.style.opacity='0.8'" onmouseleave="this.style.opacity='1'">+44 7464 557236</a>
+
+    <p style="font-family:'Jost',sans-serif;font-size:12px;font-weight:400;letter-spacing:0.14em;text-transform:uppercase;color:rgba(253,248,245,0.5);margin-bottom:6px;" class="reveal" style="animation-delay:0.25s">33 Albert Street, Longtown, CA6 5SF</p>
+
+    <a href="https://maps.google.com/?q=33+Albert+Street,+Longtown,+CA6+5SF" target="_blank" rel="noopener" style="
+      display:inline-flex;align-items:center;gap:6px;
+      font-family:'Jost',sans-serif;font-size:13px;color:var(--rose);
+      text-decoration:none;margin-bottom:36px;
+      transition:opacity 0.2s;
+    " onmouseenter="this.style.opacity='0.7'" onmouseleave="this.style.opacity='1'" class="reveal" aria-label="View Dolled by Louise on Google Maps">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      View on Google Maps
+    </a>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;" class="reveal">
+      <a href="tel:+447464557236" class="btn-plum" style="background:linear-gradient(135deg,var(--rose),#b06888);">📞 Call Now</a>
+      <a href="https://wa.me/447464557236" target="_blank" rel="noopener" class="btn-wa">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        WhatsApp Us
+      </a>
+    </div>
+  </div>
+</section>
+```
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add FAQ accordion and Book & Find Us section"
+```
+
+---
+
+### Task 11: Gift Vouchers + Footer + Cookie Notice
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Add gift vouchers section, then close `<main>`, add footer**
+
+```html
+<!-- Gift vouchers — inside <main>, before closing </main> -->
+<section style="padding:70px 24px; background:linear-gradient(135deg,var(--blush),var(--lilac));">
+  <div style="max-width:640px; margin:0 auto; text-align:center;">
+    <p class="section-label reveal">✦ The Perfect Gift</p>
+    <h2 class="section-heading reveal" style="animation-delay:0.1s">Give the Gift of Gorgeous Lashes 🎁</h2>
+    <p class="reveal" style="font-size:15px;font-weight:300;color:var(--plum);opacity:0.8;line-height:1.75;margin:16px 0 28px;animation-delay:0.2s">Treat someone special to a lash treatment they'll love. Gift vouchers available for all services — just WhatsApp Louise to arrange.</p>
+    <a href="https://wa.me/447464557236?text=Hi%20Louise!%20I'd%20love%20to%20enquire%20about%20a%20gift%20voucher%20%F0%9F%8E%81" target="_blank" rel="noopener" class="btn-wa reveal" style="animation-delay:0.3s;display:inline-flex;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Enquire About Vouchers
+    </a>
+    <p style="font-size:11px;color:var(--plum);opacity:0.5;margin-top:14px;font-weight:300;" class="reveal" style="animation-delay:0.4s">Vouchers valid for 12 months from purchase</p>
+  </div>
+</section>
+
+</main><!-- end #main -->
+
+<!-- Footer -->
+<footer style="background:#1a0a10; padding:28px 24px; display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
+  <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:20px;color:var(--cream);">Dolled by Louise</span>
+  <span style="font-family:'Jost',sans-serif;font-size:12px;color:rgba(253,248,245,0.4);">© 2026 · Instagram coming soon</span>
+</footer>
+
+<!-- Cookie notice -->
+<div id="cookieBanner" style="
+  position:fixed; bottom:0; left:0; right:0; z-index:500;
+  background:#1a0a10; padding:14px 24px;
+  display:flex; flex-wrap:wrap; align-items:center; gap:14px; justify-content:space-between;
+  font-family:'Jost',sans-serif; font-size:13px; color:rgba(253,248,245,0.75);
+  border-top:1px solid rgba(201,127,160,0.15);
+" role="alert">
+  <span>We use cookies to improve your experience. By continuing you agree to our use of cookies.</span>
+  <button onclick="acceptCookies()" class="btn-wa" style="padding:8px 20px;font-size:13px;flex-shrink:0;" aria-label="Accept cookies">Accept</button>
+</div>
+
+<script>
+function acceptCookies(){
+  localStorage.setItem('cookieConsent','true');
+  document.getElementById('cookieBanner').style.display='none';
+}
+if(localStorage.getItem('cookieConsent')){
+  document.getElementById('cookieBanner').style.display='none';
+}
+</script>
+```
+
+- [ ] **Step 2: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add gift vouchers section, footer, and cookie notice"
+```
+
+---
+
+### Task 12: Fixed UI — Floating WA, Back-to-Top, Mobile Booking Bar, Proactive Chat Bubble
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Add floating WA button (before `</body>`)**
+
+```html
+<!-- Floating WhatsApp button -->
+<a href="https://wa.me/447464557236" id="floatWa" target="_blank" rel="noopener"
+   aria-label="Open WhatsApp to contact Louise"
+   style="
+     position:fixed; bottom:24px; right:24px; z-index:200;
+     width:60px; height:60px; border-radius:50%;
+     background:var(--wa); display:flex; align-items:center; justify-content:center;
+     box-shadow:0 4px 24px rgba(37,211,102,0.4);
+     animation:waPulse 2.5s ease-in-out infinite;
+     transition:transform 0.2s var(--easing);
+   "
+   onmouseenter="this.style.transform='scale(1.1)'"
+   onmouseleave="this.style.transform='scale(1)'">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+```
+
+- [ ] **Step 2: Add back-to-top button**
+
+```html
+<!-- Back to top -->
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+  aria-label="Back to top"
+  style="
+    position:fixed; bottom:24px; left:24px; z-index:200;
+    width:44px; height:44px; border-radius:50%; border:none; cursor:pointer;
+    background:linear-gradient(135deg,var(--plum),#4a1a30);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 16px rgba(45,20,35,0.25);
+    opacity:0; pointer-events:none;
+    transition:opacity 0.3s,transform 0.2s var(--easing);
+  "
+  onmouseenter="this.style.transform='scale(1.1)'"
+  onmouseleave="this.style.transform='scale(1)'">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script>
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backToTop');
+  const show = window.scrollY > 600;
+  btn.style.opacity = show ? '1' : '0';
+  btn.style.pointerEvents = show ? 'auto' : 'none';
+}, { passive: true });
+</script>
+```
+
+- [ ] **Step 3: Add mobile booking bar**
+
+```html
+<!-- Mobile booking bar (640px and below) -->
+<div id="mobileBar" style="
+  display:none;
+  position:fixed; bottom:0; left:0; right:0; z-index:300;
+  height:52px;
+  background:linear-gradient(90deg,var(--plum),#4a1a30);
+  flex-direction:row; align-items:center;
+  box-shadow:0 -2px 16px rgba(45,20,35,0.25);
+  opacity:0; pointer-events:none;
+  transition:opacity 0.4s;
+">
+  <a href="tel:+447464557236" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:100%;font-family:'Jost',sans-serif;font-size:14px;font-weight:500;color:var(--cream);text-decoration:none;border-right:1px solid rgba(253,248,245,0.12);" aria-label="Call Louise">📞 Call</a>
+  <a href="https://wa.me/447464557236" target="_blank" rel="noopener" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:100%;background:var(--wa);font-family:'Jost',sans-serif;font-size:14px;font-weight:500;color:#fff;text-decoration:none;" aria-label="WhatsApp Louise">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    WhatsApp
+  </a>
+</div>
+
+<style>
+  @media (max-width: 640px) {
+    #mobileBar { display: flex !important; }
+    body { padding-bottom: 52px; }
+  }
+</style>
+
+<script>
+// Show mobile bar after scrolling past hero
+(function(){
+  const bar = document.getElementById('mobileBar');
+  if (!bar) return;
+  const hero = document.getElementById('hero');
+  function check(){
+    if(!hero) return;
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    const show = heroBottom < 0;
+    bar.style.opacity = show ? '1' : '0';
+    bar.style.pointerEvents = show ? 'auto' : 'none';
+  }
+  window.addEventListener('scroll', check, { passive:true });
+})();
+</script>
+```
+
+- [ ] **Step 4: Add proactive chat bubble (placeholder — wired up in agent plan)**
+
+```html
+<!-- Proactive chat bubble — shown after 8s if chat not opened -->
+<div id="chatPromo" style="
+  position:fixed; bottom:96px; right:24px; z-index:199;
+  background:#fff; border-radius:14px 14px 4px 14px;
+  padding:12px 16px; max-width:220px;
+  box-shadow:0 4px 24px rgba(45,20,35,0.18);
+  font-family:'Jost',sans-serif; font-size:13px; color:var(--plum);
+  opacity:0; pointer-events:none;
+  transition:opacity 0.35s var(--easing), transform 0.35s var(--easing);
+  transform:translateY(8px);
+" aria-live="polite">
+  Need help choosing a treatment? 💕
+  <button onclick="document.getElementById('chatPromo').style.opacity='0';document.getElementById('chatPromo').style.pointerEvents='none';"
+    style="position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;font-size:14px;color:var(--rose);line-height:1;" aria-label="Dismiss chat prompt">×</button>
+</div>
+
+<script>
+(function(){
+  let chatOpened = false;
+  let promoDismissed = false;
+  setTimeout(function(){
+    if (!chatOpened && !promoDismissed) {
+      const promo = document.getElementById('chatPromo');
+      if (promo) {
+        promo.style.opacity = '1';
+        promo.style.pointerEvents = 'auto';
+        promo.style.transform = 'translateY(0)';
+        setTimeout(function(){
+          if(parseFloat(promo.style.opacity) > 0){
+            promo.style.opacity = '0';
+            promo.style.pointerEvents = 'none';
+          }
+        }, 6000);
+      }
+    }
+  }, 8000);
+  // chatOpened is set to true by agent widget JS (Plan 2)
+  window._setChatOpened = function(){ chatOpened = true; };
+})();
+</script>
+```
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add floating WA, back-to-top, mobile booking bar, proactive chat bubble"
+```
+
+---
+
+### Task 13: Scroll Reveal + IntersectionObserver
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Add IntersectionObserver script (place near bottom, before other scripts)**
+
+```html
+<script>
+(function(){
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+})();
+</script>
+```
+
+- [ ] **Step 2: Screenshot the full page at `http://localhost:3000/dolled-by-louise.html`**
+
+Scroll through the page — elements should animate in as they enter the viewport. All sections should be visible. No broken layouts or console errors.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: add IntersectionObserver scroll reveal to all sections"
+```
+
+---
+
+### Task 14: Full accessibility pass
+
+**Files:**
+- Modify: `dolled-by-louise.html`
+
+- [ ] **Step 1: Verify skip link appears on Tab keypress** — Tab once after page load, skip link should appear at top.
+
+- [ ] **Step 2: Verify all icon-only buttons have `aria-label`** — Check: floating WA (`aria-label="Open WhatsApp to contact Louise"`), back-to-top (`aria-label="Back to top"`). Add any missing.
+
+- [ ] **Step 3: Verify semantic structure** — The page should have: `<nav>`, `<main id="main">`, at least 6 `<section>` elements, `<footer>`. H1 appears once (hero). Section headings use `<h2>`. Service/step titles use `<h3>`. Verify in browser DevTools Elements panel.
+
+- [ ] **Step 4: Verify all images have `alt` text** — Every `<img>` tag should have a non-empty, descriptive `alt` attribute describing the lash treatment shown.
+
+- [ ] **Step 5: Verify `prefers-reduced-motion` rule exists** — Already in Task 1 scaffold. Confirm it's still present.
+
+- [ ] **Step 6: Final commit**
+
+```bash
+git add dolled-by-louise.html
+git commit -m "feat: complete Dolled by Louise landing page with all sections and accessibility"
+```
+
+---
+
+## Self-Review Checklist
+
+After writing this plan, verified against spec:
+
+- [x] All 12 sections covered (nav, hero, stats, certification, services, pricing, how-to-book, gallery, aftercare, testimonials, about, FAQ, book+find-us, gift vouchers, footer)
+- [x] All additional features covered (before/after slider, quiz, proactive chat bubble placeholder, mobile booking bar, back-to-top, cookie notice, Google Reviews badge, floating WA)
+- [x] Local SEO (JSON-LD, OG, meta description) in Task 1 scaffold
+- [x] Accessibility (skip link, ARIA labels, alt text, focus-visible, reduced-motion, semantic HTML)
+- [x] Scroll reveal on all sections
+- [x] Brand tokens (--plum, --rose, --blush, --lilac, --cream, --wa) defined in Task 1
+- [x] Fonts: Cormorant Garamond + Jost loaded in Task 1
+- [x] Animations on transform + opacity only — no transition-all
+- [x] WhatsApp links all use correct number: `wa.me/447464557236`
+- [x] Phone links use `tel:+447464557236`
+- [x] Proactive chat bubble wired to `window._setChatOpened` hook (connected in Plan 2)
+- [x] `serve.mjs` already running on port 3000 — no new server needed for Plan 1
