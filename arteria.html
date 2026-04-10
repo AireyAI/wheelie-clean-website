@@ -3240,6 +3240,51 @@ function wizPickAvatar(){
   inp.click();
 }
 
+function wizStep3HTML(){
+  if(wiz.type==='advertiser') return wizStep3AdvertiserHTML();
+  const items=['🎵 Music','📸 Photography','💃 Dance','🎬 Film','🎨 Visual Art','🎙 Podcast','🎭 Theatre','✍️ Writing'];
+  const pills=items.map(d=>`<div class="wiz-pill${wiz.disciplines.includes(d)?' sel':''}" onclick="wizToggleDiscipline(this,'${d}')">${d}</div>`).join('');
+  const hasSelection=wiz.disciplines.length>0;
+  return`
+  <div class="wizard-h">What do you create?</div>
+  <div class="wizard-sub">Pick all that apply — minimum 1</div>
+  <div class="wiz-pills" id="wizPills">${pills}</div>
+  <div class="wiz-nav">
+    <button class="wiz-back" onclick="wizBack()">← Back</button>
+    <button class="wiz-continue" id="wizContinue3" onclick="wizNext()" ${hasSelection?'':'disabled'}>Continue →</button>
+  </div>`;
+}
+
+function wizStep3AdvertiserHTML(){
+  const items=['🎙 Recording Studio','📸 Photography Studio','🏛 Venue / Event Space','📢 Brand / Agency','🎛 Equipment Rental','⚡ Other'];
+  const pills=items.map(d=>`<div class="wiz-pill${wiz.businessType===d?' sel':''}" onclick="wizSelectBusiness(this,'${d}')">${d}</div>`).join('');
+  const hasSelection=!!wiz.businessType;
+  return`
+  <div class="wizard-h">What type of business are you?</div>
+  <div class="wizard-sub">Helps us connect you with the right creators</div>
+  <div class="wiz-pills" id="wizPills">${pills}</div>
+  <div class="wiz-nav">
+    <button class="wiz-back" onclick="wizBack()">← Back</button>
+    <button class="wiz-continue" id="wizContinue3" onclick="wizNext()" ${hasSelection?'':'disabled'}>Continue →</button>
+  </div>`;
+}
+
+function wizToggleDiscipline(el,d){
+  const idx=wiz.disciplines.indexOf(d);
+  if(idx>-1){wiz.disciplines.splice(idx,1);el.classList.remove('sel');}
+  else{wiz.disciplines.push(d);el.classList.add('sel');}
+  const btn=document.getElementById('wizContinue3');
+  if(btn)btn.disabled=wiz.disciplines.length===0;
+}
+
+function wizSelectBusiness(el,d){
+  wiz.businessType=d;
+  document.querySelectorAll('#wizPills .wiz-pill').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+  const btn=document.getElementById('wizContinue3');
+  if(btn)btn.disabled=false;
+}
+
 function setAuthMode(mode){
   authMode=mode;
   document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));
