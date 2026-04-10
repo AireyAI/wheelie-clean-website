@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AireyAi — Business Brief</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --ai-blue: #2563eb;
+      --ai-blue-light: #eff6ff;
+      --ai-dark: #0f172a;
+      --ai-muted: #64748b;
+      --ai-border: #e2e8f0;
+      --ai-bg: #f8fafc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--ai-bg);
+      color: var(--ai-dark);
+      min-height: 100vh;
+    }
+    .progress-track { height: 3px; background: var(--ai-border); border-radius: 99px; }
+    .progress-fill { height: 3px; background: var(--ai-blue); border-radius: 99px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border: 1.5px solid var(--ai-border); border-radius: 99px;
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+      background: #fff; color: var(--ai-dark); user-select: none;
+    }
+    .chip:hover { border-color: var(--ai-blue); color: var(--ai-blue); }
+    .chip.selected { background: var(--ai-blue-light); border-color: var(--ai-blue); color: var(--ai-blue); }
+    .chip.selected::before { content: '✓ '; font-size: 11px; }
+    .field {
+      width: 100%; border: 1.5px solid var(--ai-border); border-radius: 10px;
+      padding: 11px 14px; font-size: 14px; background: #fff; outline: none;
+      transition: border-color 0.2s; color: var(--ai-dark);
+    }
+    .field:focus { border-color: var(--ai-blue); }
+    textarea.field { min-height: 90px; resize: vertical; }
+    label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
+    .optional { font-weight: 400; color: var(--ai-muted); font-size: 12px; margin-left: 4px; }
+    .btn-primary {
+      background: var(--ai-blue); color: #fff; border: none; border-radius: 10px;
+      padding: 12px 28px; font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { opacity: 0.92; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-ghost { background: none; border: none; color: var(--ai-muted); font-size: 14px; cursor: pointer; padding: 0; }
+    .btn-ghost:hover { color: var(--ai-dark); }
+    .btn-outline {
+      background: #fff; border: 1.5px solid var(--ai-border); border-radius: 10px;
+      padding: 12px 28px; font-size: 14px; font-weight: 600; cursor: pointer;
+      color: var(--ai-dark); transition: border-color 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--ai-blue); color: var(--ai-blue); }
+    .section-pill {
+      display: inline-block; background: var(--ai-blue-light); color: var(--ai-blue);
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 99px; margin-bottom: 10px;
+    }
+    .card {
+      background: #fff; border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+      max-width: 580px; width: 100%; padding: 40px;
+    }
+    .summary-row { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ai-border); font-size: 14px; }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-label { font-weight: 600; color: #475569; min-width: 140px; flex-shrink: 0; }
+    .summary-value { color: var(--ai-dark); word-break: break-word; }
+    .step-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .step-sub { font-size: 14px; color: var(--ai-muted); margin-bottom: 28px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } .card { padding: 24px; } }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav style="background:#fff;border-bottom:1px solid var(--ai-border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:17px;font-weight:700;color:var(--ai-dark);">Airey<span style="color:var(--ai-blue);">Ai</span></span>
+    <span style="font-size:13px;color:var(--ai-muted);">Business Brief</span>
+  </nav>
+
+  <!-- Main -->
+  <main style="display:flex;align-items:flex-start;justify-content:center;padding:40px 16px 80px;">
+    <div class="card">
+      <!-- Progress header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span id="step-label" style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ai-muted);">Step 1 of 4</span>
+        <span id="step-pct" style="font-size:12px;color:var(--ai-muted);">25%</span>
+      </div>
+      <div class="progress-track" style="margin-bottom:32px;">
+        <div class="progress-fill" id="progress-fill" style="width:25%;"></div>
+      </div>
+
+      <div id="step-container"></div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="text-align:center;padding:24px;font-size:12px;color:var(--ai-muted);">
+    Powered by <strong style="color:var(--ai-dark);">AireyAi</strong>
+  </footer>
+
+  <script>
+    // ── State ──────────────────────────────────────────────────────────────
+    const STORAGE_KEY = 'aireyai_brief_v1';
+    const STEP_KEY = STORAGE_KEY + '_step';
+    let currentStep = 0;
+    const TOTAL_STEPS = 4;
+
+    const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    // ── Navigation ─────────────────────────────────────────────────────────
+    function goToStep(n) {
+      currentStep = n;
+      localStorage.setItem(STEP_KEY, n);
+      updateProgress();
+      renderStep(n);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateProgress() {
+      const pct = Math.round(((currentStep + 1) / TOTAL_STEPS) * 100);
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('step-label').textContent = `Step ${currentStep + 1} of ${TOTAL_STEPS}`;
+      document.getElementById('step-pct').textContent = pct + '%';
+    }
+
+    // ── DOM helpers ────────────────────────────────────────────────────────
+    function renderChips(key, options, container) {
+      const selected = state[key] || [];
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;';
+      options.forEach(opt => {
+        const chip = document.createElement('span');
+        chip.className = 'chip' + (selected.includes(opt) ? ' selected' : '');
+        chip.textContent = opt;
+        chip.onclick = () => {
+          const arr = state[key] || [];
+          const idx = arr.indexOf(opt);
+          if (idx === -1) arr.push(opt); else arr.splice(idx, 1);
+          state[key] = arr;
+          saveState();
+          chip.className = 'chip' + (arr.includes(opt) ? ' selected' : '');
+        };
+        wrap.appendChild(chip);
+      });
+      container.appendChild(wrap);
+    }
+
+    function renderField(key, placeholder, container, multiline, optional) {
+      const el = document.createElement(multiline ? 'textarea' : 'input');
+      el.className = 'field';
+      el.placeholder = placeholder;
+      el.value = state[key] || '';
+      if (!multiline) el.type = 'text';
+      el.style.marginBottom = '18px';
+      el.oninput = () => { state[key] = el.value; saveState(); };
+      container.appendChild(el);
+      return el;
+    }
+
+    function makeLabel(text, optional, container) {
+      const lbl = document.createElement('label');
+      lbl.innerHTML = text + (optional ? '<span class="optional">(optional)</span>' : '');
+      container.appendChild(lbl);
+    }
+
+    function makeTwoCol(container) {
+      const row = document.createElement('div');
+      row.className = 'two-col';
+      container.appendChild(row);
+      return row;
+    }
+
+    // ── Markdown generator ─────────────────────────────────────────────────
+    function generateMarkdown() {
+      const s = state;
+      const slug = (s.businessName || 'business')
+        .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+      const lines = [
+        `# Business Brief — ${s.businessName || 'Unnamed Business'}`,
+        '',
+        '## About You',
+        `- **Name:** ${s.fullName || '—'}`,
+        `- **Phone:** ${s.phone || '—'}`,
+        `- **Email:** ${s.email || '—'}`,
+        '',
+        '## Your Business',
+        `- **Business Name:** ${s.businessName || '—'}`,
+        `- **Industry:** ${s.industry || '—'}`,
+        `- **Address:** ${s.address || '—'}`,
+        `- **Website:** ${s.website || '—'}`,
+        '',
+        '## Your Brand',
+        `- **Tagline:** ${s.tagline || '—'}`,
+        `- **Services / Products:** ${s.services || '—'}`,
+        `- **Brand Voice:** ${(s.brandVoice || []).join(', ') || '—'}`,
+        `- **Colour Palette:** ${(s.colourPalette || []).join(', ') || '—'}${s.customColours ? ' · ' + s.customColours : ''}`,
+        `- **Website Vibe:** ${(s.websiteVibe || []).join(', ') || '—'}`,
+        '',
+        '## Your Customers',
+        `- **Target Customers:** ${(s.targetCustomers || []).join(', ') || '—'}`,
+        `- **What We Do:** ${s.whatWeDo || '—'}`,
+        `- **Social Media:** ${(s.socialMedia || []).join(', ') || '—'}`,
+        '',
+        '## Additional Notes',
+        s.notes || '—',
+        '',
+        '---',
+        '_Generated by AireyAi_',
+      ];
+
+      return { md: lines.join('\n'), slug };
+    }
+
+    // ── Steps ──────────────────────────────────────────────────────────────
+    const steps = [
+
+      // Step 1 — About You & Your Business
+      function(c) {
+        const pill = document.createElement('span');
+        pill.className = 'section-pill';
+        pill.textContent = 'About You & Your Business';
+        c.appendChild(pill);
+
+        const title = document.createElement('div');
+        title.className = 'step-title';
+        title.textContent = "Let's start with the basics";
+        c.appendChild(title);
+
+        const sub = document.createElement('div');
+        sub.className = 'step-sub';
+        sub.textContent = 'A few details about you and your business.';
+        c.appendChild(sub);
+
+        makeLabel('Full Name', false, c);
+        renderField('fullName', 'Jane Smith', c);
+
+        const contactRow = makeTwoCol(c);
+
+        const phoneWrap = document.createElement('div');
+        makeLabel('Phone Number', false, phoneWrap);
+        renderField('phone', '+1 555 000 0000', phoneWrap);
+        contactRow.appendChild(phoneWrap);
+
+        const emailWrap = document.createElement('div');
+        makeLabel('Email Address', false, emailWrap);
+        renderField('email', 'jane@example.com', emailWrap);
+        contactRow.appendChild(emailWrap);
+
+        makeLabel('Business Name', false, c);
+        renderField('businessName', 'Acme Co', c);
+
+        makeLabel('Industry / Type of Business', false, c);
+        renderField('industry', 'e.g. Mobile Car Detailing', c);
+
+        makeLabel('Business Address', false, c);
+        renderField('address', '123 Main St, City, Country', c);
+
+        makeLabel('Website', true, c);
+        renderField('website', 'yoursite.com', c, false, true);
+
+        const nav = document.createElement('div');
+        nav.style.cssText = 'display:flex;justify-content:flex-end;margin-top:8px;';
+        const next = document.createElement('button');
+        next.className = 'btn-primary';
+        next.textContent = 'Next →';
+        next.onclick = () => {
+          const required = ['fullName','phone','email','businessName','industry','address'];
+          const missing = required.filter(k => !state[k] || !state[k].trim());
+          if (missing.length) {
+            next.textContent = 'Fill in required fields';
+            next.style.background = '#ef4444';
+            setTimeout(() => { next.textContent = 'Next →'; next.style.background = ''; }, 2000);
+            return;
+          }
+          goToStep(1);
+        };
+        nav.appendChild(next);
+        c.appendChild(nav);
+      },
+
+      // Step 2 — Your Brand
+      function(c) {
+        const pill = document.createElement('span');
+        pill.className = 'section-pill';
+        pill.textContent = 'Your Brand';
+        c.appendChild(pill);
+
+        const title = document.createElement('div');
+        title.className = 'step-title';
+        title.textContent = 'Tell us about your brand';
+        c.appendChild(title);
+
+        const sub = document.createElement('div');
+        sub.className = 'step-sub';
+        sub.textContent = 'How your business looks, sounds, and feels.';
+        c.appendChild(sub);
+
+        makeLabel('Tagline / Elevator Pitch', true, c);
+        renderField('tagline', 'e.g. "Fast, friendly, reliable service"', c, false, true);
+
+        makeLabel('Services / Products Offered', false, c);
+        renderField('services', 'List what you offer', c, true);
+
+        makeLabel('Brand Voice', true, c);
+        renderChips('brandVoice', ['Professional','Friendly','Luxury','Playful','Bold','Minimalist'], c);
+
+        makeLabel('Colour Palette', true, c);
+        renderChips('colourPalette', ['Black & Gold','Blues & Whites','Earthy Tones','Pastels','Bold & Bright','Dark & Moody'], c);
+
+        makeLabel('Custom Colours', true, c);
+        renderField('customColours', 'e.g. Navy blue and gold', c, false, true);
+
+        makeLabel('Website Vibe', true, c);
+        renderChips('websiteVibe', ['Clean & Minimal','Bold & Colourful','Luxury/Premium','Fun & Playful','Corporate','Modern'], c);
+
+        const nav = document.createElement('div');
+        nav.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-top:8px;';
+
+        const back = document.createElement('button');
+        back.className = 'btn-ghost';
+        back.textContent = '← Back';
+        back.onclick = () => goToStep(0);
+
+        const next = document.createElement('button');
+        next.className = 'btn-primary';
+        next.textContent = 'Next →';
+        next.onclick = () => {
+          if (!state.services || !state.services.trim()) {
+            next.textContent = 'Add your services';
+            next.style.background = '#ef4444';
+            setTimeout(() => { next.textContent = 'Next →'; next.style.background = ''; }, 2000);
+            return;
+          }
+          goToStep(2);
+        };
+
+        nav.appendChild(back);
+        nav.appendChild(next);
+        c.appendChild(nav);
+      },
+
+      // Step 3 — Your Customers
+      function(c) {
+        const pill = document.createElement('span');
+        pill.className = 'section-pill';
+        pill.textContent = 'Your Customers';
+        c.appendChild(pill);
+
+        const title = document.createElement('div');
+        title.className = 'step-title';
+        title.textContent = 'Who are your customers?';
+        c.appendChild(title);
+
+        const sub = document.createElement('div');
+        sub.className = 'step-sub';
+        sub.textContent = 'Help Claude understand who you serve.';
+        c.appendChild(sub);
+
+        makeLabel('Target Customers', true, c);
+        renderChips('targetCustomers', ['Individuals','Families','Small Businesses','Corporates','Young Adults','Other'], c);
+
+        makeLabel('What Does Your Business Do?', false, c);
+        renderField('whatWeDo', 'Describe your core offering in plain English', c, true);
+
+        makeLabel('Social Media Presence', true, c);
+        renderChips('socialMedia', ['Instagram','Facebook','TikTok','LinkedIn','Twitter/X','WhatsApp'], c);
+
+        const nav = document.createElement('div');
+        nav.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-top:8px;';
+
+        const back = document.createElement('button');
+        back.className = 'btn-ghost';
+        back.textContent = '← Back';
+        back.onclick = () => goToStep(1);
+
+        const next = document.createElement('button');
+        next.className = 'btn-primary';
+        next.textContent = 'Next →';
+        next.onclick = () => {
+          if (!state.whatWeDo || !state.whatWeDo.trim()) {
+            next.textContent = 'Describe what you do';
+            next.style.background = '#ef4444';
+            setTimeout(() => { next.textContent = 'Next →'; next.style.background = ''; }, 2000);
+            return;
+          }
+          goToStep(3);
+        };
+
+        nav.appendChild(back);
+        nav.appendChild(next);
+        c.appendChild(nav);
+      },
+
+      // Step 4 — Done
+      function(c) {
+        const pill = document.createElement('span');
+        pill.className = 'section-pill';
+        pill.textContent = 'Almost Done';
+        c.appendChild(pill);
+
+        const title = document.createElement('div');
+        title.className = 'step-title';
+        title.textContent = 'Looking good!';
+        c.appendChild(title);
+
+        const sub = document.createElement('div');
+        sub.className = 'step-sub';
+        sub.textContent = 'Anything else Claude should know? Then download your brief.';
+        c.appendChild(sub);
+
+        makeLabel('Anything else?', true, c);
+        renderField('notes', 'Awards, story, key info, special requests…', c, true, true);
+
+        // Summary
+        const summaryTitle = document.createElement('div');
+        summaryTitle.style.cssText = 'font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--ai-muted);margin:24px 0 12px;';
+        summaryTitle.textContent = 'Your Summary';
+        c.appendChild(summaryTitle);
+
+        const summaryWrap = document.createElement('div');
+        summaryWrap.style.cssText = 'background:var(--ai-bg);border-radius:10px;padding:4px 16px;margin-bottom:28px;';
+
+        const rows = [
+          ['Name', state.fullName],
+          ['Phone', state.phone],
+          ['Email', state.email],
+          ['Business', state.businessName],
+          ['Industry', state.industry],
+          ['Address', state.address],
+          ['Website', state.website],
+          ['Tagline', state.tagline],
+          ['Services', state.services],
+          ['Brand Voice', (state.brandVoice||[]).join(', ')],
+          ['Colours', [(state.colourPalette||[]).join(', '), state.customColours].filter(Boolean).join(' · ')],
+          ['Vibe', (state.websiteVibe||[]).join(', ')],
+          ['Customers', (state.targetCustomers||[]).join(', ')],
+          ['What We Do', state.whatWeDo],
+          ['Social', (state.socialMedia||[]).join(', ')],
+        ];
+
+        rows.forEach(([label, value]) => {
+          if (!value) return;
+          const row = document.createElement('div');
+          row.className = 'summary-row';
+          row.innerHTML = `<span class="summary-label">${label}</span><span class="summary-value">${value}</span>`;
+          summaryWrap.appendChild(row);
+        });
+        c.appendChild(summaryWrap);
+
+        // Action buttons
+        const actions = document.createElement('div');
+        actions.style.cssText = 'display:flex;gap:12px;flex-wrap:wrap;';
+
+        const dlBtn = document.createElement('button');
+        dlBtn.className = 'btn-primary';
+        dlBtn.textContent = '⬇ Download Brief';
+        dlBtn.onclick = () => {
+          const { md, slug } = generateMarkdown();
+          const blob = new Blob([md], { type: 'text/markdown' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${slug}-brief.md`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        };
+
+        const emailBtn = document.createElement('button');
+        emailBtn.className = 'btn-outline';
+        emailBtn.textContent = '✉ Email to Myself';
+        emailBtn.onclick = () => {
+          const { md } = generateMarkdown();
+          const subject = encodeURIComponent(`Business Brief — ${state.businessName || 'My Business'}`);
+          const body = encodeURIComponent(md);
+          window.location.href = `mailto:${state.email || ''}?subject=${subject}&body=${body}`;
+        };
+
+        actions.appendChild(dlBtn);
+        actions.appendChild(emailBtn);
+        c.appendChild(actions);
+
+        // Back + reset
+        const bottomNav = document.createElement('div');
+        bottomNav.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-top:24px;';
+
+        const back = document.createElement('button');
+        back.className = 'btn-ghost';
+        back.textContent = '← Back';
+        back.onclick = () => goToStep(2);
+
+        const resetBtn = document.createElement('button');
+        resetBtn.style.cssText = 'font-size:12px;color:#ef4444;background:none;border:none;cursor:pointer;padding:0;';
+        resetBtn.textContent = 'Start over';
+        resetBtn.onclick = () => {
+          if (!confirm('Clear all answers and start over?')) return;
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(STEP_KEY);
+          Object.keys(state).forEach(k => delete state[k]);
+          goToStep(0);
+        };
+
+        bottomNav.appendChild(back);
+        bottomNav.appendChild(resetBtn);
+        c.appendChild(bottomNav);
+      },
+
+    ];
+
+    // ── Step renderer ──────────────────────────────────────────────────────
+    function renderStep(n) {
+      const c = document.getElementById('step-container');
+      c.innerHTML = '';
+      steps[n](c);
+    }
+
+    // ── Boot — restore saved progress ──────────────────────────────────────
+    const savedStep = parseInt(localStorage.getItem(STEP_KEY) || '0', 10);
+    goToStep(isNaN(savedStep) ? 0 : Math.min(savedStep, TOTAL_STEPS - 1));
+
+  </script>
+</body>
+</html>
