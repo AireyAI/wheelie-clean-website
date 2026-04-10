@@ -63,9 +63,14 @@ arteria_profile = {
 ```
 
 ## Advertiser Variation
-- Step 3 (disciplines) is skipped entirely
+- Step 3 is replaced with: **"What type of business are you?"**
+  - Pill options (single-select): Recording Studio, Photography Studio, Venue / Event Space, Brand / Agency, Equipment Rental, Other
+  - Heading: "What type of business are you?"
+  - Subheading: "Helps us connect you with the right creators"
+  - 1 selection required to Continue
 - Step 2 bio placeholder changes to "Describe your brand or business"
 - Finish toast: "Welcome to ARTERIA, [name] — your advertiser account is ready."
+- Data stored as `businessType: string` on the profile object
 
 ## Tech
 - Single HTML file, no backend
