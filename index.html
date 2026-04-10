@@ -183,6 +183,17 @@
       50%      { background-position: 100% 50%; }
     }
 
+    /* Scrolling ticker */
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-track { display:flex; animation: ticker 28s linear infinite; width: max-content; }
+    .ticker-track:hover { animation-play-state: paused; }
+
+    /* FAQ numbered badge */
+    .faq-num { width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;background:linear-gradient(135deg,#e8f7fd,#c8eefa);color:#00A3E3; }
+
     /* Back to top */
     #back-to-top { opacity:0; transform:translateY(12px); transition:opacity 0.3s ease, transform 0.3s ease; pointer-events:none; }
     #back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
@@ -278,12 +289,15 @@
       </p>
 
       <!-- CTAs -->
-      <div class="reveal reveal-delay-3 flex flex-wrap gap-4 justify-center mb-10">
+      <div class="reveal reveal-delay-3 flex flex-wrap gap-3 justify-center mb-10">
         <a href="#booking" class="btn bg-white px-7 py-3.5 rounded-full text-sm" style="color:#00A3E3;font-weight:900;box-shadow:0 6px 24px rgba(0,0,0,0.25);">
           ✨ Get a Free Quote
         </a>
-        <a href="tel:07388585330" class="btn px-7 py-3.5 rounded-full text-sm text-white border-2 border-white/50" style="background:rgba(255,255,255,0.14);backdrop-filter:blur(6px);font-weight:700;">
-          📞 Call Us
+        <a href="https://wa.me/447388585330?text=Hi%20Wheelie%20Clean!%20I%27d%20like%20to%20book%20a%20bin%20clean." target="_blank" class="btn px-7 py-3.5 rounded-full text-sm text-white" style="background:linear-gradient(135deg,#25D366,#1aad52);font-weight:700;box-shadow:0 4px 16px rgba(37,211,102,0.4);">
+          💬 WhatsApp
+        </a>
+        <a href="tel:07388585330" class="btn px-6 py-3.5 rounded-full text-sm text-white border-2 border-white/50" style="background:rgba(255,255,255,0.14);backdrop-filter:blur(6px);font-weight:700;">
+          📞 Call
         </a>
       </div>
 
@@ -310,12 +324,44 @@
     </svg>
   </section>
 
-  <!-- ═══════════ TRUST BAR ═══════════ -->
-  <div class="bg-white border-b border-gray-100 px-6 py-5 flex flex-wrap justify-center gap-6 md:gap-12">
-    <div class="flex items-center gap-2 text-xs text-gray-600" style="font-weight:700;">🌿 <span>Eco-friendly products</span></div>
-    <div class="flex items-center gap-2 text-xs text-gray-600" style="font-weight:700;">🏡 <span>No need to be home</span></div>
-    <div class="flex items-center gap-2 text-xs text-gray-600" style="font-weight:700;">📅 <span>Flexible scheduling</span></div>
-    <div class="flex items-center gap-2 text-xs text-gray-600" style="font-weight:700;">✅ <span>Fully insured</span></div>
+  <!-- ═══════════ SCROLLING TRUST TICKER ═══════════ -->
+  <div class="bg-white border-b border-gray-100 py-3 overflow-hidden relative" style="mask-image:linear-gradient(to right,transparent,black 8%,black 92%,transparent);">
+    <div class="ticker-track">
+      <!-- set 1 -->
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">🌿 Eco-friendly products</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">🏡 No need to be home</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">⭐ 500+ Happy Customers</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">✅ Fully Insured</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">📅 Flexible Scheduling</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">💬 WhatsApp Bookings</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">🚚 We Come to You</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">🧴 Biodegradable Chemicals</span>
+      <span class="text-gray-200 select-none">|</span>
+      <!-- set 2 (duplicate for seamless loop) -->
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">🌿 Eco-friendly products</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">🏡 No need to be home</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">⭐ 500+ Happy Customers</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">✅ Fully Insured</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">📅 Flexible Scheduling</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">💬 WhatsApp Bookings</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">🚚 We Come to You</span>
+      <span class="text-gray-200 select-none">|</span>
+      <span class="flex items-center gap-2 text-xs text-gray-500 px-8 whitespace-nowrap" style="font-weight:700;">🧴 Biodegradable Chemicals</span>
+      <span class="text-gray-200 select-none">|</span>
+    </div>
   </div>
 
   <!-- ═══════════ SERVICES ═══════════ -->
@@ -329,7 +375,8 @@
         <!-- Standard -->
         <div class="service-card service-card-light reveal reveal-delay-1 bg-white rounded-2xl p-7 text-center flex flex-col items-center border-2" style="border-color:#e0f4fd;box-shadow:0 4px 20px rgba(0,163,227,0.07);">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-5" style="background:linear-gradient(135deg,#e8f7fd,#c8eefa);">🧽</div>
-          <h3 class="text-base mb-2" style="font-weight:900;color:#1a1a1a;">Standard Clean</h3>
+          <h3 class="text-base mb-1" style="font-weight:900;color:#1a1a1a;">Standard Clean</h3>
+          <p class="text-xs mb-3" style="color:#00A3E3;font-weight:800;">From £8 per bin</p>
           <p class="text-xs text-gray-500 leading-relaxed">Interior & exterior wash, deodorised and disinfected every time.</p>
         </div>
         <!-- Deep Clean (featured) -->
@@ -337,13 +384,15 @@
           <div class="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(56,199,77,0.28),transparent);"></div>
           <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-white text-[10px] px-3 py-1 rounded-full whitespace-nowrap" style="background:linear-gradient(135deg,#38C74D,#2aaa40);box-shadow:0 2px 8px rgba(56,199,77,0.45);font-weight:900;">★ MOST POPULAR</div>
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-5 mt-2" style="background:rgba(255,255,255,0.14);">✨</div>
-          <h3 class="text-base mb-2 text-white" style="font-weight:900;">Deep Clean</h3>
+          <h3 class="text-base mb-1 text-white" style="font-weight:900;">Deep Clean</h3>
+          <p class="text-xs mb-3" style="color:#7aeea0;font-weight:800;">From £12 per bin</p>
           <p class="text-xs leading-relaxed" style="color:rgba(255,255,255,0.78);">Power wash + sanitise — kills 99.9% of bacteria and eliminates stubborn odours.</p>
         </div>
         <!-- Monthly -->
         <div class="service-card service-card-light reveal reveal-delay-3 bg-white rounded-2xl p-7 text-center flex flex-col items-center border-2" style="border-color:#c8f5da;box-shadow:0 4px 20px rgba(56,199,77,0.07);">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-5" style="background:linear-gradient(135deg,#edfaf2,#c8f5da);">📅</div>
-          <h3 class="text-base mb-2" style="font-weight:900;color:#1a1a1a;">Monthly Plan</h3>
+          <h3 class="text-base mb-1" style="font-weight:900;color:#1a1a1a;">Monthly Plan</h3>
+          <p class="text-xs mb-3" style="color:#38C74D;font-weight:800;">From £6/month per bin</p>
           <p class="text-xs text-gray-500 leading-relaxed">Regular scheduled cleans — set it up once and never think about it again.</p>
         </div>
       </div>
@@ -372,6 +421,38 @@
           <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl text-white mb-5 flex-shrink-0" style="font-weight:900;background:linear-gradient(135deg,#38C74D,#2aaa40);box-shadow:0 6px 20px rgba(56,199,77,0.38);">✓</div>
           <h3 class="text-base mb-2" style="font-weight:900;color:#1a1a1a;">Sparkling Result</h3>
           <p class="text-xs text-gray-500 leading-relaxed">Your bin is spotless, deodorised and returned to your door. ✦</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ WHY CHOOSE US ═══════════ -->
+  <section class="py-16 px-6 md:px-14" style="background:linear-gradient(135deg,#003d5c 0%,#005a8a 100%);">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-10 reveal">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color:#7aeea0;font-weight:800;letter-spacing:0.12em;">✦ WHY US? ✦</p>
+        <h2 class="font-display text-4xl md:text-5xl text-white">The Wheelie Clean Difference</h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div class="reveal reveal-delay-1 text-center p-6 rounded-2xl" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <div class="text-3xl mb-3">🌡️</div>
+          <h3 class="text-sm text-white mb-1" style="font-weight:900;">Hot Water Clean</h3>
+          <p class="text-xs" style="color:rgba(255,255,255,0.6);line-height:1.6;">High-temperature wash kills bacteria other services miss</p>
+        </div>
+        <div class="reveal reveal-delay-2 text-center p-6 rounded-2xl" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <div class="text-3xl mb-3">📍</div>
+          <h3 class="text-sm text-white mb-1" style="font-weight:900;">Local & Reliable</h3>
+          <p class="text-xs" style="color:rgba(255,255,255,0.6);line-height:1.6;">Cumbria-based team — we show up on time, every time</p>
+        </div>
+        <div class="reveal reveal-delay-3 text-center p-6 rounded-2xl" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <div class="text-3xl mb-3">💧</div>
+          <h3 class="text-sm text-white mb-1" style="font-weight:900;">Water Recycled</h3>
+          <p class="text-xs" style="color:rgba(255,255,255,0.6);line-height:1.6;">Our van recycles wastewater — no mess left on your drive</p>
+        </div>
+        <div class="reveal reveal-delay-4 text-center p-6 rounded-2xl" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <div class="text-3xl mb-3">📱</div>
+          <h3 class="text-sm text-white mb-1" style="font-weight:900;">Easy to Book</h3>
+          <p class="text-xs" style="color:rgba(255,255,255,0.6);line-height:1.6;">Book online, by phone, or just drop us a WhatsApp</p>
         </div>
       </div>
     </div>
@@ -541,7 +622,7 @@
 
         <div class="reveal faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
           <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
-            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">How does the service work?</span>
+            <span class="flex items-center gap-3"><span class="faq-num">1</span><span class="text-sm" style="font-weight:800;color:#1a1a1a;">How does the service work?</span></span>
             <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
           </button>
           <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
@@ -551,7 +632,7 @@
 
         <div class="reveal reveal-delay-1 faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
           <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
-            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">Do I need to be home for the clean?</span>
+            <span class="flex items-center gap-3"><span class="faq-num">2</span><span class="text-sm" style="font-weight:800;color:#1a1a1a;">Do I need to be home for the clean?</span></span>
             <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
           </button>
           <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
@@ -561,7 +642,7 @@
 
         <div class="reveal reveal-delay-2 faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
           <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
-            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">What products do you use?</span>
+            <span class="flex items-center gap-3"><span class="faq-num">3</span><span class="text-sm" style="font-weight:800;color:#1a1a1a;">What products do you use?</span></span>
             <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
           </button>
           <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
@@ -571,7 +652,7 @@
 
         <div class="reveal reveal-delay-3 faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
           <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
-            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">How much does it cost?</span>
+            <span class="flex items-center gap-3"><span class="faq-num">4</span><span class="text-sm" style="font-weight:800;color:#1a1a1a;">How much does it cost?</span></span>
             <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
           </button>
           <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
@@ -581,7 +662,7 @@
 
         <div class="reveal reveal-delay-4 faq-item bg-white rounded-2xl overflow-hidden border-2" style="border-color:#efefef;">
           <button class="faq-btn w-full flex items-center justify-between text-left px-6 py-5 gap-3" aria-expanded="false">
-            <span class="text-sm" style="font-weight:800;color:#1a1a1a;">What areas do you cover?</span>
+            <span class="flex items-center gap-3"><span class="faq-num">5</span><span class="text-sm" style="font-weight:800;color:#1a1a1a;">What areas do you cover?</span></span>
             <span class="faq-icon text-xl flex-shrink-0" style="color:#00A3E3;">+</span>
           </button>
           <div class="faq-answer px-6" style="color:#555;font-size:0.8rem;line-height:1.65;">
@@ -606,17 +687,33 @@
           <input type="hidden" name="form-name" value="booking">
           <p class="hidden"><input name="bot-field"></p>
           <input type="text"  name="name"     placeholder="Your name"    required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
-          <input type="tel"   name="phone"    placeholder="Phone number" required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
+          <div class="grid grid-cols-2 gap-4">
+            <input type="tel"   name="phone"    placeholder="Phone number" required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
+            <input type="email" name="email"    placeholder="Email address" class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
+          </div>
           <div class="grid grid-cols-2 gap-4">
             <input type="text" name="postcode" placeholder="Postcode" required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200" style="font-family:inherit;">
             <select name="service" required class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200 text-gray-500" style="font-family:inherit;">
               <option value="" disabled selected>Service type</option>
-              <option value="standard">Standard Clean</option>
-              <option value="deep">Deep Clean</option>
-              <option value="monthly">Monthly Plan</option>
+              <option value="standard">Standard Clean — £8</option>
+              <option value="deep">Deep Clean — £12</option>
+              <option value="monthly">Monthly Plan — £6/mo</option>
             </select>
           </div>
-          <textarea name="message" placeholder="Message / notes (optional)" rows="3" class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200 resize-none" style="font-family:inherit;"></textarea>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="relative">
+              <input type="date" name="preferred_date" class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200 text-gray-500" style="font-family:inherit;" id="date-input">
+              <label for="date-input" class="absolute -top-2 left-3 text-[10px] px-1 bg-gray-50" style="color:#00A3E3;font-weight:800;">Preferred date</label>
+            </div>
+            <select name="bins" class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200 text-gray-500" style="font-family:inherit;">
+              <option value="" disabled selected>No. of bins</option>
+              <option value="1">1 bin</option>
+              <option value="2">2 bins</option>
+              <option value="3">3 bins</option>
+              <option value="4+">4+ bins</option>
+            </select>
+          </div>
+          <textarea name="message" placeholder="Any notes (optional)" rows="2" class="w-full px-4 py-3 rounded-xl text-sm border-2 border-gray-100 bg-gray-50 transition-colors duration-200 resize-none" style="font-family:inherit;"></textarea>
           <button type="submit" class="btn w-full py-3.5 rounded-xl text-sm text-white" style="font-weight:900;background:linear-gradient(135deg,#00A3E3,#0080c0);box-shadow:0 4px 16px rgba(0,163,227,0.4);">
             Send Enquiry →
           </button>
@@ -662,19 +759,52 @@
   </section>
 
   <!-- ═══════════ FOOTER ═══════════ -->
-  <footer class="py-12 px-6 text-center" style="background:linear-gradient(160deg,#1a1a1a 0%,#2a2a2a 100%);">
-    <div class="logo-circle mx-auto mb-2" style="width:64px;height:64px;filter:drop-shadow(0 2px 10px rgba(0,163,227,0.3));"><img src="./IMG_1549 3.PNG" alt="Wheelie Clean"></div>
-    <p class="text-sm italic mb-1" style="color:#00A3E3;font-weight:900;">"Keep It Wheelie Clean" ✦</p>
-    <p class="text-xs text-gray-500 mb-1">Eco-friendly bin cleaning across Cumbria</p>
-    <div class="flex flex-wrap justify-center gap-4 mb-7 text-xs" style="color:#888;">
-      <a href="tel:07388585330" class="hover:text-[#00A3E3] transition-colors duration-200">📞 07388 58533</a>
-      <a href="mailto:wheelieclean.cumbria@gmail.com" class="hover:text-[#00A3E3] transition-colors duration-200">✉️ wheelieclean.cumbria@gmail.com</a>
+  <footer class="pt-14 pb-8 px-6 md:px-14" style="background:linear-gradient(160deg,#0d0d0d 0%,#1a1a1a 100%);">
+    <div class="max-w-5xl mx-auto">
+      <!-- Top row -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10 pb-10 border-b border-white/10">
+        <!-- Brand -->
+        <div>
+          <div class="flex items-center gap-3 mb-3">
+            <div class="logo-circle" style="width:52px;height:52px;filter:drop-shadow(0 2px 10px rgba(0,163,227,0.3));"><img src="./IMG_1549 3.PNG" alt="Wheelie Clean"></div>
+            <div>
+              <p class="text-white text-sm" style="font-weight:900;">Wheelie Clean</p>
+              <p class="text-xs italic" style="color:#00A3E3;">"Keep It Wheelie Clean" ✦</p>
+            </div>
+          </div>
+          <p class="text-xs leading-relaxed" style="color:#666;">Eco-friendly, fully insured wheelie bin cleaning across Cumbria. Family-run and proud of it.</p>
+        </div>
+        <!-- Quick links -->
+        <div>
+          <p class="text-xs uppercase tracking-widest mb-4" style="color:#555;font-weight:800;">Quick Links</p>
+          <div class="flex flex-col gap-2">
+            <a href="#services"     class="text-xs hover:text-[#00A3E3] transition-colors" style="color:#666;font-weight:600;">Services</a>
+            <a href="#pricing"      class="text-xs hover:text-[#00A3E3] transition-colors" style="color:#666;font-weight:600;">Pricing</a>
+            <a href="#gallery"      class="text-xs hover:text-[#00A3E3] transition-colors" style="color:#666;font-weight:600;">Before &amp; After</a>
+            <a href="#faq"          class="text-xs hover:text-[#00A3E3] transition-colors" style="color:#666;font-weight:600;">FAQ</a>
+            <a href="#booking"      class="text-xs hover:text-[#00A3E3] transition-colors" style="color:#666;font-weight:600;">Book Now</a>
+          </div>
+        </div>
+        <!-- Contact -->
+        <div>
+          <p class="text-xs uppercase tracking-widest mb-4" style="color:#555;font-weight:800;">Get In Touch</p>
+          <div class="flex flex-col gap-3">
+            <a href="tel:07388585330" class="flex items-center gap-2 text-xs hover:text-[#00A3E3] transition-colors" style="color:#666;font-weight:600;">📞 07388 58533</a>
+            <a href="mailto:wheelieclean.cumbria@gmail.com" class="flex items-center gap-2 text-xs hover:text-[#00A3E3] transition-colors" style="color:#666;font-weight:600;">✉️ wheelieclean.cumbria@gmail.com</a>
+            <a href="https://wa.me/447388585330" target="_blank" class="flex items-center gap-2 text-xs hover:text-[#25D366] transition-colors" style="color:#666;font-weight:600;">💬 WhatsApp Us</a>
+          </div>
+          <div class="flex gap-2 mt-5">
+            <a href="https://facebook.com/wheeliecleancumbria" target="_blank" rel="noopener" class="btn w-9 h-9 rounded-full flex items-center justify-center text-white text-xs" style="background:#1877f2;" aria-label="Facebook">f</a>
+            <a href="https://instagram.com/wheeliecleancumbria" target="_blank" rel="noopener" class="btn w-9 h-9 rounded-full flex items-center justify-center text-white text-xs" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);" aria-label="Instagram">📸</a>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom row -->
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs" style="color:#444;">
+        <p>© 2026 Wheelie Clean · All rights reserved · Cumbria, UK</p>
+        <p>Built with ♥ by <span style="color:#00A3E3;">AireyAi</span></p>
+      </div>
     </div>
-    <div class="flex gap-3 justify-center mb-7">
-      <a href="#" class="btn px-5 py-2 rounded-full text-white text-xs" style="background:#1877f2;font-weight:800;">📘 Facebook</a>
-      <a href="#" class="btn px-5 py-2 rounded-full text-white text-xs" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);font-weight:800;">📸 Instagram</a>
-    </div>
-    <p class="text-xs" style="color:#444;">© 2026 Wheelie Clean · All rights reserved</p>
   </footer>
 
   <!-- ═══════════ FLOATING BUTTONS ═══════════ -->
