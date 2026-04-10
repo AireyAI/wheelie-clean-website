@@ -251,6 +251,96 @@ index.html (or dolled-by-louise.html)
 
 ---
 
+## Additional Features
+
+### Local SEO — `<head>` metadata
+
+**`<title>`:** `Dolled by Louise — Lash Artist in Longtown, Cumbria`
+
+**`<meta description>`:** `Expert lash lifts and extensions in Longtown, Cumbria. Korean Lash Lift, LVL, Classic, Hybrid & Russian Volume. Call or WhatsApp Louise to book.`
+
+**JSON-LD schema** (`application/ld+json`) — `LocalBusiness` type:
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "BeautySalon",
+  "name": "Dolled by Louise",
+  "description": "Expert lash lifts and extensions in Longtown, Cumbria",
+  "telephone": "+447464557236",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "33 Albert Street",
+    "addressLocality": "Longtown",
+    "postalCode": "CA6 5SF",
+    "addressCountry": "GB"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 55.0007,
+    "longitude": -2.9757
+  },
+  "url": "https://dolledbylouise.co.uk",
+  "priceRange": "££",
+  "hasMap": "https://maps.google.com/?q=33+Albert+Street,+Longtown,+CA6+5SF"
+}
+```
+
+**Open Graph tags** (for WhatsApp/Facebook/iMessage link previews):
+```html
+<meta property="og:title" content="Dolled by Louise — Lash Artist in Longtown, Cumbria">
+<meta property="og:description" content="Expert lash lifts and extensions. Call or WhatsApp Louise to book.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="[placeholder og-image.jpg — 1200×630]">
+```
+
+---
+
+### Nav Anchor Links
+
+The nav right side adds smooth-scroll anchor links to key sections:
+- Services (`#services`)
+- Pricing (`#pricing`)
+- Gallery (`#gallery`)
+- FAQ (`#faq`)
+
+Links styled in rose Jost, hidden on mobile (only CTAs shown). Each section gets a corresponding `id` attribute.
+
+---
+
+### Proactive Chat Bubble
+
+After **8 seconds** on the page (if the chat widget hasn't been opened), a small message bubble pops out to the left of the widget button:
+
+> *"Need help choosing a treatment? 💕"*
+
+Behaviour:
+- Animates in with `fadeUp` + slight slide from right
+- Auto-dismisses after 6 seconds if not clicked
+- Clicking it opens the chat widget
+- Dismissed permanently for the session once closed or clicked
+- Does NOT appear if the widget has already been opened
+
+---
+
+### Back-to-Top Button
+
+A small circular button (40px, plum gradient, chevron-up SVG icon) pinned bottom-left. Hidden by default — fades in once user scrolls past 600px. Smooth-scrolls to top on click.
+
+Sits to the left to avoid overlapping the floating WhatsApp button (bottom-right) and the AI agent (also bottom-right). Stacked order: agent > WhatsApp > back-to-top, from right to left.
+
+---
+
+### Cookie / Privacy Notice
+
+UK law (PECR + UK GDPR) requires a cookie notice. A slim bar fixed to the **bottom** of the page (above footer, below everything else):
+
+- Background: `#1a0a10` (matches footer)
+- Text: "We use cookies to improve your experience. By continuing you agree to our use of cookies." in small Jost
+- "Accept" pill button in rose — dismisses the bar and sets `localStorage` flag so it doesn't show again
+- Bar does not obscure the WhatsApp button or agent on mobile — appears only if `localStorage` flag not set
+
+---
+
 ## Technical Constraints
 
 - Single HTML file (`dolled-by-louise.html`) — all styles inline
@@ -276,3 +366,5 @@ index.html (or dolled-by-louise.html)
 | Stats (100+, 5★ etc.) | Update to reflect real numbers |
 | Instagram handle | Add when account is ready |
 | Logo | Replace "D" monogram when logo created |
+| OG image (`og-image.jpg`) | Create 1200×630 brand image for link previews |
+| Domain URL in JSON-LD | Update `dolledbylouise.co.uk` to real domain when live |
