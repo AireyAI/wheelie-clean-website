@@ -166,15 +166,22 @@
 
     /* Before/after slider */
     .ba-slider { position: relative; overflow: hidden; border-radius: 16px; cursor: col-resize; user-select: none; }
-    .ba-after  { position: absolute; inset: 0; overflow: hidden; }
-    .ba-after img { width: 100%; height: 100%; object-fit: cover; }
+    /* before = base layer (left side) */
+    .ba-before { width:100%; height:100%; }
     .ba-before img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .ba-handle { position: absolute; top: 0; bottom: 0; width: 3px; background: white; cursor: col-resize; z-index: 10; transform: translateX(-50%); box-shadow: 0 0 12px rgba(0,0,0,0.4); }
-    .ba-handle::before, .ba-handle::after { content:''; position:absolute; left:50%; transform:translateX(-50%); width:36px; height:36px; border-radius:50%; background:white; box-shadow:0 2px 12px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; }
-    .ba-handle::before { top:50%; transform:translate(-50%,-50%); }
+    /* after = clipped overlay from the right */
+    .ba-after { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); }
+    .ba-after img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ba-handle { position: absolute; top: 0; bottom: 0; width: 3px; background: white; cursor: col-resize; z-index: 10; left: 50%; transform: translateX(-50%); box-shadow: 0 0 12px rgba(0,0,0,0.4); }
+    .ba-handle::before { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:36px; height:36px; border-radius:50%; background:white; box-shadow:0 2px 12px rgba(0,0,0,0.3); }
     .ba-label { position:absolute; bottom:10px; font-size:10px; font-weight:900; color:white; text-transform:uppercase; letter-spacing:0.08em; padding:3px 10px; border-radius:20px; z-index:5; }
     .ba-label-before { left:10px; background:rgba(50,50,50,0.88); }
     .ba-label-after  { right:10px; background:rgba(42,170,64,0.88); }
+
+    @keyframes gradientShift {
+      0%,100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
 
     /* Back to top */
     #back-to-top { opacity:0; transform:translateY(12px); transition:opacity 0.3s ease, transform 0.3s ease; pointer-events:none; }
@@ -191,14 +198,21 @@
 </head>
 <body>
 
+  <!-- ═══════════ ANNOUNCEMENT BAR ═══════════ -->
+  <div id="announce-bar" class="relative z-[60] text-center py-2.5 px-10 text-xs text-white" style="background:linear-gradient(90deg,#003d5c,#00A3E3,#38C74D,#00A3E3,#003d5c);background-size:300% 100%;animation:gradientShift 6s ease infinite;font-weight:800;letter-spacing:0.04em;">
+    🎉 Limited slots available this month — <a href="#booking" class="underline underline-offset-2 hover:opacity-80">Book now and get 10% off your first clean</a>
+    <button onclick="document.getElementById('announce-bar').remove()" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white text-base leading-none" aria-label="Close">✕</button>
+  </div>
+
   <!-- ═══════════ NAV ═══════════ -->
-  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-transparent px-6 md:px-14 py-3 flex items-center justify-between">
+  <nav id="nav" class="sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-transparent px-6 md:px-14 py-3 flex items-center justify-between">
     <a href="#" class="flex-shrink-0">
       <div class="logo-circle" style="width:48px;height:48px;"><img src="./IMG_1549 3.PNG" alt="Wheelie Clean"></div>
     </a>
 
-    <div id="nav-links" class="hidden md:flex items-center gap-8 text-sm text-gray-600" style="font-weight:700;">
+    <div id="nav-links" class="hidden md:flex items-center gap-7 text-sm text-gray-600" style="font-weight:700;">
       <a href="#services"     class="hover:text-[#00A3E3] transition-colors duration-200">Services</a>
+      <a href="#how-it-works" class="hover:text-[#00A3E3] transition-colors duration-200">How It Works</a>
       <a href="#pricing"      class="hover:text-[#00A3E3] transition-colors duration-200">Pricing</a>
       <a href="#gallery"      class="hover:text-[#00A3E3] transition-colors duration-200">Gallery</a>
       <a href="#faq"          class="hover:text-[#00A3E3] transition-colors duration-200">FAQ</a>
@@ -217,8 +231,9 @@
   </nav>
 
   <!-- Mobile nav -->
-  <div id="mobile-nav" class="fixed top-[68px] left-0 right-0 z-40 bg-white border-b border-gray-100 px-6 py-5 flex flex-col gap-5 text-sm text-gray-700 hidden" style="font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,0.08);">
+  <div id="mobile-nav" class="fixed top-[106px] left-0 right-0 z-40 bg-white border-b border-gray-100 px-6 py-5 flex flex-col gap-5 text-sm text-gray-700 hidden" style="font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,0.08);">
     <a href="#services"     class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Services</a>
+    <a href="#how-it-works" class="hover:text-[#00A3E3]" onclick="closeMobileNav()">How It Works</a>
     <a href="#pricing"      class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Pricing</a>
     <a href="#gallery"      class="hover:text-[#00A3E3]" onclick="closeMobileNav()">Gallery</a>
     <a href="#faq"          class="hover:text-[#00A3E3]" onclick="closeMobileNav()">FAQ</a>
@@ -226,7 +241,7 @@
   </div>
 
   <!-- ═══════════ HERO ═══════════ -->
-  <section class="relative overflow-hidden pt-[68px]" style="background:linear-gradient(150deg,#003d5c 0%,#005a8a 30%,#007ab5 60%,#00A3E3 85%,#1acc6e 100%);">
+  <section class="relative overflow-hidden" style="background:linear-gradient(150deg,#003d5c 0%,#005a8a 30%,#007ab5 60%,#00A3E3 85%,#1acc6e 100%);">
     <!-- Glow blobs -->
     <div class="absolute -top-16 -left-16 w-80 h-80 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(56,199,77,0.32) 0%,transparent 70%);"></div>
     <div class="absolute -bottom-10 -right-10 w-72 h-72 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(0,163,227,0.45) 0%,transparent 70%);"></div>
@@ -378,8 +393,8 @@
           <div class="ba-before" style="height:100%;">
             <img src="https://placehold.co/600x400/555555/aaaaaa?text=BEFORE" alt="Dirty bin">
           </div>
-          <!-- AFTER (clipped overlay) -->
-          <div class="ba-after" style="width:50%;">
+          <!-- AFTER (clipped overlay — reveals from RIGHT as you drag right) -->
+          <div class="ba-after" style="clip-path:inset(0 0 0 50%);">
             <img src="https://placehold.co/600x400/1a7a40/7aeea0?text=AFTER" alt="Clean bin">
           </div>
           <!-- Handle line -->
@@ -413,7 +428,7 @@
         <p class="text-xs uppercase tracking-widest mb-3" style="color:#38C74D;font-weight:800;letter-spacing:0.12em;">✦ HAPPY CUSTOMERS ✦</p>
         <h2 class="font-display text-4xl md:text-5xl" style="color:#1a1a1a;">Trusted Across Cumbria</h2>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="reveal reveal-delay-1 bg-white rounded-2xl p-7 border-l-4" style="border-color:#00A3E3;box-shadow:0 4px 20px rgba(0,163,227,0.08);">
           <div class="text-xl mb-3" style="color:#f5a623;letter-spacing:0.05em;">★★★★★</div>
           <p class="text-sm text-gray-600 leading-relaxed italic mb-5">"Brilliant service — bin looks brand new. Can't believe the difference. Will definitely be booking again!"</p>
@@ -423,6 +438,11 @@
           <div class="text-xl mb-3" style="color:#f5a623;letter-spacing:0.05em;">★★★★★</div>
           <p class="text-sm text-gray-600 leading-relaxed italic mb-5">"So easy to book online and they arrived right on time. No more disgusting bin smell — absolute game changer!"</p>
           <p class="text-xs uppercase tracking-wider" style="color:#404040;font-weight:900;">James T. · Penrith</p>
+        </div>
+        <div class="reveal reveal-delay-3 bg-white rounded-2xl p-7 border-l-4" style="border-color:#B8BF5A;box-shadow:0 4px 20px rgba(184,191,90,0.08);">
+          <div class="text-xl mb-3" style="color:#f5a623;letter-spacing:0.05em;">★★★★★</div>
+          <p class="text-sm text-gray-600 leading-relaxed italic mb-5">"Used the monthly plan — best decision ever. They just show up, do the job brilliantly, and the bin always smells fresh."</p>
+          <p class="text-xs uppercase tracking-wider" style="color:#404040;font-weight:900;">Linda K. · Kendal</p>
         </div>
       </div>
     </div>
@@ -504,7 +524,6 @@
         <img src="https://placehold.co/900x320/c8eefa/00A3E3?text=Team+%2F+Van+Photo" alt="Wheelie Clean team" class="w-full h-48 object-cover">
         <div class="p-8">
           <p class="text-sm text-gray-600 leading-relaxed">We're Wheelie Clean — a local, family-run bin cleaning business proudly serving Cumbria. We started because we believed everyone deserves a clean, hygienic bin without the hassle. Using eco-friendly, biodegradable cleaning products, we power-wash and sanitise your wheelie bins right on your doorstep.</p>
-          <p class="text-sm text-gray-400 leading-relaxed mt-3 italic">Replace this with your own story — when you started, why you started, and what makes Wheelie Clean special.</p>
         </div>
       </div>
     </div>
@@ -610,6 +629,13 @@
         <div id="booking-success" class="hidden mt-4 text-center text-sm" style="color:#38C74D;font-weight:700;">
           ✦ Thanks! We'll be in touch shortly.
         </div>
+        <!-- Trust badges -->
+        <div class="flex flex-wrap justify-center gap-4 mt-6 pt-5 border-t border-gray-100">
+          <span class="flex items-center gap-1.5 text-xs text-gray-400" style="font-weight:700;">✅ Fully Insured</span>
+          <span class="flex items-center gap-1.5 text-xs text-gray-400" style="font-weight:700;">🌿 Eco-Certified</span>
+          <span class="flex items-center gap-1.5 text-xs text-gray-400" style="font-weight:700;">🏡 Family-Run</span>
+          <span class="flex items-center gap-1.5 text-xs text-gray-400" style="font-weight:700;">⭐ 5-Star Rated</span>
+        </div>
       </div>
     </div>
   </section>
@@ -648,14 +674,14 @@
       <a href="#" class="btn px-5 py-2 rounded-full text-white text-xs" style="background:#1877f2;font-weight:800;">📘 Facebook</a>
       <a href="#" class="btn px-5 py-2 rounded-full text-white text-xs" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);font-weight:800;">📸 Instagram</a>
     </div>
-    <p class="text-xs" style="color:#444;">© 2025 Wheelie Clean · All rights reserved</p>
+    <p class="text-xs" style="color:#444;">© 2026 Wheelie Clean · All rights reserved</p>
   </footer>
 
   <!-- ═══════════ FLOATING BUTTONS ═══════════ -->
   <!-- WhatsApp bubble (always visible, bottom right) -->
   <a href="https://wa.me/447388585330?text=Hi%20Wheelie%20Clean!%20I%27d%20like%20to%20book%20a%20bin%20clean." target="_blank"
      class="btn fixed z-50 flex items-center gap-2 text-white text-sm font-800 px-5 py-3 rounded-full shadow-2xl"
-     style="bottom:24px;right:24px;background:linear-gradient(135deg,#25D366,#1aad52);font-weight:800;box-shadow:0 6px 24px rgba(37,211,102,0.5);"
+     style="bottom:88px;right:24px;background:linear-gradient(135deg,#25D366,#1aad52);font-weight:800;box-shadow:0 6px 24px rgba(37,211,102,0.5);"
      aria-label="Chat on WhatsApp">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px;flex-shrink:0;">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
@@ -681,7 +707,7 @@
   <!-- ═══════════ BACK TO TOP ═══════════ -->
   <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"
     class="fixed z-50 flex items-center justify-center w-11 h-11 rounded-full text-white shadow-lg"
-    style="bottom:100px;right:24px;background:linear-gradient(135deg,#003d5c,#00A3E3);box-shadow:0 4px 16px rgba(0,61,92,0.4);"
+    style="bottom:152px;right:24px;background:linear-gradient(135deg,#003d5c,#00A3E3);box-shadow:0 4px 16px rgba(0,61,92,0.4);"
     aria-label="Back to top">
     ↑
   </button>
@@ -792,6 +818,8 @@
     });
 
     // ── Before/After drag sliders ──
+    // before = base layer (left/right of handle shows before)
+    // after  = clip-path overlay: reveals from left as you drag right
     document.querySelectorAll('[data-ba]').forEach(slider => {
       const after  = slider.querySelector('.ba-after');
       const handle = slider.querySelector('.ba-handle');
@@ -799,12 +827,14 @@
 
       function setPos(x) {
         const rect = slider.getBoundingClientRect();
-        let pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
-        after.style.width  = (pct * 100) + '%';
-        handle.style.left  = (pct * 100) + '%';
+        let pct = Math.max(0.02, Math.min(0.98, (x - rect.left) / rect.width));
+        // Clip from left: inset(0 0 0 [pct%]) — after reveals from handle to right edge
+        // Before stays visible on left, After reveals on right as you drag right
+        after.style.clipPath = `inset(0 0 0 ${pct * 100}%)`;
+        handle.style.left    = (pct * 100) + '%';
       }
 
-      slider.addEventListener('mousedown',  e => { dragging = true; setPos(e.clientX); });
+      slider.addEventListener('mousedown',  e => { dragging = true; setPos(e.clientX); e.preventDefault(); });
       slider.addEventListener('touchstart', e => { dragging = true; setPos(e.touches[0].clientX); }, { passive: true });
       window.addEventListener('mousemove',  e => { if (dragging) setPos(e.clientX); });
       window.addEventListener('touchmove',  e => { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
