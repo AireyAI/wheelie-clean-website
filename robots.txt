@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stunning-torte-501093.netlify.app/sitemap.xml
