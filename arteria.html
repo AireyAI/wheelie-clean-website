@@ -3285,6 +3285,42 @@ function wizSelectBusiness(el,d){
   if(btn)btn.disabled=false;
 }
 
+function wizStep4HTML(){
+  return`
+  <div class="wizard-h">Where are you based?</div>
+  <div class="wizard-sub">We'll show you spaces and creators nearby</div>
+  <div class="field-group">
+    <label>Your city</label>
+    <input class="field-input" id="wizCity" placeholder="e.g. London, Berlin, Paris…" value="${wiz.city}" oninput="wiz.city=this.value">
+  </div>
+  <div class="wiz-nav">
+    <button class="wiz-back" onclick="wizBack()">← Back</button>
+    <button class="wiz-continue" onclick="wizFinish()">Finish — Enter ARTERIA ✦</button>
+  </div>
+  <div class="wiz-skip" onclick="wiz.city='';wizFinish()">Skip — I'll add this later</div>`;
+}
+
+function wizFinish(){
+  const cityEl=document.getElementById('wizCity');
+  if(cityEl)wiz.city=cityEl.value.trim();
+  const profile={
+    type:wiz.type,
+    name:wiz.name.trim(),
+    bio:wiz.bio.trim(),
+    avatar:wiz.avatar,
+    disciplines:wiz.type==='creator'?[...wiz.disciplines]:[],
+    businessType:wiz.type==='advertiser'?wiz.businessType:'',
+    city:wiz.city
+  };
+  localStorage.setItem('arteria_profile',JSON.stringify(profile));
+  closeWizard();
+  closeLogin();
+  const msg=wiz.type==='advertiser'
+    ?`Welcome to ARTERIA, ${profile.name} — your advertiser account is ready.`
+    :`Welcome to ARTERIA, ${profile.name} ✦`;
+  setTimeout(()=>toast(msg,'✦'),350);
+}
+
 function setAuthMode(mode){
   authMode=mode;
   document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));
