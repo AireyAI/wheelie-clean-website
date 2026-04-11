@@ -2980,6 +2980,70 @@ function submitPodListing(){
   toast('Listing posted ✦','✦');
 }
 
+// ── TICKET CHECKOUT ──────────────────────────────────────────────
+let tktEvent=null;
+let tktQty=1;
+
+function openTicketPanelById(id){
+  const ev=getEventsData().find(e=>String(e.id)===String(id));
+  if(!ev)return;
+  tktEvent=ev;
+  tktQty=1;
+  document.getElementById('tktEventTitle').textContent=ev.title;
+  document.getElementById('tktEventMeta').textContent=ev.day+' '+ev.mon+' · '+ev.loc;
+  document.getElementById('tktQty').textContent='1';
+  updateTicketCTA();
+  document.getElementById('ticketName').value='';
+  document.getElementById('ticketEmail').value='';
+  document.getElementById('tktOverlay').classList.add('open');
+  document.getElementById('tktPanel').classList.add('open');
+}
+
+function closeTicketPanel(){
+  document.getElementById('tktOverlay').classList.remove('open');
+  document.getElementById('tktPanel').classList.remove('open');
+}
+
+function updateTicketQty(delta){
+  if(!tktEvent)return;
+  tktQty=Math.max(1,Math.min(10,tktQty+delta));
+  document.getElementById('tktQty').textContent=tktQty;
+  updateTicketCTA();
+}
+
+function updateTicketCTA(){
+  if(!tktEvent)return;
+  const price=tktEvent.price||0;
+  const total=price*tktQty;
+  const isFree=price===0;
+  document.getElementById('tktLineLabel').textContent='Ticket × '+tktQty;
+  document.getElementById('tktLineAmt').textContent=isFree?'Free':fmtPrice(price)+' each';
+  document.getElementById('tktTotal').textContent=isFree?'Free':fmtPrice(total);
+  document.getElementById('tktCTA').textContent=isFree?'Confirm Reservation':'Confirm & Pay '+fmtPrice(total);
+}
+
+function confirmTicket(){
+  const name=document.getElementById('ticketName').value.trim();
+  const email=document.getElementById('ticketEmail').value.trim();
+  if(!name){document.getElementById('ticketName').focus();return;}
+  if(!email||!email.includes('@')){document.getElementById('ticketEmail').focus();return;}
+  if(!tktEvent)return;
+  const ticket={
+    eventId:tktEvent.id,
+    eventTitle:tktEvent.title,
+    name,email,
+    qty:tktQty,
+    total:(tktEvent.price||0)*tktQty,
+    purchasedAt:new Date().toISOString()
+  };
+  const stored=JSON.parse(localStorage.getItem('arteria_tickets')||'[]');
+  stored.push(ticket);
+  localStorage.setItem('arteria_tickets',JSON.stringify(stored));
+  closeTicketPanel();
+  updateEventsNavBadge();
+  toast('You\'re going! 🎟 Check your email for details ✦','🎟');
+}
+
 window.addEventListener('hashchange',handleRoute);
 
 // ── AUTOCOMPLETE ────────────────────────────────────────────────────
@@ -5120,7 +5184,7 @@ let gPressed=false,gTimer=null;
 document.addEventListener('keydown',e=>{
   if(e.target.matches('input,textarea,select'))return;
   // Escape — close everything
-  if(e.key==='Escape'){closeLb();closeWn();closeBooking();closeLogin();closeAddListing();closeReview();closeKbd();closeVt();closeWishlist();closePodModal();return}
+  if(e.key==='Escape'){closeLb();closeWn();closeBooking();closeLogin();closeAddListing();closeReview();closeKbd();closeVt();closeWishlist();closePodModal();closeTicketPanel();closeCreateEventModal();return}
   // ? — shortcuts modal
   if(e.key==='?'){openKbd();return}
   // / — focus search
