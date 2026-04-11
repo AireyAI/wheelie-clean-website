@@ -1190,20 +1190,48 @@
     statEls.forEach(el => statObserver.observe(el));
 
     // Booking form — submit to Netlify, show success message
-    function handleBooking(e) {
-      // If Netlify is handling POST, let native submit fire after showing message
+    async function handleBooking(e) {
+      e.preventDefault();
       const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
       const success = document.getElementById('booking-success');
-      // For dev/local: prevent default + show message
-      // On Netlify: native form POST will navigate; skip preventDefault so Netlify receives it
-      const isNetlify = document.querySelector('[data-netlify="true"]');
-      if (!isNetlify || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        e.preventDefault();
+
+      const data = Object.fromEntries(new FormData(form));
+      const datetime = [data.preferred_date, data.service].filter(Boolean).join(' — ');
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        await fetch('http://localhost:3003/api/booking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name:       data.name,
+            email:      data.email,
+            phone:      data.phone,
+            postcode:   data.postcode,
+            service:    data.service,
+            bins:       data.bins,
+            datetime:   datetime,
+            notes:      data.message || '',
+            siteName:   'Wheelie Clean',
+            ownerEmail: 'wheelieclean.cumbria@gmail.com',
+            page:       window.location.href,
+          })
+        });
         success.classList.remove('hidden');
+        success.textContent = '✦ Booking received! We\'ll be in touch shortly.';
         form.reset();
-        setTimeout(() => success.classList.add('hidden'), 5000);
+        setTimeout(() => success.classList.add('hidden'), 6000);
+      } catch (err) {
+        // Fallback: open WhatsApp with their details pre-filled
+        const msg = `Hi Wheelie Clean! I'd like to book a clean.\nName: ${data.name}\nPhone: ${data.phone}\nPostcode: ${data.postcode}\nService: ${data.service || 'Not specified'}\nDate: ${data.preferred_date || 'Flexible'}`;
+        window.open('https://wa.me/447388585330?text=' + encodeURIComponent(msg), '_blank');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Enquiry →';
       }
-      // else: let form submit naturally to Netlify
     }
 
     // Trigger already-visible reveals on load + on anchor navigation

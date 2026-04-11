@@ -2,3 +2,7 @@ node_modules/
 temporary screenshots/
 .superpowers/
 .claude/
+memory/
+docs/
+.DS_Store
+*.code-workspace
