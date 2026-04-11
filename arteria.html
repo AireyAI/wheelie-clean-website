@@ -2594,6 +2594,18 @@ svg.sparkline circle{fill:var(--amber)}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
+// ── PODCAST NETWORK DATA ─────────────────────────────────────────
+const POD_SEEDS = [
+  {id:'h1',type:'host',show:'The Creative Hour',host:'Marcus T.',loc:'London',niche:['Music','Culture'],episodes:142,desc:'Weekly deep-dives with musicians, producers, and visual artists about the business and craft of creativity.',contact:'instagram.com/thecreativehour',img:'600x400/131110/F5A623'},
+  {id:'h2',type:'host',show:'Frequency',host:'Aisha M.',loc:'Berlin',niche:['Tech','Music'],episodes:67,desc:'Exploring the intersection of technology and sound design. Looking for producers, engineers, and innovators.',contact:'twitter.com/frequencypod',img:'600x400/100E1C/7C5CFC'},
+  {id:'h3',type:'host',show:'Studio Sessions',host:'Pedro R.',loc:'Lisbon',niche:['Music','Business'],episodes:28,desc:'Conversations with independent artists about building a sustainable career without a label.',contact:'studiosessionspod@gmail.com',img:'600x400/0C1218/5CE8F5'},
+  {id:'h4',type:'host',show:'Lens & Light',host:'Yuki S.',loc:'Paris',niche:['Culture','Other'],episodes:91,desc:'A photography and visual art podcast. Seeking photographers, directors, and visual storytellers.',contact:'instagram.com/lensandlightpod',img:'600x400/1A0F1A/FF9DE2'},
+  {id:'g1',type:'guest',name:'Diane C.',loc:'Amsterdam',expertise:['Music','Business'],pitch:'Music manager with 10 years in the industry. Happy to talk A&R, sync licensing, or artist development.',appearances:'The Business of Music, Ep 12',contact:'instagram.com/dianec_music'},
+  {id:'g2',type:'guest',name:'Olu A.',loc:'London',expertise:['Tech','Music'],pitch:'Audio software engineer and producer. Can speak on DAWs, plugin development, and electronic music production.',appearances:'',contact:'twitter.com/oluaudio'},
+  {id:'g3',type:'guest',name:'Cleo B.',loc:'Barcelona',expertise:['Culture','Health'],pitch:'Dance artist and wellbeing coach. I talk about the mental health side of life as a performing artist.',appearances:'Move Well Podcast, Ep 5',contact:'cleobarnes.com'},
+  {id:'g4',type:'guest',name:'James W.',loc:'Berlin',expertise:['Business','Other'],pitch:'Independent label founder. Three years running a Berlin-based electronic music label. Happy to talk DIY releasing.',appearances:'The Label Life, Ep 3 & Ep 19',contact:'instagram.com/jameswlabel'},
+];
+
 // ── DATA ──────────────────────────────────────────────────────────
 const LISTINGS = [
   {id:1,cat:'space',subcat:'Music Studio',name:'Pulse Recording Studio — Suite A',loc:'Shoreditch, London',lat:51.523,lng:-0.077,hourly:80,daily:480,monthly:6400,rating:4.9,reviews:128,badge:'b-space',img:'1041',cap:8,host:'James H.',desc:'A world-class recording facility in the heart of Shoreditch. Suite A features a vintage SSL console, an acoustically treated live room, and a full vocal booth — built by musicians, for musicians. Access to a fully stocked lounge, free parking, and an experienced in-house engineer available on request.'},
@@ -2676,7 +2688,7 @@ function handleRoute(){
   document.querySelectorAll('[data-view]').forEach(v=>{
     v.style.display=v.dataset.view===view?'':'none';
   });
-  ['home','explore','favourites','marketplace','profile','training','events','community','creator','inbox'].forEach(v=>{
+  ['home','explore','favourites','marketplace','profile','training','events','community','creator','inbox','podcast-network'].forEach(v=>{
     const el=document.getElementById('nl-'+v);
     if(el)el.classList.toggle('active',v===view);
   });
@@ -2693,6 +2705,7 @@ function handleRoute(){
   if(view==='home'){renderRecentlyViewed();renderSpotlight();renderRecommendations();}
   if(view==='inbox')renderInbox();
   if(view==='pricing'){/* static, no render needed */}
+  if(view==='podcast-network')renderPodcastNetwork();
   if(!KNOWN_VIEWS.includes(view)){
     document.querySelectorAll('[data-view]').forEach(v=>v.style.display='none');
     const nf=document.querySelector('[data-view="404"]');
@@ -4530,7 +4543,7 @@ function renderBookingCalendar(){
 }
 
 // ── 404 HANDLER ───────────────────────────────────────────────────────
-const KNOWN_VIEWS=['home','explore','favourites','space','marketplace','profile','training','events','community','creator','inbox','pricing','404'];
+const KNOWN_VIEWS=['home','explore','favourites','space','marketplace','profile','training','events','community','creator','inbox','pricing','podcast-network','404'];
 
 // ── PHOTO IN REVIEW ────────────────────────────────────────────────────
 let reviewPhotoDataUrl=null;
