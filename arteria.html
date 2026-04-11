@@ -1778,6 +1778,92 @@ svg.sparkline circle{fill:var(--amber)}
   </div>
 </div>
 
+<!-- TICKET CHECKOUT PANEL -->
+<div class="overlay" id="tktOverlay" onclick="closeTicketPanel()"></div>
+<div class="booking-panel" id="tktPanel">
+  <div class="booking-handle"></div>
+  <div class="booking-header">
+    <div>
+      <div style="font-family:var(--fd);font-size:1.1rem;font-weight:800;letter-spacing:-.03em" id="tktEventTitle">Get Tickets</div>
+      <div style="font-size:.78rem;color:var(--t2);margin-top:2px" id="tktEventMeta"></div>
+    </div>
+    <button class="modal-close" onclick="closeTicketPanel()">✕</button>
+  </div>
+  <div class="booking-body">
+    <div class="tkt-stepper">
+      <button class="tkt-step-btn" onclick="updateTicketQty(-1)">−</button>
+      <span class="tkt-qty" id="tktQty">1</span>
+      <button class="tkt-step-btn" onclick="updateTicketQty(1)">+</button>
+      <span class="tkt-label">ticket(s)</span>
+    </div>
+    <div class="price-breakdown" id="tktBreakdown">
+      <div class="price-row"><span id="tktLineLabel">Ticket × 1</span><span id="tktLineAmt">£0</span></div>
+      <div class="price-row"><span>ARTERIA fee</span><span>£0</span></div>
+      <div class="price-row total"><span>Total</span><span id="tktTotal">£0</span></div>
+    </div>
+    <div class="field-group">
+      <label>Full name *</label>
+      <input class="field-input" id="ticketName" placeholder="Your name">
+    </div>
+    <div class="field-group">
+      <label>Email *</label>
+      <input class="field-input" id="ticketEmail" type="email" placeholder="your@email.com">
+    </div>
+    <button class="btn-primary" style="width:100%;padding:13px;margin-top:1rem" id="tktCTA" onclick="confirmTicket()">Confirm & Pay</button>
+  </div>
+</div>
+
+<!-- CREATE EVENT PANEL -->
+<div class="overlay" id="createEvOverlay" onclick="closeCreateEventModal()"></div>
+<div class="booking-panel" id="createEvPanel">
+  <div class="booking-handle"></div>
+  <div class="booking-header">
+    <div>
+      <div style="font-family:var(--fd);font-size:1.1rem;font-weight:800;letter-spacing:-.03em">Create an Event</div>
+      <div style="font-size:.78rem;color:var(--t2);margin-top:2px">List your event on ARTERIA</div>
+    </div>
+    <button class="modal-close" onclick="closeCreateEventModal()">✕</button>
+  </div>
+  <div class="booking-body">
+    <div class="field-group">
+      <label>Event title *</label>
+      <input class="field-input" id="evTitle" placeholder="e.g. Beat Making Intensive — Berlin">
+    </div>
+    <div class="field-group">
+      <label>Category *</label>
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.25rem" id="evCatPills">
+        <button type="button" class="ev-cat-pill" onclick="selectEvCat(this,'workshop')">Workshop</button>
+        <button type="button" class="ev-cat-pill" onclick="selectEvCat(this,'networking')">Networking</button>
+        <button type="button" class="ev-cat-pill" onclick="selectEvCat(this,'showcase')">Showcase</button>
+        <button type="button" class="ev-cat-pill" onclick="selectEvCat(this,'retreat')">Retreat</button>
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Date *</label>
+      <input class="field-input" id="evDate" type="date">
+    </div>
+    <div class="field-group">
+      <label>Location *</label>
+      <input class="field-input" id="evLoc" placeholder="e.g. Shoreditch, London">
+    </div>
+    <div class="field-group">
+      <label>Description * <span id="evDescCount" style="font-weight:400;color:var(--t3)">0/200</span></label>
+      <textarea class="field-input" id="evDesc" rows="3" maxlength="200" placeholder="What's this event about?" oninput="document.getElementById('evDescCount').textContent=this.value.length+'/200'"></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+      <div class="field-group">
+        <label>Ticket price (£) *</label>
+        <input class="field-input" id="evPrice" type="number" min="0" placeholder="0 = free">
+      </div>
+      <div class="field-group">
+        <label>Capacity *</label>
+        <input class="field-input" id="evCapacity" type="number" min="1" placeholder="e.g. 50">
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;padding:13px;margin-top:1rem" onclick="submitCreateEvent()">List Event ✦</button>
+  </div>
+</div>
+
 <!-- BOOKING OVERLAY + PANEL -->
 <div class="overlay" id="bookingOverlay" onclick="closeBooking()"></div>
 <div class="booking-panel" id="bookingPanel">
@@ -1863,7 +1949,7 @@ svg.sparkline circle{fill:var(--amber)}
     <li><a id="nl-explore" onclick="go('explore')">Explore</a></li>
     <li><a id="nl-marketplace" onclick="go('marketplace')">Marketplace</a></li>
     <li><a id="nl-training" onclick="go('training')">Training</a></li>
-    <li><a id="nl-events" onclick="go('events')">Events</a></li>
+    <li><a id="nl-events" onclick="go('events')">Events<span class="events-nav-badge" id="eventsNavBadge"></span></a></li>
     <li><a id="nl-community" onclick="go('community')">Community</a></li>
     <li><a id="nl-podcast-network" onclick="go('podcast-network')">Podcast</a></li>
     <li><a id="nl-favourites" onclick="go('favourites')" class="nav-fav-wrap" style="display:flex;align-items:center;gap:4px;position:relative">Favourites<span class="nav-badge" id="favBadge">0</span></a></li>
@@ -2415,6 +2501,7 @@ svg.sparkline circle{fill:var(--amber)}
         <h2 class="section-title">Events &amp; Unique Venues</h2>
         <p class="section-sub">Rooftops, farms, retreat houses, and extraordinary spaces for creative experiences</p>
       </div>
+      <button class="btn-primary" onclick="openCreateEventModal()">+ Create Event</button>
     </div>
     <div class="filter-bar" style="margin-bottom:1.5rem">
       <button class="fp active" onclick="filterEvents(this,'all')">All</button>
