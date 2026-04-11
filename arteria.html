@@ -1339,10 +1339,10 @@ svg.sparkline circle{fill:var(--amber)}
 .pod-new-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);color:var(--amber);border-radius:100px;padding:2px 8px;font-size:.65rem;font-weight:700;margin-left:6px;vertical-align:middle}
 .pod-new-dot{width:5px;height:5px;border-radius:50%;background:var(--amber)}
 /* Post modal niche pills */
-.pod-niche-pill{background:var(--elevated);border:1px solid var(--border);color:var(--t2);border-radius:100px;padding:5px 13px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s}
+.pod-niche-pill{background:var(--elevated);border:1px solid var(--border);color:var(--t2);border-radius:100px;padding:5px 13px;font-size:.78rem;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
 .pod-niche-pill.sel{background:var(--amber-dim);border-color:rgba(245,166,35,.4);color:var(--amber)}
 .pod-mode-toggle{display:flex;background:var(--elevated);border:1px solid var(--border);border-radius:var(--r-sm);padding:4px;gap:4px;margin-bottom:1.25rem}
-.pod-mode-btn{flex:1;padding:9px;border-radius:6px;background:transparent;border:none;font-family:var(--fb);font-size:.85rem;font-weight:600;color:var(--t3);cursor:pointer;transition:all .2s}
+.pod-mode-btn{flex:1;padding:9px;border-radius:6px;background:transparent;border:none;font-family:var(--fb);font-size:.85rem;font-weight:600;color:var(--t3);cursor:pointer;transition:background .2s,color .2s}
 .pod-mode-btn.active{background:var(--floating);color:var(--t1)}
 </style>
 </head>
@@ -2735,6 +2735,12 @@ function podSwitchTab(tab){
   renderPodcastCards(tab);
 }
 
+function buildContactHref(raw){
+  if(!raw)return'#';
+  if(raw.startsWith('http'))return raw;
+  if(raw.includes('@'))return'mailto:'+raw;
+  return'https://'+raw;
+}
 function renderPodcastCards(tab){
   const grid=document.getElementById('podGrid');
   if(!grid)return;
@@ -2747,7 +2753,7 @@ function renderPodcastCards(tab){
     const newBadge=p.isNew?`<span class="pod-new-badge"><span class="pod-new-dot"></span>New</span>`:'';
     if(p.type==='host'){
       const tags=p.niche.map(n=>`<span class="pod-tag">${n}</span>`).join('');
-      const contactHref=p.contact.startsWith('http')?p.contact:'https://'+p.contact;
+      const contactHref=buildContactHref(p.contact);
       return `<div class="pod-card">
         <img class="pod-card-img" src="https://placehold.co/${p.img}?text=🎙" alt="${p.show}">
         <div class="pod-card-body">
@@ -2760,7 +2766,7 @@ function renderPodcastCards(tab){
       </div>`;
     } else {
       const tags=p.expertise.map(n=>`<span class="pod-tag">${n}</span>`).join('');
-      const contactHref=p.contact.startsWith('http')?p.contact:'https://'+p.contact;
+      const contactHref=buildContactHref(p.contact);
       const prev=p.appearances?`<div class="pod-card-prev">Previously on: ${p.appearances}</div>`:'';
       return `<div class="pod-card">
         <div class="pod-card-body" style="padding-top:1.25rem">
@@ -2822,7 +2828,7 @@ function renderPodModalFields(){
       <div class="field-group"><label>Niche *</label><div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.25rem">${pills}</div></div>
       <div class="field-group" style="margin-top:.75rem"><label>Episodes so far</label><input class="field-input" id="podEpisodes" type="number" min="0" placeholder="e.g. 24"></div>
       <div class="field-group"><label>Description *</label><textarea class="field-input" id="podDesc" rows="3" maxlength="200" placeholder="What's your show about? Who are you looking for?"></textarea></div>
-      <div class="field-group"><label>Contact link *</label><input class="field-input" id="podContact" placeholder="instagram.com/yourshow or email"></div>
+      <div class="field-group"><label>Contact link *</label><input class="field-input" id="podContactHost" placeholder="instagram.com/yourshow or email"></div>
     `;
   } else {
     f.innerHTML=`
@@ -2830,14 +2836,12 @@ function renderPodModalFields(){
       <div class="field-group"><label>Expertise *</label><div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.25rem">${pills}</div></div>
       <div class="field-group" style="margin-top:.75rem"><label>Your pitch *</label><textarea class="field-input" id="podPitch" rows="3" maxlength="200" placeholder="Why should a podcaster invite you on?"></textarea></div>
       <div class="field-group"><label>Previous appearances</label><input class="field-input" id="podAppearances" placeholder="e.g. The Creative Hour, Ep 12 (optional)"></div>
-      <div class="field-group"><label>Contact link *</label><input class="field-input" id="podContact" placeholder="twitter.com/yourhandle or email"></div>
+      <div class="field-group"><label>Contact link *</label><input class="field-input" id="podContactGuest" placeholder="twitter.com/yourhandle or email"></div>
     `;
   }
 }
 
 function submitPodListing(){
-  const contact=(document.getElementById('podContact')||{}).value||'';
-  if(!contact.trim()){document.getElementById('podContact').focus();return;}
   let listing;
   if(podModalType==='host'){
     const show=(document.getElementById('podShowName')||{}).value||'';
@@ -2845,6 +2849,8 @@ function submitPodListing(){
     if(!show.trim()){document.getElementById('podShowName').focus();return;}
     if(!desc.trim()){document.getElementById('podDesc').focus();return;}
     if(!podSelectedNiches.length){showToast('Pick at least one niche');return;}
+    const contact=(document.getElementById('podContactHost')||{}).value||'';
+    if(!contact.trim()){document.getElementById('podContactHost').focus();return;}
     listing={
       id:'u'+Date.now(),type:'host',show:show.trim(),
       host:JSON.parse(localStorage.getItem('arteria_profile')||'{}').name||'You',
@@ -2858,6 +2864,8 @@ function submitPodListing(){
     if(!name.trim()){document.getElementById('podGuestName').focus();return;}
     if(!pitch.trim()){document.getElementById('podPitch').focus();return;}
     if(!podSelectedNiches.length){showToast('Pick at least one expertise area');return;}
+    const contact=(document.getElementById('podContactGuest')||{}).value||'';
+    if(!contact.trim()){document.getElementById('podContactGuest').focus();return;}
     listing={
       id:'u'+Date.now(),type:'guest',name:name.trim(),loc:'',
       expertise:podSelectedNiches,pitch:pitch.trim(),
@@ -2869,10 +2877,7 @@ function submitPodListing(){
   stored.unshift(listing);
   localStorage.setItem('arteria_podcast_listings',JSON.stringify(stored));
   closePodModal();
-  podTab=podModalType;
-  document.getElementById('pod-tab-host').classList.toggle('active',podTab==='host');
-  document.getElementById('pod-tab-guest').classList.toggle('active',podTab==='guest');
-  renderPodcastCards(podTab);
+  podSwitchTab(podModalType);
   showToast('Listing posted ✦');
 }
 
@@ -5016,7 +5021,7 @@ let gPressed=false,gTimer=null;
 document.addEventListener('keydown',e=>{
   if(e.target.matches('input,textarea,select'))return;
   // Escape — close everything
-  if(e.key==='Escape'){closeLb();closeWn();closeBooking();closeLogin();closeAddListing();closeReview();closeKbd();closeVt();closeWishlist();return}
+  if(e.key==='Escape'){closeLb();closeWn();closeBooking();closeLogin();closeAddListing();closeReview();closeKbd();closeVt();closeWishlist();closePodModal();return}
   // ? — shortcuts modal
   if(e.key==='?'){openKbd();return}
   // / — focus search
