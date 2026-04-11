@@ -2776,6 +2776,106 @@ function renderPodcastCards(tab){
   }).join('');
 }
 
+let podModalType='host'; // 'host' | 'guest'
+const POD_NICHES=['Music','Tech','Culture','Comedy','Sport','Business','Health','Other'];
+let podSelectedNiches=[];
+
+function openPodModal(){
+  podModalType='host';
+  podSelectedNiches=[];
+  document.getElementById('podModeHost').classList.add('active');
+  document.getElementById('podModeGuest').classList.remove('active');
+  renderPodModalFields();
+  document.getElementById('podOverlay').classList.add('open');
+  document.getElementById('podPanel').classList.add('open');
+}
+
+function closePodModal(){
+  document.getElementById('podOverlay').classList.remove('open');
+  document.getElementById('podPanel').classList.remove('open');
+}
+
+function podSwitchType(t){
+  podModalType=t;
+  podSelectedNiches=[];
+  document.getElementById('podModeHost').classList.toggle('active',t==='host');
+  document.getElementById('podModeGuest').classList.toggle('active',t==='guest');
+  renderPodModalFields();
+}
+
+function podToggleNiche(el,n){
+  if(podSelectedNiches.includes(n)){
+    podSelectedNiches=podSelectedNiches.filter(x=>x!==n);
+    el.classList.remove('sel');
+  } else {
+    podSelectedNiches.push(n);
+    el.classList.add('sel');
+  }
+}
+
+function renderPodModalFields(){
+  const f=document.getElementById('podModalFields');
+  const pills=POD_NICHES.map(n=>`<button type="button" class="pod-niche-pill" onclick="podToggleNiche(this,'${n}')">${n}</button>`).join('');
+  if(podModalType==='host'){
+    f.innerHTML=`
+      <div class="field-group"><label>Show name *</label><input class="field-input" id="podShowName" placeholder="e.g. The Creative Hour"></div>
+      <div class="field-group"><label>Niche *</label><div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.25rem">${pills}</div></div>
+      <div class="field-group" style="margin-top:.75rem"><label>Episodes so far</label><input class="field-input" id="podEpisodes" type="number" min="0" placeholder="e.g. 24"></div>
+      <div class="field-group"><label>Description *</label><textarea class="field-input" id="podDesc" rows="3" maxlength="200" placeholder="What's your show about? Who are you looking for?"></textarea></div>
+      <div class="field-group"><label>Contact link *</label><input class="field-input" id="podContact" placeholder="instagram.com/yourshow or email"></div>
+    `;
+  } else {
+    f.innerHTML=`
+      <div class="field-group"><label>Your name *</label><input class="field-input" id="podGuestName" placeholder="e.g. Sarah J."></div>
+      <div class="field-group"><label>Expertise *</label><div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.25rem">${pills}</div></div>
+      <div class="field-group" style="margin-top:.75rem"><label>Your pitch *</label><textarea class="field-input" id="podPitch" rows="3" maxlength="200" placeholder="Why should a podcaster invite you on?"></textarea></div>
+      <div class="field-group"><label>Previous appearances</label><input class="field-input" id="podAppearances" placeholder="e.g. The Creative Hour, Ep 12 (optional)"></div>
+      <div class="field-group"><label>Contact link *</label><input class="field-input" id="podContact" placeholder="twitter.com/yourhandle or email"></div>
+    `;
+  }
+}
+
+function submitPodListing(){
+  const contact=(document.getElementById('podContact')||{}).value||'';
+  if(!contact.trim()){document.getElementById('podContact').focus();return;}
+  let listing;
+  if(podModalType==='host'){
+    const show=(document.getElementById('podShowName')||{}).value||'';
+    const desc=(document.getElementById('podDesc')||{}).value||'';
+    if(!show.trim()){document.getElementById('podShowName').focus();return;}
+    if(!desc.trim()){document.getElementById('podDesc').focus();return;}
+    if(!podSelectedNiches.length){showToast('Pick at least one niche');return;}
+    listing={
+      id:'u'+Date.now(),type:'host',show:show.trim(),
+      host:JSON.parse(localStorage.getItem('arteria_profile')||'{}').name||'You',
+      loc:'',niche:podSelectedNiches,
+      episodes:parseInt((document.getElementById('podEpisodes')||{}).value||'0')||0,
+      desc:desc.trim(),contact:contact.trim(),img:'600x400/131110/F5A623',isNew:true
+    };
+  } else {
+    const name=(document.getElementById('podGuestName')||{}).value||'';
+    const pitch=(document.getElementById('podPitch')||{}).value||'';
+    if(!name.trim()){document.getElementById('podGuestName').focus();return;}
+    if(!pitch.trim()){document.getElementById('podPitch').focus();return;}
+    if(!podSelectedNiches.length){showToast('Pick at least one expertise area');return;}
+    listing={
+      id:'u'+Date.now(),type:'guest',name:name.trim(),loc:'',
+      expertise:podSelectedNiches,pitch:pitch.trim(),
+      appearances:(document.getElementById('podAppearances')||{}).value.trim()||'',
+      contact:contact.trim(),isNew:true
+    };
+  }
+  const stored=JSON.parse(localStorage.getItem('arteria_podcast_listings')||'[]');
+  stored.unshift(listing);
+  localStorage.setItem('arteria_podcast_listings',JSON.stringify(stored));
+  closePodModal();
+  podTab=podModalType;
+  document.getElementById('pod-tab-host').classList.toggle('active',podTab==='host');
+  document.getElementById('pod-tab-guest').classList.toggle('active',podTab==='guest');
+  renderPodcastCards(podTab);
+  showToast('Listing posted ✦');
+}
+
 window.addEventListener('hashchange',handleRoute);
 
 // ── AUTOCOMPLETE ────────────────────────────────────────────────────
