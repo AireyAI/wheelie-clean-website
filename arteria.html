@@ -1344,6 +1344,18 @@ svg.sparkline circle{fill:var(--amber)}
 .pod-mode-toggle{display:flex;background:var(--elevated);border:1px solid var(--border);border-radius:var(--r-sm);padding:4px;gap:4px;margin-bottom:1.25rem}
 .pod-mode-btn{flex:1;padding:9px;border-radius:6px;background:transparent;border:none;font-family:var(--fb);font-size:.85rem;font-weight:600;color:var(--t3);cursor:pointer;transition:background .2s,color .2s}
 .pod-mode-btn.active{background:var(--floating);color:var(--t1)}
+/* EVENTS TICKETING */
+.tkt-stepper{display:flex;align-items:center;gap:.75rem;margin:1rem 0}
+.tkt-step-btn{width:34px;height:34px;border-radius:50%;background:var(--elevated);border:1px solid var(--border2);color:var(--t1);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s}
+.tkt-step-btn:hover{background:var(--floating);border-color:rgba(245,166,35,.4)}
+.tkt-qty{font-family:var(--fd);font-size:1.25rem;font-weight:800;color:var(--t1);min-width:2rem;text-align:center}
+.tkt-label{font-size:.82rem;color:var(--t2)}
+.ev-new-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);color:var(--amber);border-radius:100px;padding:2px 8px;font-size:.65rem;font-weight:700;margin-left:6px;vertical-align:middle}
+.ev-new-dot{width:5px;height:5px;border-radius:50%;background:var(--amber);display:inline-block}
+.ev-cat-pill{background:var(--elevated);border:1px solid var(--border);color:var(--t2);border-radius:100px;padding:5px 13px;font-size:.78rem;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.ev-cat-pill.sel{background:var(--amber-dim);border-color:rgba(245,166,35,.4);color:var(--amber)}
+.events-nav-badge{display:none;background:var(--amber);color:#07070A;font-size:.6rem;font-weight:800;border-radius:100px;padding:1px 6px;margin-left:4px;vertical-align:middle}
+.events-nav-badge.show{display:inline}
 </style>
 </head>
 <body>
@@ -2019,16 +2031,16 @@ svg.sparkline circle{fill:var(--amber)}
     <span class="see-all" onclick="go('explore')">All categories →</span>
   </div>
   <div class="cat-scroll reveal d1">
-    <div class="cat-card" onclick="goExploreType('Music Studio')"><img src="https://placehold.co/400x540/100E1C/7C5CFC?text=🎧" alt="Music"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎧</span><div class="cat-name">Music Studios</div><div class="cat-count">1,240+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Music Studio')">See more</button></div></div>
-    <div class="cat-card" onclick="goExploreType('Photography Studio')"><img src="https://placehold.co/400x540/1A100C/F5A623?text=📷" alt="Photo"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">📷</span><div class="cat-name">Photography Studios</div><div class="cat-count">890+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Photography Studio')">See more</button></div></div>
-    <div class="cat-card" onclick="goExploreType('Dance Studio')"><img src="https://placehold.co/400x540/0C1A10/22D55B?text=💃" alt="Dance"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">💃</span><div class="cat-name">Dance Studios</div><div class="cat-count">670+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Dance Studio')">See more</button></div></div>
-    <div class="cat-card" onclick="goExploreType('Podcast Studio')"><img src="https://placehold.co/400x540/131110/F5A623?text=🎙" alt="Podcast"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎙</span><div class="cat-name">Podcast Studios</div><div class="cat-count">420+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Podcast Studio')">See more</button></div></div>
-    <div class="cat-card" onclick="goExploreType('Art Space')"><img src="https://placehold.co/400x540/1A0F1A/FF9DE2?text=🎨" alt="Art"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎨</span><div class="cat-name">Art Spaces</div><div class="cat-count">550+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Art Space')">See more</button></div></div>
-    <div class="cat-card" onclick="goExploreType('Theater Room')"><img src="https://placehold.co/400x540/0C1218/5CE8F5?text=🎭" alt="Theater"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎭</span><div class="cat-name">Theater Rooms</div><div class="cat-count">310+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Theater Room')">See more</button></div></div>
-    <div class="cat-card" onclick="go('training')"><img src="https://placehold.co/400x540/0E1A0C/A3E635?text=🎓" alt="Training"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎓</span><div class="cat-name">Training &amp; Workshops</div><div class="cat-count">800+ courses</div><button class="cat-btn" onclick="event.stopPropagation();go('training')">See more</button></div></div>
-    <div class="cat-card" onclick="goExploreType('Music Producer')"><img src="https://placehold.co/400x540/1A0E0C/FB923C?text=🛠" alt="Pros"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🛠</span><div class="cat-name">Professionals</div><div class="cat-count">3,200+ experts</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Music Producer')">See more</button></div></div>
-    <div class="cat-card" onclick="go('marketplace')"><img src="https://placehold.co/400x540/0D0D1E/A78BFA?text=🛍" alt="Market"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🛍</span><div class="cat-name">Marketplace</div><div class="cat-count">5,600+ products</div><button class="cat-btn" onclick="event.stopPropagation();go('marketplace')">See more</button></div></div>
-    <div class="cat-card" onclick="go('events')"><img src="https://placehold.co/400x540/1A0D15/F9A8D4?text=🎪" alt="Events"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎪</span><div class="cat-name">Events &amp; Venues</div><div class="cat-count">480+ venues</div><button class="cat-btn" onclick="event.stopPropagation();go('events')">See more</button></div></div>
+    <div class="cat-card" onclick="goExploreType('Music Studio')"><img src="https://picsum.photos/seed/1088/400/540" alt="Music"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎧</span><div class="cat-name">Music Studios</div><div class="cat-count">1,240+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Music Studio')">See more</button></div></div>
+    <div class="cat-card" onclick="goExploreType('Photography Studio')"><img src="https://picsum.photos/seed/1076/400/540" alt="Photo"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">📷</span><div class="cat-name">Photography Studios</div><div class="cat-count">890+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Photography Studio')">See more</button></div></div>
+    <div class="cat-card" onclick="goExploreType('Dance Studio')"><img src="https://picsum.photos/seed/1019/400/540" alt="Dance"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">💃</span><div class="cat-name">Dance Studios</div><div class="cat-count">670+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Dance Studio')">See more</button></div></div>
+    <div class="cat-card" onclick="goExploreType('Podcast Studio')"><img src="https://picsum.photos/seed/180/400/540" alt="Podcast"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎙</span><div class="cat-name">Podcast Studios</div><div class="cat-count">420+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Podcast Studio')">See more</button></div></div>
+    <div class="cat-card" onclick="goExploreType('Art Space')"><img src="https://picsum.photos/seed/1043/400/540" alt="Art"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎨</span><div class="cat-name">Art Spaces</div><div class="cat-count">550+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Art Space')">See more</button></div></div>
+    <div class="cat-card" onclick="goExploreType('Theater Room')"><img src="https://picsum.photos/seed/1060/400/540" alt="Theater"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎭</span><div class="cat-name">Theater Rooms</div><div class="cat-count">310+ spaces</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Theater Room')">See more</button></div></div>
+    <div class="cat-card" onclick="go('training')"><img src="https://picsum.photos/seed/1013/400/540" alt="Training"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎓</span><div class="cat-name">Training &amp; Workshops</div><div class="cat-count">800+ courses</div><button class="cat-btn" onclick="event.stopPropagation();go('training')">See more</button></div></div>
+    <div class="cat-card" onclick="goExploreType('Music Producer')"><img src="https://picsum.photos/seed/1025/400/540" alt="Pros"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🛠</span><div class="cat-name">Professionals</div><div class="cat-count">3,200+ experts</div><button class="cat-btn" onclick="event.stopPropagation();goExploreType('Music Producer')">See more</button></div></div>
+    <div class="cat-card" onclick="go('marketplace')"><img src="https://picsum.photos/seed/1030/400/540" alt="Market"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🛍</span><div class="cat-name">Marketplace</div><div class="cat-count">5,600+ products</div><button class="cat-btn" onclick="event.stopPropagation();go('marketplace')">See more</button></div></div>
+    <div class="cat-card" onclick="go('events')"><img src="https://picsum.photos/seed/1039/400/540" alt="Events"><div class="cat-overlay"></div><div class="cat-content"><span class="cat-icon">🎪</span><div class="cat-name">Events &amp; Venues</div><div class="cat-count">480+ venues</div><button class="cat-btn" onclick="event.stopPropagation();go('events')">See more</button></div></div>
     <div class="cat-suggest" onclick="toast('Thanks! We\'ll review your suggestion.','💡')"><div class="sug-icon">+</div><div class="cat-name" style="font-size:.85rem;color:var(--t3);text-align:center">Suggest a Category</div></div>
   </div>
 </section>
@@ -2039,10 +2051,10 @@ svg.sparkline circle{fill:var(--amber)}
 <section class="section">
   <div class="section-hd reveal"><div><h2 class="section-title">Explore the Ecosystem</h2><p class="section-sub">Everything you need to create, connect, and grow</p></div></div>
   <div class="modules-grid">
-    <div class="mc reveal" onclick="goExploreType('Music Producer')" style="cursor:pointer"><div class="mc-img"><img src="https://placehold.co/500x400/120F1E/7C5CFC?text=🛠" alt="Pros"><div class="mc-tint"></div></div><div class="mc-body"><span class="mc-icon">🛠</span><div class="mc-title">Hire Professionals</div><p class="mc-desc">Videographers, photographers, producers, designers, tattoo artists, sound engineers, and more.</p><a class="mc-link">Browse professionals →</a></div></div>
-    <div class="mc reveal d1" onclick="go('marketplace')" style="cursor:pointer"><div class="mc-img"><img src="https://placehold.co/500x400/1A120D/F5A623?text=🛍" alt="Market"><div class="mc-tint"></div></div><div class="mc-body"><span class="mc-icon">🛍</span><div class="mc-title">Marketplace</div><p class="mc-desc">Buy, sell, or rent cameras, instruments, studio props, lighting kits, and creative décor.</p><a class="mc-link">Shop now →</a></div></div>
-    <div class="mc reveal d2" onclick="go('training')" style="cursor:pointer"><div class="mc-img"><img src="https://placehold.co/500x400/0C1A10/22D55B?text=🎓" alt="Training"><div class="mc-tint"></div></div><div class="mc-body"><span class="mc-icon">🎓</span><div class="mc-title">Training &amp; Workshops</div><p class="mc-desc">Level up with courses in music, photography, dance, audiovisual production, and creative direction.</p><a class="mc-link">Discover courses →</a></div></div>
-    <div class="mc reveal d3" onclick="go('events')" style="cursor:pointer"><div class="mc-img"><img src="https://placehold.co/500x400/1A0D0D/F87171?text=🎪" alt="Events"><div class="mc-tint"></div></div><div class="mc-body"><span class="mc-icon">🎪</span><div class="mc-title">Events &amp; Unique Venues</div><p class="mc-desc">Rooftops, farms, retreat houses, and exotic locations for shoots, launches, and experiences.</p><a class="mc-link">Explore venues →</a></div></div>
+    <div class="mc reveal" onclick="goExploreType('Music Producer')" style="cursor:pointer"><div class="mc-img"><img src="https://picsum.photos/seed/1080/500/400" alt="Pros"><div class="mc-tint"></div></div><div class="mc-body"><span class="mc-icon">🛠</span><div class="mc-title">Hire Professionals</div><p class="mc-desc">Videographers, photographers, producers, designers, tattoo artists, sound engineers, and more.</p><a class="mc-link">Browse professionals →</a></div></div>
+    <div class="mc reveal d1" onclick="go('marketplace')" style="cursor:pointer"><div class="mc-img"><img src="https://picsum.photos/seed/1074/500/400" alt="Market"><div class="mc-tint"></div></div><div class="mc-body"><span class="mc-icon">🛍</span><div class="mc-title">Marketplace</div><p class="mc-desc">Buy, sell, or rent cameras, instruments, studio props, lighting kits, and creative décor.</p><a class="mc-link">Shop now →</a></div></div>
+    <div class="mc reveal d2" onclick="go('training')" style="cursor:pointer"><div class="mc-img"><img src="https://picsum.photos/seed/1013/500/400" alt="Training"><div class="mc-tint"></div></div><div class="mc-body"><span class="mc-icon">🎓</span><div class="mc-title">Training &amp; Workshops</div><p class="mc-desc">Level up with courses in music, photography, dance, audiovisual production, and creative direction.</p><a class="mc-link">Discover courses →</a></div></div>
+    <div class="mc reveal d3" onclick="go('events')" style="cursor:pointer"><div class="mc-img"><img src="https://picsum.photos/seed/1039/500/400" alt="Events"><div class="mc-tint"></div></div><div class="mc-body"><span class="mc-icon">🎪</span><div class="mc-title">Events &amp; Unique Venues</div><p class="mc-desc">Rooftops, farms, retreat houses, and exotic locations for shoots, launches, and experiences.</p><a class="mc-link">Explore venues →</a></div></div>
   </div>
 </section>
 
@@ -2848,7 +2860,7 @@ function submitPodListing(){
     const desc=(document.getElementById('podDesc')||{}).value||'';
     if(!show.trim()){document.getElementById('podShowName').focus();return;}
     if(!desc.trim()){document.getElementById('podDesc').focus();return;}
-    if(!podSelectedNiches.length){showToast('Pick at least one niche');return;}
+    if(!podSelectedNiches.length){toast('Pick at least one niche','⚠');return;}
     const contact=(document.getElementById('podContactHost')||{}).value||'';
     if(!contact.trim()){document.getElementById('podContactHost').focus();return;}
     listing={
@@ -2863,7 +2875,7 @@ function submitPodListing(){
     const pitch=(document.getElementById('podPitch')||{}).value||'';
     if(!name.trim()){document.getElementById('podGuestName').focus();return;}
     if(!pitch.trim()){document.getElementById('podPitch').focus();return;}
-    if(!podSelectedNiches.length){showToast('Pick at least one expertise area');return;}
+    if(!podSelectedNiches.length){toast('Pick at least one expertise area','⚠');return;}
     const contact=(document.getElementById('podContactGuest')||{}).value||'';
     if(!contact.trim()){document.getElementById('podContactGuest').focus();return;}
     listing={
@@ -2878,7 +2890,7 @@ function submitPodListing(){
   localStorage.setItem('arteria_podcast_listings',JSON.stringify(stored));
   closePodModal();
   podSwitchTab(podModalType);
-  showToast('Listing posted ✦');
+  toast('Listing posted ✦','✦');
 }
 
 window.addEventListener('hashchange',handleRoute);
