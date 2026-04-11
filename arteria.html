@@ -2716,6 +2716,66 @@ function handleRoute(){
   animateViewIn(activeView);
 }
 
+// ── PODCAST NETWORK ──────────────────────────────────────────────
+let podTab='host'; // 'host' | 'guest'
+
+function getPodListings(){
+  const stored=JSON.parse(localStorage.getItem('arteria_podcast_listings')||'[]');
+  return [...stored,...POD_SEEDS];
+}
+
+function renderPodcastNetwork(){
+  renderPodcastCards(podTab);
+}
+
+function podSwitchTab(tab){
+  podTab=tab;
+  document.getElementById('pod-tab-host').classList.toggle('active',tab==='host');
+  document.getElementById('pod-tab-guest').classList.toggle('active',tab==='guest');
+  renderPodcastCards(tab);
+}
+
+function renderPodcastCards(tab){
+  const grid=document.getElementById('podGrid');
+  if(!grid)return;
+  const items=getPodListings().filter(p=>p.type===tab);
+  if(!items.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:4rem 0;color:var(--t3);font-size:.9rem">No listings yet — be the first to post!</div>`;
+    return;
+  }
+  grid.innerHTML=items.map(p=>{
+    const newBadge=p.isNew?`<span class="pod-new-badge"><span class="pod-new-dot"></span>New</span>`:'';
+    if(p.type==='host'){
+      const tags=p.niche.map(n=>`<span class="pod-tag">${n}</span>`).join('');
+      const contactHref=p.contact.startsWith('http')?p.contact:'https://'+p.contact;
+      return `<div class="pod-card">
+        <img class="pod-card-img" src="https://placehold.co/${p.img}?text=🎙" alt="${p.show}">
+        <div class="pod-card-body">
+          <div class="pod-card-name">${p.show}${newBadge}</div>
+          <div class="pod-card-meta">${p.host} · ${p.loc} · ${p.episodes} episodes</div>
+          <div class="pod-tags">${tags}</div>
+          <div class="pod-card-desc">${p.desc}</div>
+          <a class="pod-contact-btn" href="${contactHref}" target="_blank" rel="noopener">Contact Host →</a>
+        </div>
+      </div>`;
+    } else {
+      const tags=p.expertise.map(n=>`<span class="pod-tag">${n}</span>`).join('');
+      const contactHref=p.contact.startsWith('http')?p.contact:'https://'+p.contact;
+      const prev=p.appearances?`<div class="pod-card-prev">Previously on: ${p.appearances}</div>`:'';
+      return `<div class="pod-card">
+        <div class="pod-card-body" style="padding-top:1.25rem">
+          <div class="pod-card-name">${p.name}${newBadge}</div>
+          <div class="pod-card-meta">${p.loc}</div>
+          <div class="pod-tags">${tags}</div>
+          <div class="pod-card-desc">${p.pitch}</div>
+          ${prev}
+          <a class="pod-contact-btn" href="${contactHref}" target="_blank" rel="noopener">Invite to Show →</a>
+        </div>
+      </div>`;
+    }
+  }).join('');
+}
+
 window.addEventListener('hashchange',handleRoute);
 
 // ── AUTOCOMPLETE ────────────────────────────────────────────────────
