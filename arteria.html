@@ -3044,6 +3044,71 @@ function confirmTicket(){
   toast('You\'re going! 🎟 Check your email for details ✦','🎟');
 }
 
+// ── CREATE EVENT ─────────────────────────────────────────────────
+let evSelectedCat='';
+
+function openCreateEventModal(){
+  evSelectedCat='';
+  document.querySelectorAll('.ev-cat-pill').forEach(p=>p.classList.remove('sel'));
+  ['evTitle','evLoc','evDesc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['evPrice','evCapacity'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const d=document.getElementById('evDate');if(d)d.value='';
+  document.getElementById('evDescCount').textContent='0/200';
+  document.getElementById('createEvOverlay').classList.add('open');
+  document.getElementById('createEvPanel').classList.add('open');
+}
+
+function closeCreateEventModal(){
+  document.getElementById('createEvOverlay').classList.remove('open');
+  document.getElementById('createEvPanel').classList.remove('open');
+}
+
+function selectEvCat(el,cat){
+  evSelectedCat=cat;
+  document.querySelectorAll('.ev-cat-pill').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function submitCreateEvent(){
+  const title=(document.getElementById('evTitle')||{}).value||'';
+  const dateVal=(document.getElementById('evDate')||{}).value||'';
+  const loc=(document.getElementById('evLoc')||{}).value||'';
+  const desc=(document.getElementById('evDesc')||{}).value||'';
+  const priceVal=(document.getElementById('evPrice')||{}).value;
+  const capVal=(document.getElementById('evCapacity')||{}).value;
+  if(!title.trim()){document.getElementById('evTitle').focus();return;}
+  if(!evSelectedCat){toast('Pick a category','⚠');return;}
+  if(!dateVal){document.getElementById('evDate').focus();return;}
+  if(!loc.trim()){document.getElementById('evLoc').focus();return;}
+  if(!desc.trim()){document.getElementById('evDesc').focus();return;}
+  if(priceVal===''||priceVal===null){document.getElementById('evPrice').focus();return;}
+  if(!capVal||parseInt(capVal)<1){document.getElementById('evCapacity').focus();return;}
+  const d=new Date(dateVal);
+  const MONTHS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const day=String(d.getUTCDate()).padStart(2,'0');
+  const mon=MONTHS[d.getUTCMonth()];
+  const ev={
+    id:'u'+Date.now(),
+    cat:evSelectedCat,
+    title:title.trim(),
+    loc:loc.trim(),
+    date:dateVal,
+    day,mon,
+    price:parseFloat(priceVal)||0,
+    capacity:parseInt(capVal),
+    img:'arteria-user-'+Date.now()%100,
+    type:evSelectedCat,
+    desc:desc.trim(),
+    isNew:true
+  };
+  const stored=JSON.parse(localStorage.getItem('arteria_user_events')||'[]');
+  stored.unshift(ev);
+  localStorage.setItem('arteria_user_events',JSON.stringify(stored));
+  closeCreateEventModal();
+  renderEventsGrid(evFilter);
+  toast('Event listed! ✦','🎪');
+}
+
 window.addEventListener('hashchange',handleRoute);
 
 // ── AUTOCOMPLETE ────────────────────────────────────────────────────
