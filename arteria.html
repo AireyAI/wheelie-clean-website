@@ -1798,7 +1798,7 @@ svg.sparkline circle{fill:var(--amber)}
     </div>
     <div class="price-breakdown" id="tktBreakdown">
       <div class="price-row"><span id="tktLineLabel">Ticket × 1</span><span id="tktLineAmt">£0</span></div>
-      <div class="price-row"><span>ARTERIA fee</span><span>£0</span></div>
+      <div class="price-row"><span>ARTERIA fee</span><span id="tktFeeAmt">£0</span></div>
       <div class="price-row total"><span>Total</span><span id="tktTotal">£0</span></div>
     </div>
     <div class="field-group">
@@ -3018,6 +3018,8 @@ function updateTicketCTA(){
   const isFree=price===0;
   document.getElementById('tktLineLabel').textContent='Ticket × '+tktQty;
   document.getElementById('tktLineAmt').textContent=isFree?'Free':fmtPrice(price)+' each';
+  const feeEl=document.getElementById('tktFeeAmt');
+  if(feeEl)feeEl.textContent=isFree?'Free':fmtPrice(0);
   document.getElementById('tktTotal').textContent=isFree?'Free':fmtPrice(total);
   document.getElementById('tktCTA').textContent=isFree?'Confirm Reservation':'Confirm & Pay '+fmtPrice(total);
 }
@@ -6263,6 +6265,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   updateFavBadge();
   updateInboxBadge();
   updateCreditsBadge();
+  updateEventsNavBadge();
   renderNotifs();
   renderSpotlight();
   renderRecentlyViewed();
