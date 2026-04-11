@@ -2798,7 +2798,7 @@ function handleRoute(){
   if(view==='marketplace')renderMarketGrid('all');
   if(view==='profile')renderProfile();
   if(view==='training')renderCourseGrid('all');
-  if(view==='events')renderEventsGrid('all');
+  if(view==='events'){renderEventsGrid('all');updateEventsNavBadge();}
   if(view==='community')renderCommunityFeed();
   if(view==='creator')renderCreatorPage(param||'james-h');
   if(view==='home'){renderRecentlyViewed();renderSpotlight();renderRecommendations();}
@@ -5226,6 +5226,18 @@ function enrollCourse(id,btn){
   else{btn.textContent='Enrol Now';toast('Unenrolled','📤')}
 }
 
+// ── EVENTS HELPERS ───────────────────────────────────────────────────
+function getEventsData(){
+  const stored=JSON.parse(localStorage.getItem('arteria_user_events')||'[]');
+  return [...stored,...EVENTS_DATA];
+}
+function updateEventsNavBadge(){
+  const tickets=JSON.parse(localStorage.getItem('arteria_tickets')||'[]');
+  const badge=document.getElementById('eventsNavBadge');
+  if(!badge)return;
+  if(tickets.length>0){badge.textContent=tickets.length;badge.classList.add('show');}
+  else{badge.textContent='';badge.classList.remove('show');}
+}
 // ── EVENTS DATA ───────────────────────────────────────────────────────
 const EVENTS_DATA=[
   {id:1,cat:'workshop',title:'Beat Making Intensive — Berlin',loc:'Kreuzberg, Berlin',date:'2026-05-10',day:'10',mon:'MAY',price:80,capacity:20,img:'1022',type:'workshop',desc:'A full-day hands-on beat-making session led by producers from the Berlin underground scene.'},
@@ -5247,22 +5259,24 @@ function renderEventsGrid(cat='all'){
   evFilter=cat;
   const el=document.getElementById('eventsGrid');
   if(!el)return;
-  const list=cat==='all'?EVENTS_DATA:EVENTS_DATA.filter(e=>e.cat===cat);
+  const list=cat==='all'?getEventsData():getEventsData().filter(e=>e.cat===cat);
   el.innerHTML=list.map(ev=>{
     const typeColor={workshop:'var(--amber)',networking:'var(--violet)',showcase:'#22D55B',retreat:'#5CE8F5'}[ev.cat]||'var(--t2)';
     const priceStr=ev.price===0?'Free':fmtPrice(ev.price);
-    return`<div class="ev-card" onclick="toast('Booking for \\'${ev.title}\\' — coming soon!','🎪')">
+    const newBadge=ev.isNew?`<span class="ev-new-badge"><span class="ev-new-dot"></span>New</span>`:'';
+    const btnLabel=ev.price===0?'Reserve Free Spot':'Get Tickets →';
+    return`<div class="ev-card">
       <div class="ev-img"><img src="https://picsum.photos/seed/${ev.img}/600/380" alt="${ev.title}" loading="lazy">
         <div class="ev-date-badge"><span class="ev-date-day">${ev.day}</span><span class="ev-date-mon">${ev.mon}</span></div>
         <span class="ev-type" style="background:${typeColor}18;color:${typeColor};border:1px solid ${typeColor}40;position:absolute;top:10px;right:10px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:5px">${ev.type}</span>
       </div>
       <div style="padding:1rem 1.25rem 1.25rem">
-        <div style="font-family:var(--fd);font-size:1rem;font-weight:800;letter-spacing:-.02em;color:var(--t1);margin-bottom:.3rem">${ev.title}</div>
+        <div style="font-family:var(--fd);font-size:1rem;font-weight:800;letter-spacing:-.02em;color:var(--t1);margin-bottom:.3rem">${ev.title}${newBadge}</div>
         <div style="font-size:.77rem;color:var(--t3);margin-bottom:.75rem">📍 ${ev.loc}</div>
         <div style="font-size:.78rem;color:var(--t2);line-height:1.55;margin-bottom:1rem">${ev.desc}</div>
         <div style="display:flex;align-items:center;justify-content:space-between">
           <div style="font-family:var(--fd);font-weight:800;font-size:1.05rem;color:var(--t1)">${priceStr}<span style="font-size:.75rem;font-weight:400;color:var(--t3);margin-left:3px">${ev.price===0?'entry':'per person'}</span></div>
-          <button class="btn-enroll" onclick="event.stopPropagation();toast('Interest registered!','✓')">Join</button>
+          <button class="btn-enroll" data-evid="${ev.id}" onclick="openTicketPanelById(this.dataset.evid)">${btnLabel}</button>
         </div>
       </div>
     </div>`;
